@@ -78,7 +78,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc -b && vite build && vsce package --no-dependencies -o extension.vsix",
+    "build": "vue-tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },

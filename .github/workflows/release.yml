@@ -20,6 +20,12 @@ jobs:
       - run: pnpm i
       - run: pnpm build
 
+      - run: pnpm vsce publish --no-dependencies
+        continue-on-error: true
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
+      - run: pnpm vsce package --no-dependencies -o extension.vsix
       - uses: csexton/release-asset-action@3567794e918fa3068116688122a76cdeb57b5f09 # v3
         with:
           file: extension.vsix
