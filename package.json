@@ -15,6 +15,7 @@
     "Other"
   ],
   "main": "dist/extension/index.js",
+  "icon": "assets/logo.png",
   "engines": {
     "node": "20",
     "vscode": "^1.94.0"
