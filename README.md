@@ -1,7 +1,9 @@
 # OI Runner++
 
-专为 OIer 和 ACMer 设计的 VS Code 插件，用于运行单文件程序。
+> • English｜[简体中文](https://oier-runner-2.by-ts.top/)
 
-## 鸣谢
+VS Code extension designed for OIer and ACMer, used to run single file program.
 
-本项目是 [OI Runner](https://github.com/CmdBlockZQG/oi-runner) 的改进版，大量借鉴了 OI Runner 的源代码。感谢 [@CmdBlockZQG](https://github.com/CmdBlockZQG) 和其他贡献者对 OI Runner 的贡献。
+## Credits
+
+This project is deeply inspired by [OI Runner](https://github.com/CmdBlockZQG/oi-runner). Thanks to [@CmdBlockZQG](https://github.com/CmdBlockZQG) and other contributors of OI Runner.

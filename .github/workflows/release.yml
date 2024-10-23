@@ -1,0 +1,27 @@
+name: Publish Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: package.json
+          cache: pnpm
+          
+      - run: pnpm i
+      - run: pnpm build
+
+      - uses: csexton/release-asset-action@3567794e918fa3068116688122a76cdeb57b5f09 # v3
+        with:
+          file: dist/extension.vsix
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          release-url: ${{ github.event.release.url }}
