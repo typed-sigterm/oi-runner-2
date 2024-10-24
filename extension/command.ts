@@ -52,6 +52,8 @@ export function executeCommand(command: string, args: string[], stdin?: string, 
   return new Promise<ExecuteCommandResult>((resolve) => {
     let startTime: number;
     let stderrUsed = false;
+
+    commandStderrOutput.clear();
     const child = spawn(command, args, {
       cwd,
       shell: true,

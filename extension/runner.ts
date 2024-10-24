@@ -1,3 +1,5 @@
+// @todo rewrite with state machine
+
 import type { EventMessage, RunStep } from '../shared/events';
 import type { Task } from './config';
 import * as vscode from 'vscode';
