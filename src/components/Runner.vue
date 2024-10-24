@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import type { RunStep } from '../../shared/events';
+import type { RunStep, TaskAttributes } from '../../shared/events';
+
 import { IconError } from '@iconify-prerendered/vue-codicon';
 import { computed, onMounted, ref } from 'vue';
 import { consola, postEvent } from '../utils';
@@ -22,7 +23,7 @@ export interface RunnerState {
 
 const { state } = defineProps<{
   state: RunnerState
-  tasks: string[]
+  tasks: TaskAttributes[]
 }>();
 const running = computed(() => state.status !== 'idle');
 const stopping = computed(() => state.status === 'stopping');

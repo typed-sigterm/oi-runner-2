@@ -1,10 +1,14 @@
 export const EventMarker = '__oierRunner2';
 
+export interface TaskAttributes {
+  name: string
+  compilable: boolean
+}
 export type RunStep = 'compile' | 'execute' | 'compile-execute';
 
 export type EventMessage = { // extension -> webview
   type: 'config'
-  tasks: string[]
+  tasks: TaskAttributes[]
 } | { // webview -> extension
   type: 'webview:ready'
 } | { // extension -> webview

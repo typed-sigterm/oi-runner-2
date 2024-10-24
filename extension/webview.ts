@@ -62,7 +62,10 @@ class PanelProvider implements vscode.WebviewViewProvider {
       case 'webview:ready': // pass config and initial state to webview
         this.postEvent({
           type: 'config',
-          tasks: Object.keys(getConfiguredTasks()),
+          tasks: Object.entries(getConfiguredTasks()).map(([k, v]) => ({
+            name: k,
+            compilable: !!v.compile,
+          })),
         });
         this._handleActiveEditorChange(vscode.window.activeTextEditor);
         break;

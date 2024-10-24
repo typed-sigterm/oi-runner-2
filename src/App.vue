@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import type { EventMessage, TaskAttributes } from '../shared/events';
 import type { RunnerState } from './components/Runner.vue';
 import { onMounted, provide, readonly, ref } from 'vue';
-import { EventMarker, type EventMessage } from '../shared/events';
+import { EventMarker } from '../shared/events';
 import Runner from './components/Runner.vue';
 import { consola, postEvent, ThemeInjectKey } from './utils';
 
@@ -17,7 +18,7 @@ const DefaultState = readonly<RunnerState>({
 const states = new Map<string, RunnerState>();
 const currentState = ref<RunnerState>({ ...DefaultState });
 
-const tasks = ref<string[]>([]);
+const tasks = ref<TaskAttributes[]>([]);
 
 window.addEventListener('message', (ev) => {
   if (ev.data[EventMarker] !== true)
@@ -35,7 +36,7 @@ window.addEventListener('message', (ev) => {
         currentState.value = {
           ...DefaultState,
           file: data.file,
-          task: tasks.value[0],
+          task: tasks.value[0].name,
         };
         states.set(data.file, currentState.value);
       }

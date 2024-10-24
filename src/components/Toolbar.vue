@@ -1,17 +1,18 @@
 <script lang="ts" setup>
-import type { RunStep } from '../../shared/events';
+import type { RunStep, TaskAttributes } from '../../shared/events';
 import {
   IconDebugStart,
   IconDebugStop,
   IconExtensions,
   IconRunAll,
 } from '@iconify-prerendered/vue-codicon';
+import { computed } from 'vue';
 import '@vscode-elements/elements/dist/vscode-button';
 import '@vscode-elements/elements/dist/vscode-single-select';
 import '@vscode-elements/elements/dist/vscode-option';
 
-defineProps<{
-  tasks: string[]
+const props = defineProps<{
+  tasks: TaskAttributes[]
   running: boolean
   stopping: boolean
 }>();
@@ -21,6 +22,11 @@ defineEmits<{
 }>();
 
 const currentTask = defineModel<string>('currentTask');
+const currentTaskCompilable = computed(() => {
+  const task = props.tasks.find(t => t.name === currentTask.value);
+  // If task is not found, the webview is not ready, so treat it as compilable by default
+  return !task || task.compilable;
+});
 </script>
 
 <template>
@@ -30,18 +36,18 @@ const currentTask = defineModel<string>('currentTask');
       :disabled="running || stopping"
       @change="currentTask = $event.srcElement.value"
     >
-      <vscode-option v-for="s in tasks" :key="s">
-        {{ s }}
+      <vscode-option v-for="task in tasks" :key="task">
+        {{ task.name }}
       </vscode-option>
     </vscode-single-select>
 
-    <vscode-button title="Compile" :disabled="running" @click="$emit('run', 'compile')">
+    <vscode-button v-if="currentTaskCompilable" title="Compile" :disabled="running" @click="$emit('run', 'compile')">
       <IconExtensions />
     </vscode-button>
     <vscode-button title="Run" :disabled="running" @click="$emit('run', 'execute')">
       <IconDebugStart />
     </vscode-button>
-    <vscode-button title="Compile & Run" :disabled="running" @click="$emit('run', 'compile-execute')">
+    <vscode-button v-if="currentTaskCompilable" title="Compile & Run" :disabled="running" @click="$emit('run', 'compile-execute')">
       <IconRunAll />
     </vscode-button>
     <vscode-button
