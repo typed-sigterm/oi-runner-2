@@ -57,8 +57,7 @@ export function executeCommand(command: string, args: string[], stdin?: string, 
       shell: true,
       signal,
     });
-    if (stdin)
-      child.stdin.write(stdin);
+    child.stdin.end(stdin ?? '');
     child.stderr.on('data', (data) => {
       stderrUsed = true;
       commandStderrOutput.append(transformSocketOutput(data));

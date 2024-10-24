@@ -28,7 +28,7 @@ export class Runner extends vscode.EventEmitter<EventMessage> {
     return result as Task;
   }
 
-  public startRun(task: string, step: RunStep) {
+  public startRun(task: string, step: RunStep, stdin?: string) {
     let t: Task;
     try {
       t = this._evalTask(task);
@@ -59,7 +59,7 @@ export class Runner extends vscode.EventEmitter<EventMessage> {
       })
       .then(() => { // execute
         if (step !== 'compile' && t.execute)
-          return executeCommand(t.execute[0], t.execute[1], undefined, cwd, signal);
+          return executeCommand(t.execute[0], t.execute[1], stdin, cwd, signal);
       })
       .then((p) => { // execute completed
         if (!p)

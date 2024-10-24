@@ -67,7 +67,7 @@ class PanelProvider implements vscode.WebviewViewProvider {
         this._handleActiveEditorChange(vscode.window.activeTextEditor);
         break;
       case 'run:launch':
-        this._runners.get(message.file)!.startRun(message.task, message.step);
+        this._runners.get(message.file)!.startRun(message.task, message.step, message.stdin);
         break;
       case 'run:kill':
         this._runners.get(message.file)!.stopRun();
