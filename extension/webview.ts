@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { EventMarker, type EventMessage } from '../shared/events';
-import { getConfiguredDefaultTask, getConfiguredTasks, getDefaultTask } from './config';
+import { getConfiguredTasks, getDefaultTask } from './config';
 import { Runner } from './runner';
 import { consola } from './utils';
 
