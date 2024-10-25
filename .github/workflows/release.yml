@@ -17,7 +17,7 @@ jobs:
           git checkout -f -b latest origin/latest
           git merge --ff-only origin/main
           git push origin latest
-  
+
   publish:
     runs-on: ubuntu-latest
     permissions:
