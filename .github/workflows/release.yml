@@ -5,6 +5,19 @@ on:
     types: [published]
 
 jobs:
+  sync-latest-branch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: |
+          git checkout -f -b latest origin/latest
+          git merge --ff-only origin/main
+          git push origin latest
+  
   publish:
     runs-on: ubuntu-latest
     permissions:
