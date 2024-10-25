@@ -2,7 +2,6 @@
 import { useData, useRoute } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
 import giscusTalk from 'vitepress-plugin-comment-with-giscus';
-import { onMounted } from 'vue';
 
 const { Layout } = DefaultTheme;
 const { frontmatter, lang } = useData();
