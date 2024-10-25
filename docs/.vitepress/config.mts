@@ -1,5 +1,12 @@
+import process from 'node:process';
 import { defineConfig } from 'vitepress';
+import pkg from '../../package.json' with { type: 'json' };
 
+const versionLabel = process.env.NODE_ENV === 'development'
+  ? 'Dev'
+  : process.env.OI_CANARY === '1'
+    ? process.env.COMMIT_REF?.slice(0, 7) ?? 'Canary'
+    : `v${pkg.version}`;
 const editLinkPattern = 'https://github.com/typed-sigterm/oi-runner-2/edit/main/docs/:path';
 
 export default defineConfig({
@@ -18,6 +25,7 @@ export default defineConfig({
   },
 
   themeConfig: {
+    siteTitle: `OI Runner++ [${versionLabel}]`,
     logo: '/assets/logo-black.png',
     socialLinks: [
       { icon: 'github', link: 'https://github.com/typed-sigterm/oi-runner-2' },

@@ -2,3 +2,6 @@
 command = "pnpm docs:build"
 publish = "docs/.vitepress/dist"
 environment = { NODE_VERSION = "20" }
+
+[context.branch-deploy.environment]
+OI_CANARY = "1"
