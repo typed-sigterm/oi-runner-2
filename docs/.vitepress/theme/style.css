@@ -1,0 +1,5 @@
+kbd {
+  border: var(--vp-c-text-1) solid 1px;
+  border-radius: 4px;
+  padding: 0 2px;
+}

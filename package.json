@@ -5,8 +5,9 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@9.12.2",
-  "description": "VS Code extension designed for OIer and ACMer, used to run single file program.",
+  "description": "VS Code extension designed for OIer and ACMer, for running single-file programs.",
   "license": "MIT",
+  "homepage": "https://oier-runner-2.by-ts.top",
   "repository": {
     "url": "https://github.com/typed-sigterm/oi-runner-2"
   },
@@ -23,7 +24,7 @@
   "contributes": {
     "configuration": [
       {
-        "title": "OI Runner",
+        "title": "OI Runner++",
         "properties": {
           "oi-runner-2.tasks": {
             "type": "object",
@@ -78,6 +79,9 @@
   },
   "scripts": {
     "dev": "vite",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
     "build": "vue-tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -109,6 +113,8 @@
     "husky": "^9.1.6",
     "typescript": "^5.5.3",
     "vite": "^5.4.8",
+    "vitepress": "^1.4.1",
+    "vitepress-plugin-comment-with-giscus": "^1.1.15",
     "vue-tsc": "^2.1.6"
   }
 }
