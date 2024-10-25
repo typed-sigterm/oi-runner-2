@@ -27,7 +27,36 @@
         "title": "OI Runner++",
         "properties": {
           "oi-runner-2.tasks": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "object",
+            "patternProperties": {
+              ".*": {
+                "type": "object",
+                "propertyNames": ["compile", "execute"],
+                "patternProperties": {
+                  "^compile|execute$": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "string",
+                        "description": "The command to execute."
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "The arguments to pass to the command."
+                      }
+                    ],
+                    "minLength": 2,
+                    "maxLength": 2
+                  }
+                },
+                "required": ["execute"],
+                "additionalProperties": false
+              }
+            },
             "default": {
               "C++": {
                 "compile": [
@@ -53,7 +82,27 @@
                 ]
               }
             },
-            "description": "Commands to run when compile or run."
+            "description": "The languages available in the run panel and their corresponding compilation and execution commands."
+          },
+          "oi-runner-2.defaultTask": {
+            "type": "object",
+            "properties": {
+              ".": {
+                "type": "string",
+                "description": "Fallback task. Default to the first task in `oi-runner-2.tasks`."
+              }
+            },
+            "patternProperties": {
+              "^\\.[^.]+$": {
+                "type": "string",
+                "description": "The default task for a specific file extension."
+              }
+            },
+            "additionalProperties": false,
+            "default": {
+              ".py": "Python",
+              ".": "C++"
+            }
           }
         }
       }

@@ -11,8 +11,8 @@ import Toolbar from './Toolbar.vue';
 export type RunnerStatus = 'idle' | 'compiling' | 'excuting' | 'stopping';
 export type RunnerHint = 'compile-failed' | 'execute-failed';
 export interface RunnerState {
-  file: string
-  task: string
+  file?: string
+  task?: string
   status: RunnerStatus
   stdin: string
   stdout: string
@@ -25,8 +25,15 @@ const { state } = defineProps<{
   state: RunnerState
   tasks: TaskAttributes[]
 }>();
-const running = computed(() => state.status !== 'idle');
-const stopping = computed(() => state.status === 'stopping');
+const toolbarStatus = computed(() => {
+  if (!state.file)
+    return 'disabled';
+  if (state.status === 'stopping')
+    return 'stopping';
+  if (state.status === 'idle')
+    return 'idle';
+  return 'running';
+});
 
 const ioArea = ref<HTMLDivElement | null>(null);
 
@@ -57,6 +64,8 @@ onMounted(() => {
 });
 
 function handleRun(step: RunStep) {
+  if (state.task === undefined || state.file === undefined)
+    return;
   if (step === 'execute')
     state.status = 'excuting';
   else
@@ -75,7 +84,7 @@ function handleStop() {
   state.status = 'stopping';
   postEvent({
     type: 'run:kill',
-    file: state.file,
+    file: state.file!,
   });
 }
 </script>
@@ -84,32 +93,36 @@ function handleStop() {
   <Toolbar
     v-model:current-task="state.task"
     :tasks
-    :running
-    :stopping
+    :status="toolbarStatus"
     @run="handleRun"
     @stop="handleStop"
   />
 
   <div ref="ioArea" class="io-area">
     <IOPanel v-model="state.stdin" title="Input" />
+
     <IOPanel
       v-model="state.stdout"
       title="Output"
       readonly
-      :disabled="running || !!state.hint"
+      :disabled="state.status !== 'idle' || !!state.hint"
     >
       <template v-if="state.duration !== undefined" #info>
         <span class="exit-info">
           Exited with code {{ state.exitCode }} in {{ state.duration / 1000 }}s
         </span>
       </template>
+
       <template #extra>
         <div v-if="state.hint" class="stdout-mask run-failed">
           <IconError style="font-size: 32px;" />
           {{ state.hint === 'compile-failed' ? 'Compilation failed' : 'Execution failed' }}
         </div>
-        <Spin v-else-if="running" class="stdout-mask">
-          {{ state.status === 'compiling' ? 'Compiling...' : 'Excuting...' }}
+        <Spin v-else-if="state.status === 'compiling'" class="stdout-mask">
+          Compiling...
+        </Spin>
+        <Spin v-else-if="state.status === 'excuting'" class="stdout-mask">
+          Executing...
         </Spin>
       </template>
     </IOPanel>

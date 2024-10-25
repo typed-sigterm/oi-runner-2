@@ -9,8 +9,6 @@ import { consola, postEvent, ThemeInjectKey } from './utils';
 provide(ThemeInjectKey, 'dark');
 
 const DefaultState = readonly<RunnerState>({
-  file: '',
-  task: '',
   status: 'idle',
   stdin: '',
   stdout: '',
@@ -36,7 +34,7 @@ window.addEventListener('message', (ev) => {
         currentState.value = {
           ...DefaultState,
           file: data.file,
-          task: tasks.value[0].name,
+          task: data.defaultTask ?? tasks.value[0]?.name,
         };
         states.set(data.file, currentState.value);
       }

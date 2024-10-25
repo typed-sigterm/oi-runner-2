@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { EventMarker, type EventMessage } from '../shared/events';
-import { getConfiguredTasks } from './config';
+import { getConfiguredDefaultTask, getConfiguredTasks, getDefaultTask } from './config';
 import { Runner } from './runner';
 import { consola } from './utils';
 
@@ -53,6 +53,7 @@ class PanelProvider implements vscode.WebviewViewProvider {
     this.postEvent({
       type: 'context:switch',
       file,
+      defaultTask: getDefaultTask(file),
     });
   }
 

@@ -2,7 +2,7 @@
 
 import { Buffer } from 'node:buffer';
 import { spawn } from 'node:child_process';
-import * as path from 'node:path';
+import path from 'node:path';
 import { decode } from 'iconv-lite';
 import * as vscode from 'vscode';
 

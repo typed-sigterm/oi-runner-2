@@ -11,10 +11,11 @@ import '@vscode-elements/elements/dist/vscode-button';
 import '@vscode-elements/elements/dist/vscode-single-select';
 import '@vscode-elements/elements/dist/vscode-option';
 
+export type ToolbarStatus = 'idle' | 'disabled' | 'running' | 'stopping';
+
 const props = defineProps<{
   tasks: TaskAttributes[]
-  running: boolean
-  stopping: boolean
+  status: ToolbarStatus
 }>();
 defineEmits<{
   run: [step: RunStep]
@@ -33,7 +34,7 @@ const currentTaskCompilable = computed(() => {
   <div class="toolbar">
     <vscode-single-select
       :value="currentTask"
-      :disabled="running || stopping"
+      :disabled="status !== 'idle'"
       @change="currentTask = $event.srcElement.value"
     >
       <vscode-option v-for="task in tasks" :key="task">
@@ -41,19 +42,33 @@ const currentTaskCompilable = computed(() => {
       </vscode-option>
     </vscode-single-select>
 
-    <vscode-button v-if="currentTaskCompilable" title="Compile" :disabled="running" @click="$emit('run', 'compile')">
+    <vscode-button
+      v-if="currentTaskCompilable"
+      title="Compile"
+      :disabled="status !== 'idle'"
+      @click="$emit('run', 'compile')"
+    >
       <IconExtensions />
     </vscode-button>
-    <vscode-button title="Run" :disabled="running" @click="$emit('run', 'execute')">
+    <vscode-button
+      title="Run"
+      :disabled="status !== 'idle'"
+      @click="$emit('run', 'execute')"
+    >
       <IconDebugStart />
     </vscode-button>
-    <vscode-button v-if="currentTaskCompilable" title="Compile & Run" :disabled="running" @click="$emit('run', 'compile-execute')">
+    <vscode-button
+      v-if="currentTaskCompilable"
+      title="Compile & Run"
+      :disabled="status !== 'idle'"
+      @click="$emit('run', 'compile-execute')"
+    >
       <IconRunAll />
     </vscode-button>
     <vscode-button
-      :style="{ cursor: stopping ? 'progress' : 'pointer' }"
+      :style="{ cursor: status === 'stopping' ? 'progress' : undefined }"
       title="Stop"
-      :disabled="!running || stopping"
+      :disabled="status !== 'running'"
       @click="$emit('stop')"
     >
       <IconDebugStop />

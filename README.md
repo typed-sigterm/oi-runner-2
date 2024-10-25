@@ -22,7 +22,7 @@ Format:
         "g++",
         ["${file}", "-o${fileNoExt}", "-std=c++14", "-O2"] // The use of ${} is explained below
       ],
-      "execute": [ // Execution command
+      "execute": [ // Execution command, required
         "${fileNoExt}${execExt}",
         []
       ]
@@ -48,6 +48,27 @@ There are special strings in the commands and arguments that will be replaced wi
 | `${execExt}` | The extension of the executable file, `.exe` on Windows, an empty string on other systems |
 
 The working directory is the opened folder.
+
+### `oi-runner-2.defaultTask`
+
+Defines the default task selected in the run panel when a file is opened.
+
+Format:
+
+```jsonc
+{
+  "oi-runner-2.tasks": {
+    "C++": { /* ... */ },
+    "Python": { /* ... */ }
+  },
+  "oi-runner-2.defaultTask": {
+    ".py": "Python", // Files with the .py extension default to Python
+    ".": "C++" // Other files default to C++
+  }
+}
+```
+
+If `.` is not configured, the first task defined in `oi-runner-2.tasks` will be selected by default.
 
 <!-- #endregion config -->
 

@@ -24,7 +24,7 @@
         "g++",
         ["${file}", "-o${fileNoExt}", "-std=c++14", "-O2"] // ${} 的用法请参考下文
       ],
-      "execute": [ // 执行命令
+      "execute": [ // 执行命令，必填
         "${fileNoExt}${execExt}",
         []
       ]
@@ -50,3 +50,24 @@
 | `${execExt}` | 可执行文件的扩展名，Windows 下为 `.exe`，其他系统为空字符串 |
 
 命令的执行目录是当前打开的文件夹。
+
+### `oi-runner-2.defaultTask`
+
+打开文件时，运行面板默认选择的语言。
+
+格式：
+
+```jsonc
+{
+  "oi-runner-2.tasks": {
+    "C++": { /* ... */ },
+    "Python": { /* ... */ }
+  },
+  "oi-runner-2.defaultTask": {
+    ".py": "Python", // 拓展名是 .py 的文件默认选择 Python
+    ".": "C++" // 其他文件默认选择 C++
+  }
+}
+```
+
+如果不配置 `.`，则默认选择 `oi-runner-2.tasks` 中的第一个语言。

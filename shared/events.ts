@@ -14,6 +14,7 @@ export type EventMessage = { // extension -> webview
 } | { // extension -> webview
   type: 'context:switch'
   file: string
+  defaultTask?: string
   // @todo context:destroy to remove closed editors
 } | { // webview -> extension
   type: 'run:launch'
