@@ -53,14 +53,14 @@ export default defineConfig({
       },
     },
 
-    'zh-CN': {
+    'zh-cn': {
       label: '简体中文',
       lang: 'zh-CN',
       themeConfig: {
         nav: [
-          { text: '快速开始', link: '/zh-CN/guide' },
-          { text: '配置参考', link: '/zh-CN/config' },
-          { text: '更新记录', link: '/zh-CN/changelog' },
+          { text: '快速开始', link: '/zh-cn/guide' },
+          { text: '配置参考', link: '/zh-cn/config' },
+          { text: '更新记录', link: '/zh-cn/changelog' },
         ],
         editLink: {
           pattern: editLinkPattern,
