@@ -1,5 +1,7 @@
 # OI Runner++
 
+> [!INFO]
+>
 > Read more 👉 [English](https://oier-runner-2.by-ts.top/en/)｜[简体中文](https://oier-runner-2.by-ts.top/zh-cn/)
 
 VS Code extension designed for OIer and ACMer, used to run single file program.

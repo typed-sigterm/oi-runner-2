@@ -25,7 +25,7 @@ export default defineConfig({
   },
 
   themeConfig: {
-    siteTitle: `OI Runner++ [${versionLabel}]`,
+    siteTitle: `OI Runner++ <span class="VPBadge tip">${versionLabel}</span>`,
     logo: '/assets/logo-black.png',
     socialLinks: [
       { icon: 'github', link: 'https://github.com/typed-sigterm/oi-runner-2' },

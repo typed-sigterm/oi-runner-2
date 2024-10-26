@@ -32,7 +32,10 @@
             "patternProperties": {
               ".*": {
                 "type": "object",
-                "propertyNames": ["compile", "execute"],
+                "propertyNames": [
+                  "compile",
+                  "execute"
+                ],
                 "patternProperties": {
                   "^compile|execute$": {
                     "type": "array",
@@ -53,7 +56,9 @@
                     "maxLength": 2
                   }
                 },
-                "required": ["execute"],
+                "required": [
+                  "execute"
+                ],
                 "additionalProperties": false
               }
             },
@@ -162,7 +167,7 @@
     "husky": "^9.1.6",
     "typescript": "^5.5.3",
     "vite": "^5.4.8",
-    "vitepress": "^1.4.1",
+    "vitepress": "https://pkg.pr.new/vitepress@bd690d6",
     "vitepress-plugin-comment-with-giscus": "^1.1.15",
     "vue-tsc": "^2.1.6"
   }
