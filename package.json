@@ -7,7 +7,7 @@
   "packageManager": "pnpm@9.12.2",
   "description": "VS Code extension designed for OIer and ACMer, for running single-file programs.",
   "license": "MIT",
-  "homepage": "https://oier-runner-2.by-ts.top",
+  "homepage": "https://oi-runner-2.by-ts.top",
   "repository": {
     "url": "https://github.com/typed-sigterm/oi-runner-2"
   },

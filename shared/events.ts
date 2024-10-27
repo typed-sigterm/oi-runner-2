@@ -1,4 +1,4 @@
-export const EventMarker = '__oierRunner2';
+export const EventMarker = '__oiRunner2';
 
 export interface TaskAttributes {
   name: string
