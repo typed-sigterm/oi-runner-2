@@ -58,6 +58,7 @@ window.addEventListener('message', (ev) => {
       break;
     case 'run:killed':
       currentState.value.status = 'idle';
+      currentState.value.hint = 'cancelled';
       break;
   }
 });

@@ -78,10 +78,10 @@ export class Runner extends vscode.EventEmitter<EventMessage> {
         }
       })
       .catch((e) => {
-        if (e instanceof Error && e.name === 'AbortError')
-          return;
         if (e instanceof RunError)
           return;
+        if (e instanceof Error && e.name === 'AbortError')
+          return this.fire({ type: 'run:killed' });
         consola.error(e);
         vscode.window.showErrorMessage(String(e));
       });

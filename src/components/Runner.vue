@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import type { RunStep, TaskAttributes } from '../../shared/events';
-
 import { IconError } from '@iconify-prerendered/vue-codicon';
 import { computed, onMounted, ref } from 'vue';
 import { consola, postEvent } from '../utils';
+import IconCircleSlash from './icon/CircleSlash.vue';
 import IOPanel from './IOPanel.vue';
 import Spin from './Spin.vue';
 import Toolbar from './Toolbar.vue';
 
-export type RunnerStatus = 'idle' | 'compiling' | 'excuting' | 'stopping';
-export type RunnerHint = 'compile-failed' | 'execute-failed';
+export type RunnerStatus = 'idle' | 'compiling' | 'excuting' | 'cancelling';
+export type RunnerHint = 'compile-failed' | 'execute-failed' | 'cancelled';
 export interface RunnerState {
   file?: string
   task?: string
@@ -28,8 +28,8 @@ const { state } = defineProps<{
 const toolbarStatus = computed(() => {
   if (!state.file)
     return 'disabled';
-  if (state.status === 'stopping')
-    return 'stopping';
+  if (state.status === 'cancelling')
+    return 'cancelling';
   if (state.status === 'idle')
     return 'idle';
   return 'running';
@@ -80,8 +80,8 @@ function handleRun(step: RunStep) {
     stdin: state.stdin,
   });
 }
-function handleStop() {
-  state.status = 'stopping';
+function handleCancel() {
+  state.status = 'cancelling';
   postEvent({
     type: 'run:kill',
     file: state.file!,
@@ -95,7 +95,7 @@ function handleStop() {
     :tasks
     :status="toolbarStatus"
     @run="handleRun"
-    @stop="handleStop"
+    @cancel="handleCancel"
   />
 
   <div ref="ioArea" class="io-area">
@@ -114,9 +114,17 @@ function handleStop() {
       </template>
 
       <template #extra>
-        <div v-if="state.hint" class="stdout-mask run-failed">
+        <div v-if="state.hint === 'compile-failed'" class="stdout-mask run-failed">
           <IconError style="font-size: 32px;" />
-          {{ state.hint === 'compile-failed' ? 'Compilation failed' : 'Execution failed' }}
+          Compilation failed
+        </div>
+        <div v-else-if="state.hint === 'execute-failed'" class="stdout-mask run-failed">
+          <IconError style="font-size: 32px;" />
+          Execution failed
+        </div>
+        <div v-else-if="state.hint === 'cancelled'" class="stdout-mask run-failed">
+          <IconCircleSlash style="font-size: 32px;" />
+          Run Cancelled
         </div>
         <Spin v-else-if="state.status === 'compiling'" class="stdout-mask">
           Compiling...

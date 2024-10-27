@@ -46,10 +46,11 @@ export interface ExecuteCommandResult {
  * @param stdin The string to write to the stdin of the command.
  * @param cwd The current working directory for the command.
  * @param signal The {@link AbortSignal} that can be used to cancel the execution
+ * @throws {AbortError} If aborted
  * @returns A promise that resolves
  */
 export function executeCommand(command: string, args: string[], stdin?: string, cwd?: string, signal?: AbortSignal) {
-  return new Promise<ExecuteCommandResult>((resolve) => {
+  return new Promise<ExecuteCommandResult>((resolve, reject) => {
     let startTime: number;
     let stderrUsed = false;
 
@@ -66,8 +67,11 @@ export function executeCommand(command: string, args: string[], stdin?: string, 
     });
 
     child.once('spawn', () => startTime = Date.now());
-    child.once('error', () => {
-      resolve({});
+    child.once('error', (e) => {
+      if (e instanceof Error && e.name === 'AbortError')
+        reject(e);
+      else
+        resolve({});
     });
     child.once('exit', () => {
       const stdout = child.stdout.read();

@@ -11,7 +11,7 @@ import '@vscode-elements/elements/dist/vscode-button';
 import '@vscode-elements/elements/dist/vscode-single-select';
 import '@vscode-elements/elements/dist/vscode-option';
 
-export type ToolbarStatus = 'idle' | 'disabled' | 'running' | 'stopping';
+export type ToolbarStatus = 'idle' | 'disabled' | 'running' | 'cancelling';
 
 const props = defineProps<{
   tasks: TaskAttributes[]
@@ -19,7 +19,7 @@ const props = defineProps<{
 }>();
 defineEmits<{
   run: [step: RunStep]
-  stop: []
+  cancel: []
 }>();
 
 const currentTask = defineModel<string>('currentTask');
@@ -66,10 +66,10 @@ const currentTaskCompilable = computed(() => {
       <IconRunAll />
     </vscode-button>
     <vscode-button
-      :style="{ cursor: status === 'stopping' ? 'progress' : undefined }"
+      :style="{ cursor: status === 'cancelling' ? 'progress' : undefined }"
       title="Stop"
       :disabled="status !== 'running'"
-      @click="$emit('stop')"
+      @click="$emit('cancel')"
     >
       <IconDebugStop />
     </vscode-button>
