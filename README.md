@@ -1,6 +1,6 @@
 # OI Runner++
 
-> [!INFO]
+> [!TIP]
 >
 > Read more 👉 [English](https://oi-runner-2.by-ts.top/en/)｜[简体中文](https://oi-runner-2.by-ts.top/zh-cn/)
 
