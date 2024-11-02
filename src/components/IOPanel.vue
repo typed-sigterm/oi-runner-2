@@ -33,6 +33,7 @@ const cmExtensions = useCmExtensions();
 .io-panel {
   display: flex;
   flex-direction: column;
+  overflow: auto;
 }
 
 h3 {
@@ -46,7 +47,5 @@ h3 {
 
 .vue-codemirror {
   flex: 1;
-  overflow: scroll;
-  margin-bottom: 8px;
 }
 </style>

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import type { RunStep, TaskAttributes } from '../../shared/events';
 import { IconError } from '@iconify-prerendered/vue-codicon';
-import { computed, onMounted, ref } from 'vue';
-import { consola, postEvent } from '../utils';
+import { computed } from 'vue';
+import { postEvent } from '../utils';
 import IconCircleSlash from './icon/CircleSlash.vue';
 import IOPanel from './IOPanel.vue';
 import Spin from './Spin.vue';
@@ -33,34 +33,6 @@ const toolbarStatus = computed(() => {
   if (state.status === 'idle')
     return 'idle';
   return 'running';
-});
-
-const ioArea = ref<HTMLDivElement | null>(null);
-
-const ioPanelHeight = ref('45vh');
-const resizeHistory: number[] = [];
-const resizeLimit = { repeat: 5, interval: 500 };
-onMounted(() => {
-  const observer = new ResizeObserver(() => {
-    if (!ioArea.value)
-      return;
-    const value = `${ioArea.value.clientHeight / 2}px`;
-    if (ioPanelHeight.value === value) // if not changed, don't trigger throttle
-      return;
-    ioPanelHeight.value = value;
-    consola.debug('Panel resized to:', value);
-
-    // Throttle: avoid infinite resize loop
-    resizeHistory.push(Date.now());
-    if (resizeHistory.length > resizeLimit.repeat)
-      resizeHistory.splice(0, resizeHistory.length - resizeLimit.repeat);
-    if (resizeHistory.length === resizeLimit.repeat
-      && Date.now() - resizeHistory[0] <= resizeLimit.interval) {
-      observer.disconnect();
-      consola.error('Resize too frequently, stopped.');
-    }
-  });
-  observer.observe(ioArea.value!);
 });
 
 function handleRun(step: RunStep) {
@@ -98,7 +70,7 @@ function handleCancel() {
     @cancel="handleCancel"
   />
 
-  <div ref="ioArea" class="io-area">
+  <div class="io-area">
     <IOPanel v-model="state.stdin" title="Input" />
 
     <IOPanel
@@ -139,14 +111,12 @@ function handleCancel() {
 
 <style scoped>
 .io-area {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   flex: 1;
-  height: 100%;
-}
-
-.io-area > * {
-  height: v-bind(ioPanelHeight);
+  align-items: stretch;
+  grid-template-rows: 1fr 1fr;
+  height: 0;
+  gap: 8px;
 }
 
 .exit-info {
@@ -158,8 +128,9 @@ function handleCancel() {
   position: absolute;
   left: 50%;
   transform: translate(-50%, -50%);
-  margin: calc(v-bind(ioPanelHeight) / 2) auto;
+  margin: 50% auto;
 }
+
 .run-failed {
   display: flex;
   flex-direction: column;
