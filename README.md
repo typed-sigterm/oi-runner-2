@@ -6,6 +6,8 @@
 
 VS Code extension designed for OIer and ACMer, used to run single file program.
 
+![](./docs/public/assets/guide/preview.png)
+
 ## Configuration
 
 <!-- #region config -->

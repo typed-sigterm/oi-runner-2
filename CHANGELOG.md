@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.1 (2024-11-02)
+
+### 🩹 Bug Fixes
+
+- Show hint when a run is canceled
+- Fix pasting behavior in stdin input box
+
+### 📖 Documentation
+
+- Make version label looks better
+- Add preview image to README
+
 ## 1.0.0 (2024-10-25)
 
 Wishing every contestant in tomorrow's <abbr title="Certified Software Professional, a very important OI contest of Chinese OIers">CSP</abbr> an ideal result!
