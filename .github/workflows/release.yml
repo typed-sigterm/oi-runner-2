@@ -24,7 +24,7 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4
       - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4
         with:
           node-version-file: package.json
@@ -33,14 +33,13 @@ jobs:
       - run: pnpm i
       - run: pnpm build
 
-      - run: pnpm vsce publish --no-dependencies
-        continue-on-error: true
-        env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
-
       - run: pnpm vsce package --no-dependencies -o extension.vsix
       - uses: csexton/release-asset-action@3567794e918fa3068116688122a76cdeb57b5f09 # v3
         with:
           file: extension.vsix
           github-token: ${{ secrets.GITHUB_TOKEN }}
           release-url: ${{ github.event.release.url }}
+
+      - run: pnpm vsce publish --no-dependencies
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
