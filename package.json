@@ -167,8 +167,8 @@
     "husky": "^9.1.6",
     "typescript": "^5.5.3",
     "vite": "^5.4.8",
-    "vitepress": "^1.4.2",
-    "vitepress-plugin-comment-with-giscus": "^1.1.15",
+    "vitepress": "^1.5.0",
+    "vitepress-giscus": "^1.0.1",
     "vue-tsc": "^2.1.10"
   }
 }
