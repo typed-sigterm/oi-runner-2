@@ -22,6 +22,9 @@ export default defineConfig({
     server: {
       port: 7008,
     },
+    ssr: {
+      noExternal: ['vitepress-giscus'],
+    },
   },
 
   themeConfig: {
