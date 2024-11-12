@@ -32,14 +32,26 @@ jobs:
 
       - run: pnpm i
       - run: pnpm build
-
       - run: pnpm vsce package --no-dependencies -o extension.vsix
-      - uses: csexton/release-asset-action@3567794e918fa3068116688122a76cdeb57b5f09 # v3
+
+      - name: Upload to GitHub Release
+        uses: csexton/release-asset-action@3567794e918fa3068116688122a76cdeb57b5f09 # v3
         with:
           file: extension.vsix
           github-token: ${{ secrets.GITHUB_TOKEN }}
           release-url: ${{ github.event.release.url }}
 
-      - run: pnpm vsce publish --no-dependencies
-        env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+      - name: Publish to Open VSX Registry
+        uses: HaaLeo/publish-vscode-extension@28e2d3f5817fccf23c1f219eb0cecc903132d1a2 # v1
+        id: publishToOpenVSX
+        with:
+          extensionFile: extension.vsix
+          pat: ${{ secrets.OPEN_VSX_TOKEN }}
+          registryUrl: https://open-vsx.org
+
+      - name: Publish to Visual Studio Marketplace
+        uses: HaaLeo/publish-vscode-extension@28e2d3f5817fccf23c1f219eb0cecc903132d1a2 # v1
+        with:
+          extensionFile: extension.vsix
+          pat: ${{ secrets.VSCE_PAT }}
+          registryUrl: https://marketplace.visualstudio.com
