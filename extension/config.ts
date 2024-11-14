@@ -34,6 +34,5 @@ export const getConfiguredDefaultTask = cachedFn(() => {
  */
 export function getDefaultTask(file: string): string | undefined {
   const { ext } = path.parse(file);
-  const config = getConfiguredDefaultTask();
-  return config[ext] ?? config['.'];
+  return getConfiguredDefaultTask()[ext];
 }

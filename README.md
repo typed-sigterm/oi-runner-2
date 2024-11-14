@@ -66,13 +66,11 @@ Format:
     "Python": { /* ... */ }
   },
   "oi-runner-2.defaultTask": {
-    ".py": "Python", // Files with the .py extension default to Python
-    ".": "C++" // Other files default to C++
+    ".py": "Python" // Files with the .py extension default to Python
+    // Others default to the first task defined in oi-runner-2.tasks, which is C++ in this example
   }
 }
 ```
-
-If `.` is not configured, the first task defined in `oi-runner-2.tasks` will be selected by default.
 
 <!-- #endregion config -->
 

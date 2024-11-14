@@ -64,10 +64,8 @@
     "Python": { /* ... */ }
   },
   "oi-runner-2.defaultTask": {
-    ".py": "Python", // 拓展名是 .py 的文件默认选择 Python
-    ".": "C++" // 其他文件默认选择 C++
+    ".py": "Python" // 拓展名是 .py 的文件默认选择 Python
+    // 其他文件默认选择 `oi-runner-2.tasks` 中的第一个语言，在此例中是 C++
   }
 }
 ```
-
-如果不配置 `.`，则默认选择 `oi-runner-2.tasks` 中的第一个语言。

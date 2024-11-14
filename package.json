@@ -91,12 +91,6 @@
           },
           "oi-runner-2.defaultTask": {
             "type": "object",
-            "properties": {
-              ".": {
-                "type": "string",
-                "description": "Fallback task. Default to the first task in `oi-runner-2.tasks`."
-              }
-            },
             "patternProperties": {
               "^\\.[^.]+$": {
                 "type": "string",
@@ -105,8 +99,7 @@
             },
             "additionalProperties": false,
             "default": {
-              ".py": "Python",
-              ".": "C++"
+              ".py": "Python"
             }
           }
         }
