@@ -22,6 +22,22 @@
     "vscode": "^1.94.0"
   },
   "contributes": {
+    "commands": [
+      {
+        "command": "oi-runner-2.runCode",
+        "title": "Launch OI Runner++",
+        "icon": "assets/logo.png"
+      }
+    ],
+    "menus": {
+      "editor/title/run": [
+        {
+          "command": "oi-runner-2.runCode",
+          "group": "z_commands",
+          "when": "config.oi-runner-2.addToRunMenu"
+        }
+      ]
+    },
     "configuration": [
       {
         "title": "OI Runner++",
@@ -101,6 +117,11 @@
             "default": {
               ".py": "Python"
             }
+          },
+          "oi-runner-2.addToRunMenu": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether to add OI Runner++ to the editor title menu."
           }
         }
       }

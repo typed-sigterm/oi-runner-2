@@ -25,21 +25,19 @@
 
 首先，你需要安装 [OI Runner++](https://marketplace.visualstudio.com/items?itemName=typed-sigterm.oi-runner-2) 到 VS Code。
 
-安装完成后，打开一个文件夹，创建一个 C++ 源文件，写一些代码然后按 <kbd>Ctrl</kbd> + <kbd>S</kbd> 保存：
+安装完成后，打开一个文件夹，创建一个 C++ 源文件，写一些代码然后按 <kbd>Ctrl</kbd> + <kbd>S</kbd> 保存。
 
-![](/assets/guide/1.png)
+在右上角的运行菜单中找到 `Launch OI Runner++`，点击即可打开运行面板：
 
-为了运行程序，需要按 <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> 打开命令面板，输入 `OI Runner++` 找到 `OI Runner++: Focus on OI Runner++ View`，并点击：
-
-![](/assets/guide/2.png)
+![](/assets/guide/launch.png)
 
 如果运行面板在底部，你可以像这样把它拖到右侧：
 
-![](/assets/guide/3.gif)
+![](/assets/guide/move.gif)
 
-好了🎉
+这样就弄好了：
 
-![](/assets/guide/4.gif)
+![](/assets/guide/run.gif)
 
 ::: tip
 
@@ -51,7 +49,7 @@
 
 如果想运行其他语言的程序，也可以切换语言：
 
-![](/assets/guide/5.gif)
+![](/assets/guide/switch-task.gif)
 
 OI Runner++ 默认支持的语言有：
 

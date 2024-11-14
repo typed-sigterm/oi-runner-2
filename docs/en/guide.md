@@ -25,21 +25,19 @@ On 2024/6/21, I decided to develop OI Runner++, completely rewriting and publish
 
 First, you need to install [OI Runner++](https://marketplace.visualstudio.com/items?itemName=typed-sigterm.oi-runner-2) to VS Code.
 
-After installation, open a folder, create a C++ source file, write some code, and then save it by pressing <kbd>Ctrl</kbd> + <kbd>S</kbd>:
+After installation, open a folder, create a C++ source file, write some code, and then save it by pressing <kbd>Ctrl</kbd> + <kbd>S</kbd>.
 
-![](/assets/guide/1.png)
+Click `Launch OI Runner++` in the run menu at the top right of the editor, the run panel will open:
 
-To run the program, you need to press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> to open the command panel, type `OI Runner++` to find `OI Runner++: Focus on OI Runner++ View`, and click:
-
-![](/assets/guide/2.png)
+![](/assets/guide/launch.png)
 
 If the run panel is at the bottom, you can drag it to the right like this:
 
-![](/assets/guide/3.gif)
+![](/assets/guide/move.gif)
 
 Let's go 🚀
 
-![](/assets/guide/4.gif)
+![](/assets/guide/run.gif)
 
 ::: tip
 
@@ -51,7 +49,7 @@ That is to say, you can run multiple programs at the same time, and the input an
 
 If you want to run programs in other languages, you can also switch languages:
 
-![](/assets/guide/5.gif)
+![](/assets/guide/switch-task.gif)
 
 The languages OI Runner++ supports by default are:
 

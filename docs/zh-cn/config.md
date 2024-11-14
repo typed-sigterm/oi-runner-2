@@ -69,3 +69,11 @@
   }
 }
 ```
+
+### `oi-runner-2.addToRunMenu`
+
+是否将 OI Runner++ 添加到编辑器的运行按钮选项中。
+
+如果禁用，则需要通过 <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> 打开命令面板，搜索 `Launch OI Runner++` 打开运行面板。
+
+格式：`true`（默认）或 `false`

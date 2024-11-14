@@ -72,6 +72,14 @@ Format:
 }
 ```
 
+### `oi-runner-2.addToRunMenu`
+
+Whether to add OI Runner++ to the editor title menu.
+
+If disabled, you need to press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> and search for `Launch OI Runner++` to open the run panel.
+
+Format: `true` (default) or `false`.
+
 <!-- #endregion config -->
 
 ## Credits
