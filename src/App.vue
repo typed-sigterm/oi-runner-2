@@ -82,5 +82,8 @@ onMounted(() => {
   flex-direction: column;
   height: 100vh;
   user-select: none;
+
+  /* @todo This is not a good practice, but I can't find a better way to do it */
+  --spinner-size: 40px;
 }
 </style>

@@ -20,7 +20,7 @@ const cmExtensions = useCmExtensions();
     </div>
     <CodeMirror
       v-model="value"
-      :style="{ opacity: disabled ? 0.3 : 1 }"
+      :class="{ disabled }"
       :extensions="cmExtensions"
       :readonly
       :disabled
@@ -33,7 +33,7 @@ const cmExtensions = useCmExtensions();
 .io-panel {
   display: flex;
   flex-direction: column;
-  overflow: auto;
+  overflow: hidden;
 }
 
 h3 {
@@ -47,5 +47,12 @@ h3 {
 
 .vue-codemirror {
   flex: 1;
+  overflow: scroll;
+}
+
+.vue-codemirror.disabled {
+  opacity: 0.3;
+  overscroll-behavior: none;
+  pointer-events: none;
 }
 </style>

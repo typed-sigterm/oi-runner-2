@@ -87,22 +87,22 @@ function handleCancel() {
 
       <template #extra>
         <div v-if="state.hint === 'compile-failed'" class="stdout-mask run-failed">
-          <IconError style="font-size: 32px;" />
+          <IconError />
           Compilation failed
         </div>
         <div v-else-if="state.hint === 'execute-failed'" class="stdout-mask run-failed">
-          <IconError style="font-size: 32px;" />
+          <IconError />
           Execution failed
         </div>
         <div v-else-if="state.hint === 'cancelled'" class="stdout-mask run-failed">
-          <IconCircleSlash style="font-size: 32px;" />
+          <IconCircleSlash />
           Run Cancelled
         </div>
         <Spin v-else-if="state.status === 'compiling'" class="stdout-mask">
-          Compiling...
+          Compiling
         </Spin>
         <Spin v-else-if="state.status === 'excuting'" class="stdout-mask">
-          Executing...
+          Executing
         </Spin>
       </template>
     </IOPanel>
@@ -125,10 +125,17 @@ function handleCancel() {
 }
 
 .stdout-mask {
-  position: absolute;
+  position: relative;
+  top: calc(-50% - var(--spinner-size) / 2);
   left: 50%;
-  transform: translate(-50%, -50%);
-  margin: 50% auto;
+  transform: translate(-50%, 50%);
+  height: 0; /* to prevent `.io-area` height changing when the mask is shown */
+}
+
+.stdout-mask > svg {
+  font-size: 32px;
+  overflow: visible; /* make icon visible */
+  --spinner-size: 32px; /* correct alignment */
 }
 
 .run-failed {
