@@ -47,7 +47,7 @@ That is to say, you can run multiple programs at the same time, and the input an
 
 :::
 
-If you want to run programs in other languages, you can also switch languages:
+If you want to run programs in other languages, you can also switch tasks:
 
 ![](/assets/guide/switch-task.gif)
 

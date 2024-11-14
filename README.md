@@ -14,14 +14,14 @@ VS Code extension designed for OIer and ACMer, used to run single file program.
 
 ### `oi-runner-2.tasks`
 
-Defines the languages available in the run panel and their corresponding compilation and execution commands.
+Defines the tasks available in the run panel and their corresponding compilation and execution commands.
 
 Format:
 
 ```jsonc
 {
   "oi-runner-2.tasks": {
-    "C++": { // Language label
+    "C++": { // Task label
       "compile": [ // Compilation command and arguments
         "g++",
         ["${file}", "-o${fileNoExt}", "-std=c++14", "-O2"] // The use of ${} is explained below
@@ -32,7 +32,7 @@ Format:
       ]
     },
     "Python": {
-      // The compilation command can be empty; the compile button will not be displayed when this language is selected
+      // The compilation command can be empty; the compile button will not be displayed when this task is selected
       "execute": [
         "python",
         ["${file}"]

@@ -103,7 +103,7 @@
                 ]
               }
             },
-            "description": "The languages available in the run panel and their corresponding compilation and execution commands."
+            "description": "The tasks available in the run panel and their corresponding compilation and execution commands."
           },
           "oi-runner-2.defaultTask": {
             "type": "object",
