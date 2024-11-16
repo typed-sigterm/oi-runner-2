@@ -48,27 +48,3 @@ export type EventMessage = { // extension -> webview
 } | { // extension -> webview
   type: 'run:killed'
 };
-
-export interface EventPayload {
-  'context:switch': {
-    file: string
-  }
-  'run:launch': {
-    file: string
-    task: string
-    step: RunStep
-    stdin?: string
-  }
-  'run:compiled': {
-    file: string
-  }
-  'run-excuted': {
-    file: string
-    stdout: string
-    exitCode?: number
-    duration?: number
-  }
-  'run:kill': {
-    file: string
-  }
-}

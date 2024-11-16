@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { EventMessage, TaskAttributes } from '../shared/events';
 import type { RunnerState } from './components/Runner.vue';
-import { onMounted, provide, readonly, ref, shallowRef } from 'vue';
+import { onMounted, provide, readonly, ref } from 'vue';
 import { EventMarker } from '../shared/events';
 import Runner from './components/Runner.vue';
 import { consola, postEvent, ThemeInjectKey } from './utils';
@@ -15,7 +15,7 @@ const DefaultState = readonly<RunnerState>({
 });
 
 const states = new Map<string, RunnerState>();
-const currentState = shallowRef<RunnerState>({ ...DefaultState });
+const currentState = ref<RunnerState>({ ...DefaultState });
 const sourceDirty = ref(false);
 
 const tasks = ref<TaskAttributes[]>([]);
@@ -49,42 +49,29 @@ window.addEventListener('message', (ev) => {
       break;
 
     case 'run:compiled':
-      currentState.value = {
-        ...currentState.value,
-        status: data.skipExcuting ? 'idle' : 'excuting',
-      };
+      currentState.value.status = data.skipExcuting ? 'idle' : 'excuting';
       break;
 
     case 'run:compile-failed':
-      currentState.value = {
-        ...currentState.value,
-        status: 'idle',
-        hint: 'compile-failed',
-      };
+      currentState.value.status = 'idle';
+      currentState.value.hint = 'compile-failed';
       break;
 
     case 'run:executed':
-      currentState.value = {
-        ...currentState.value,
-        status: 'idle',
-        ...data,
-      };
+      currentState.value.status = 'idle';
+      currentState.value.stdout = data.stdout;
+      currentState.value.exitCode = data.exitCode;
+      currentState.value.duration = data.duration;
       break;
 
     case 'run:execute-failed':
-      currentState.value = {
-        ...currentState.value,
-        status: 'idle',
-        hint: 'execute-failed',
-      };
+      currentState.value.status = 'idle';
+      currentState.value.hint = 'execute-failed';
       break;
 
     case 'run:killed':
-      currentState.value = {
-        ...currentState.value,
-        status: 'idle',
-        hint: 'cancelled',
-      };
+      currentState.value.status = 'idle';
+      currentState.value.hint = 'cancelled';
       break;
   }
 });

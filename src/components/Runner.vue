@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import type { RunStep, TaskAttributes } from '../../shared/events';
 import { IconError } from '@iconify-prerendered/vue-codicon';
-import { computed } from 'vue';
-import { postEvent } from '../utils';
+import { ref, watch } from 'vue';
+import { consola, postEvent } from '../utils';
 import IconCircleSlash from './icon/CircleSlash.vue';
 import IOPanel from './IOPanel.vue';
 import Spin from './Spin.vue';
@@ -26,17 +26,26 @@ const { state } = defineProps<{
   tasks: TaskAttributes[]
   sourceDirty: boolean
 }>();
-const toolbarStatus = computed(() => {
-  if (!state.file)
-    return 'disabled';
-  if (state.status === 'cancelling')
-    return 'cancelling';
-  if (state.status === 'idle')
-    return 'idle';
-  return 'running';
+
+// Use `ref` instead of `computed`, because `computed` is always batched, but
+// `postEvent` sometimes takes a long time, UI updates need to be prioritized
+const toolbarStatus = ref<'idle' | 'running' | 'disabled' | 'cancelling'>('disabled');
+watch(() => [state.file, state.status], ([file, status]) => {
+  if (!file)
+    toolbarStatus.value = 'disabled';
+  else if (status === 'cancelling')
+    toolbarStatus.value = 'cancelling';
+  else if (status === 'idle')
+    toolbarStatus.value = 'idle';
+  else
+    toolbarStatus.value = 'running';
+}, {
+  immediate: true,
+  flush: 'sync',
 });
 
-function handleRun(step: RunStep) {
+async function handleRun(step: RunStep) {
+  consola.debug('Run', step);
   if (state.task === undefined || state.file === undefined)
     return;
   if (step === 'execute')
@@ -44,6 +53,7 @@ function handleRun(step: RunStep) {
   else
     state.status = 'compiling';
   state.hint = state.duration = state.exitCode = undefined;
+  toolbarStatus.value = 'running';
 
   postEvent({
     type: 'run:launch',
