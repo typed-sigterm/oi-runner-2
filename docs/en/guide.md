@@ -57,3 +57,7 @@ The languages OI Runner++ supports by default are:
 - Python
 
 If you need support for other languages, or want to modify compilation options, please read the [Configuration Reference](./config).
+
+Before running the code, remember to save the file, otherwise the code you run will still be the last saved code. To avoid wasting debug time due to forgetting to save, there is a tag in the run panel to remind you to save:
+
+![](/assets/guide/unsaved.png)

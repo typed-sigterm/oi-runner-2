@@ -9,9 +9,10 @@ import {
 } from '@iconify-prerendered/vue-codicon';
 import { computed } from 'vue';
 import { postEvent } from '../utils';
+import '@vscode-elements/elements/dist/vscode-badge';
 import '@vscode-elements/elements/dist/vscode-button';
-import '@vscode-elements/elements/dist/vscode-single-select';
 import '@vscode-elements/elements/dist/vscode-option';
+import '@vscode-elements/elements/dist/vscode-single-select';
 
 export type ToolbarStatus = 'idle' | 'disabled' | 'running' | 'cancelling';
 
@@ -47,7 +48,7 @@ function gotoSource() {
     <a v-if="sourceFile" class="source-link" :title="sourceFile" @click="gotoSource">
       <IconFileCode />
       Source File
-      {{ sourceDirty ? '(Unsaved)' : undefined }}
+      <vscode-badge v-if="sourceDirty">unsaved</vscode-badge>
     </a>
 
     <vscode-single-select
@@ -113,7 +114,11 @@ function gotoSource() {
 .source-link > svg {
   width: 16px;
   height: 16px;
-  vertical-align: bottom;
+  vertical-align: text-bottom;
+}
+
+vscode-badge {
+  margin-left: 2px;
 }
 
 vscode-single-select {
