@@ -4,7 +4,7 @@
   "displayName": "OI Runner++",
   "version": "1.0.1",
   "private": true,
-  "packageManager": "pnpm@9.12.3",
+  "packageManager": "pnpm@9.13.2",
   "description": "VS Code extension designed for OIer and ACMer, for running single-file programs.",
   "license": "MIT",
   "homepage": "https://oi-runner-2.by-ts.top",
@@ -157,7 +157,7 @@
   },
   "dependencies": {
     "@guolao/vue-monaco-editor": "^1.5.4",
-    "@iconify-prerendered/vue-codicon": "^0.25.1729663599",
+    "@iconify-prerendered/vue-codicon": "^0.28.0",
     "@vscode-elements/elements": "^1.6.2",
     "consola": "^3.2.3",
     "convert": "^5.4.1",
