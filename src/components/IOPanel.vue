@@ -21,7 +21,7 @@ const fontSize = useFontSize();
       <slot name="info" />
     </div>
     <VueMonacoEditor
-      v-model="value"
+      v-model:value="value"
       class="monaco-editor"
       :disabled
       :theme="theme === 'light' ? 'vs' : 'vs-dark'"
