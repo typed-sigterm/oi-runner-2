@@ -1,9 +1,7 @@
 import type { InjectionKey } from 'vue';
-import { basicSetup } from 'codemirror';
 import Consola, { LogLevels } from 'consola/browser';
-import { inject, shallowRef } from 'vue';
+import { ref } from 'vue';
 import { EventMarker, type EventMessage } from '../shared/events';
-import * as cmThemes from './cm-theme';
 
 export const consola = Consola.withTag('OI Runner++');
 consola.options.level = import.meta.env.DEV ? LogLevels.debug : LogLevels.info;
@@ -20,12 +18,24 @@ export function postEvent(message: EventMessage) {
 export type Theme = 'dark' | 'light';
 export const ThemeInjectKey: InjectionKey<Theme> = Symbol('theme');
 
-export function useCmExtensions() {
-  const ret = shallowRef([basicSetup]);
-  const theme = inject(ThemeInjectKey);
-  if (theme === 'light')
-    ret.value.push(cmThemes.light);
-  else
-    ret.value.push(cmThemes.dark);
-  return ret;
+const fontSize = ref(0);
+let fontSizeInitialized = false;
+function refreshFontSize() {
+  const root = document.documentElement;
+  const value = getComputedStyle(root).getPropertyValue('--vscode-editor-font-size');
+  const size = Number(value.replace('px', ''));
+  if (!Number.isNaN(size))
+    fontSize.value = size;
+}
+
+export function useFontSize() {
+  if (!fontSizeInitialized) {
+    fontSizeInitialized = true;
+    new MutationObserver(refreshFontSize).observe(
+      document.documentElement,
+      { attributes: true, attributeFilter: ['style'] },
+    );
+    refreshFontSize();
+  }
+  return fontSize;
 }

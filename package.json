@@ -156,15 +156,14 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@codemirror/view": "^6.34.1",
+    "@guolao/vue-monaco-editor": "^1.5.4",
     "@iconify-prerendered/vue-codicon": "^0.25.1729663599",
     "@vscode-elements/elements": "^1.6.2",
-    "codemirror": "^6.0.1",
     "consola": "^3.2.3",
     "convert": "^5.4.1",
     "iconv-lite": "^0.6.3",
+    "monaco-editor": "^0.52.0",
     "vue": "^3.5.10",
-    "vue-codemirror6": "^1.3.4",
     "zod": "^3.23.8"
   },
   "devDependencies": {
