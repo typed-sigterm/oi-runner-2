@@ -20,6 +20,8 @@ class PanelProvider implements vscode.WebviewViewProvider {
   private _view?: vscode.WebviewView;
   private _runners = new Map<string, Runner>();
 
+  private _currentFileDirty = false;
+
   public resolveWebviewView(view: vscode.WebviewView) {
     this._view = view;
     view.webview.options = {
@@ -30,6 +32,8 @@ class PanelProvider implements vscode.WebviewViewProvider {
     };
     view.webview.html = getHtml(view.webview, this._context);
     view.webview.onDidReceiveMessage(this._handleMessage, this);
+
+    vscode.workspace.onDidChangeTextDocument(this._handleDocumentChange, this);
   }
 
   public postEvent(message: EventMessage) {
@@ -43,22 +47,38 @@ class PanelProvider implements vscode.WebviewViewProvider {
     if (editor?.document.uri.scheme !== 'file') // skip non-fs editors
       return;
     const file = editor.document.fileName;
+
     // Create runner if not exists
     if (!this._runners.has(file)) {
       const runner = new Runner(editor.document);
       runner.event(this.postEvent, this);
       this._runners.set(file, runner);
     }
+
+    this._currentFileDirty = editor.document.isDirty;
     // Notify webview
     this.postEvent({
       type: 'context:switch',
       file,
       defaultTask: getDefaultTask(file),
+      isDirty: editor.document.isDirty,
     });
+  }
+
+  private _handleDocumentChange(event: vscode.TextDocumentChangeEvent) {
+    const { isDirty } = event.document;
+    if (isDirty !== this._currentFileDirty) {
+      this._currentFileDirty = isDirty;
+      this.postEvent({
+        type: 'context:state-changed',
+        isDirty,
+      });
+    }
   }
 
   private _handleMessage(message: EventMessage) {
     consola.debug('Extension received message:', message);
+
     switch (message.type) {
       case 'webview:ready': // pass config and initial state to webview
         this.postEvent({
@@ -70,6 +90,13 @@ class PanelProvider implements vscode.WebviewViewProvider {
         });
         this._handleActiveEditorChange(vscode.window.activeTextEditor);
         break;
+
+      case 'context:goto-source':
+        vscode.window.showTextDocument(vscode.Uri.file(message.file), {
+          selection: new vscode.Selection(0, 0, 0, 0),
+        });
+        break;
+
       case 'run:launch':
         this._runners.get(message.file)!.startRun(message.task, message.step, message.stdin);
         break;

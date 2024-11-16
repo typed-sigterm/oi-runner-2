@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { EventMessage, TaskAttributes } from '../shared/events';
 import type { RunnerState } from './components/Runner.vue';
-import { onMounted, provide, readonly, ref } from 'vue';
+import { onMounted, provide, readonly, ref, shallowRef } from 'vue';
 import { EventMarker } from '../shared/events';
 import Runner from './components/Runner.vue';
 import { consola, postEvent, ThemeInjectKey } from './utils';
@@ -13,8 +13,10 @@ const DefaultState = readonly<RunnerState>({
   stdin: '',
   stdout: '',
 });
+
 const states = new Map<string, RunnerState>();
-const currentState = ref<RunnerState>({ ...DefaultState });
+const currentState = shallowRef<RunnerState>({ ...DefaultState });
+const sourceDirty = ref(false);
 
 const tasks = ref<TaskAttributes[]>([]);
 
@@ -23,10 +25,12 @@ window.addEventListener('message', (ev) => {
     return;
   const data: EventMessage = ev.data;
   consola.debug('WebView received message:', data);
+
   switch (data.type) {
     case 'config':
       tasks.value = data.tasks;
       break;
+
     case 'context:switch':
       if (states.has(data.file)) {
         currentState.value = states.get(data.file)!;
@@ -39,26 +43,48 @@ window.addEventListener('message', (ev) => {
         states.set(data.file, currentState.value);
       }
       break;
+
+    case 'context:state-changed':
+      sourceDirty.value = data.isDirty;
+      break;
+
     case 'run:compiled':
-      currentState.value.status = data.skipExcuting ? 'idle' : 'excuting';
+      currentState.value = {
+        ...currentState.value,
+        status: data.skipExcuting ? 'idle' : 'excuting',
+      };
       break;
+
     case 'run:compile-failed':
-      currentState.value.status = 'idle';
-      currentState.value.hint = 'compile-failed';
+      currentState.value = {
+        ...currentState.value,
+        status: 'idle',
+        hint: 'compile-failed',
+      };
       break;
+
     case 'run:executed':
-      currentState.value.status = 'idle';
-      currentState.value.stdout = data.stdout;
-      currentState.value.exitCode = data.exitCode;
-      currentState.value.duration = data.duration;
+      currentState.value = {
+        ...currentState.value,
+        status: 'idle',
+        ...data,
+      };
       break;
+
     case 'run:execute-failed':
-      currentState.value.status = 'idle';
-      currentState.value.hint = 'execute-failed';
+      currentState.value = {
+        ...currentState.value,
+        status: 'idle',
+        hint: 'execute-failed',
+      };
       break;
+
     case 'run:killed':
-      currentState.value.status = 'idle';
-      currentState.value.hint = 'cancelled';
+      currentState.value = {
+        ...currentState.value,
+        status: 'idle',
+        hint: 'cancelled',
+      };
       break;
   }
 });
@@ -73,7 +99,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <Runner :state="currentState" :tasks />
+  <Runner :state="currentState" :tasks :source-dirty />
 </template>
 
 <style>

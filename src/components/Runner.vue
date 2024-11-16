@@ -24,6 +24,7 @@ export interface RunnerState {
 const { state } = defineProps<{
   state: RunnerState
   tasks: TaskAttributes[]
+  sourceDirty: boolean
 }>();
 const toolbarStatus = computed(() => {
   if (!state.file)
@@ -66,6 +67,8 @@ function handleCancel() {
     v-model:current-task="state.task"
     :tasks
     :status="toolbarStatus"
+    :source-file="state.file"
+    :source-dirty
     @run="handleRun"
     @cancel="handleCancel"
   />

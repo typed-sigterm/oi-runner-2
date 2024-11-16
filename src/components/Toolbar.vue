@@ -4,9 +4,11 @@ import {
   IconDebugStart,
   IconDebugStop,
   IconExtensions,
+  IconFileCode,
   IconRunAll,
 } from '@iconify-prerendered/vue-codicon';
 import { computed } from 'vue';
+import { postEvent } from '../utils';
 import '@vscode-elements/elements/dist/vscode-button';
 import '@vscode-elements/elements/dist/vscode-single-select';
 import '@vscode-elements/elements/dist/vscode-option';
@@ -16,10 +18,13 @@ export type ToolbarStatus = 'idle' | 'disabled' | 'running' | 'cancelling';
 const props = defineProps<{
   tasks: TaskAttributes[]
   status: ToolbarStatus
+  sourceFile?: string
+  sourceDirty: boolean
 }>();
 defineEmits<{
   run: [step: RunStep]
   cancel: []
+  gotoSource: []
 }>();
 
 const currentTask = defineModel<string>('currentTask');
@@ -28,10 +33,23 @@ const currentTaskCompilable = computed(() => {
   // If task is not found, the webview is not ready, so treat it as compilable by default
   return !task || task.compilable;
 });
+
+function gotoSource() {
+  postEvent({
+    type: 'context:goto-source',
+    file: props.sourceFile!,
+  });
+}
 </script>
 
 <template>
   <div class="toolbar">
+    <a v-if="sourceFile" class="source-link" :title="sourceFile" @click="gotoSource">
+      <IconFileCode />
+      Source File
+      {{ sourceDirty ? '(Unsaved)' : undefined }}
+    </a>
+
     <vscode-single-select
       :value="currentTask"
       :disabled="status !== 'idle'"
@@ -50,6 +68,7 @@ const currentTaskCompilable = computed(() => {
     >
       <IconExtensions />
     </vscode-button>
+
     <vscode-button
       title="Run"
       :disabled="status !== 'idle'"
@@ -57,6 +76,7 @@ const currentTaskCompilable = computed(() => {
     >
       <IconDebugStart />
     </vscode-button>
+
     <vscode-button
       v-if="currentTaskCompilable"
       title="Compile & Run"
@@ -65,6 +85,7 @@ const currentTaskCompilable = computed(() => {
     >
       <IconRunAll />
     </vscode-button>
+
     <vscode-button
       :style="{ cursor: status === 'cancelling' ? 'progress' : undefined }"
       title="Stop"
@@ -84,15 +105,33 @@ const currentTaskCompilable = computed(() => {
   margin: 8px 0;
 }
 
+.source-link {
+  margin-right: auto;
+  cursor: pointer;
+}
+
+.source-link > svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: bottom;
+}
+
 vscode-single-select {
   width: 10em;
   margin-right: 8px;
 }
+
 vscode-button {
   --vscode-button-background: transparent;
   --vscode-button-hoverBackground: rgba(90, 93, 94, 0.31);
   border: none;
-  padding: 1px 7px;
+  padding: 4px;
   font-size: medium;
+  width: 16px;
+  margin: 0 2px;
+}
+
+vscode-button::slotted {
+  margin: 0;
 }
 </style>
