@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import CodeMirror from 'vue-codemirror6';
-import { useCmExtensions } from '../utils';
+import { VueMonacoEditor } from '@guolao/vue-monaco-editor';
+import { inject } from 'vue';
+import { ThemeInjectKey, useFontSize } from '../utils';
 
 defineProps<{
   title: string
@@ -9,7 +10,8 @@ defineProps<{
 }>();
 const value = defineModel<string>();
 
-const cmExtensions = useCmExtensions();
+const theme = inject(ThemeInjectKey);
+const fontSize = useFontSize();
 </script>
 
 <template>
@@ -18,12 +20,19 @@ const cmExtensions = useCmExtensions();
       <h3>{{ title }}</h3>
       <slot name="info" />
     </div>
-    <CodeMirror
+    <VueMonacoEditor
       v-model="value"
-      :class="{ disabled }"
-      :extensions="cmExtensions"
-      :readonly
+      class="monaco-editor"
       :disabled
+      :theme="theme === 'light' ? 'vs' : 'vs-dark'"
+      :options="{
+        automaticLayout: true,
+        folding: false,
+        fontSize,
+        lineNumbersMinChars: 3,
+        minimap: { enabled: false },
+        readOnly: readonly,
+      }"
     />
     <slot name="extra" />
   </div>
@@ -33,7 +42,7 @@ const cmExtensions = useCmExtensions();
 .io-panel {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  margin-bottom: 8px;
 }
 
 h3 {
@@ -45,12 +54,7 @@ h3 {
   margin-bottom: 8px;
 }
 
-.vue-codemirror {
-  flex: 1;
-  overflow: scroll;
-}
-
-.vue-codemirror.disabled {
+.monaco-editor[disabled="true"] {
   opacity: 0.3;
   overscroll-behavior: none;
   pointer-events: none;

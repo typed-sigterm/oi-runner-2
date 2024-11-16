@@ -116,7 +116,6 @@ function handleCancel() {
   align-items: stretch;
   grid-template-rows: 1fr 1fr;
   height: 0;
-  gap: 8px;
 }
 
 .exit-info {
