@@ -27,6 +27,7 @@ features:
     details: Supports adding languages, customizing compile and run commands.
 ---
 
-<h3 style="text-align: center; margin-bottom: 12px;">What it looks like:</h3>
-
-<img src="/assets/guide/preview.png" style="width: 50%; margin: 0 auto; border-radius: 4px;">
+<div class="extension-preview">
+  <h3>What it looks like:</h3>
+  <img src="/assets/guide/preview.png">
+</div>

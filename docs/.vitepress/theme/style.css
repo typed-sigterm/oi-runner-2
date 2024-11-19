@@ -3,3 +3,14 @@ kbd {
   border-radius: 4px;
   padding: 0 2px;
 }
+
+.extension-preview > h3 {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.extension-preview > img {
+  width: 50%;
+  margin: 0 auto;
+  border-radius: 4px;
+}

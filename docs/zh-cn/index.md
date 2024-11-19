@@ -18,7 +18,7 @@ hero:
 features:
   - icon: 🚀
     title: 开箱即用
-    details: 无需配置，默认支持 C++、Python
+    details: 无需配置，默认支持 C++ 和 Python
   - icon: ✨
     title: 简洁易用
     details: 不知道怎么描述，试试就知道了
@@ -27,6 +27,7 @@ features:
     details: 支持添加语言，自定义编译、运行命令
 ---
 
-<h3 style="text-align: center; margin-bottom: 12px;">效果图</h3>
-
-<img src="/assets/guide/preview.png" style="width: 50%; margin: 0 auto; border-radius: 4px;">
+<div class="extension-preview">
+  <h3 style="text-align: center; margin-bottom: 12px;">效果图</h3>
+  <img src="/assets/guide/preview.png">
+</div>
