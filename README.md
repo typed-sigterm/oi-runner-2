@@ -4,7 +4,7 @@
 >
 > Read more 👉 [English](https://oi-runner-2.by-ts.top/en/)｜[简体中文](https://oi-runner-2.by-ts.top/zh-cn/)
 
-VS Code extension designed for OIer and ACMer, used to run single file program.
+VS Code extension designed for OIer and ACMer, for run single file program.
 
 ![](./docs/public/assets/guide/preview.png)
 

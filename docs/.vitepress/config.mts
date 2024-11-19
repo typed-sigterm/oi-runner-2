@@ -11,7 +11,7 @@ const editLinkPattern = 'https://github.com/typed-sigterm/oi-runner-2/edit/main/
 
 export default defineConfig({
   title: 'OI Runner++',
-  description: 'VS Code extension designed for OIer and ACMer, used to run single file program.',
+  description: 'VS Code extension designed for OIer and ACMer, for run single file program.',
   markdown: {
     theme: {
       light: 'material-theme-lighter',

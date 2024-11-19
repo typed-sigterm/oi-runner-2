@@ -45,7 +45,7 @@ export interface ExecuteCommandResult {
  * @param args An array of string arguments for the command.
  * @param stdin The string to write to the stdin of the command.
  * @param cwd The current working directory for the command.
- * @param signal The {@link AbortSignal} that can be used to cancel the execution
+ * @param signal The {@link AbortSignal} that can be for cancel the execution
  * @throws {AbortError} If aborted
  * @returns A promise that resolves
  */
