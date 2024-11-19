@@ -153,7 +153,8 @@
     "build": "vue-tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test:types": "vue-tsc -p ./tsconfig.app.json --noEmit && vue-tsc -p ./tsconfig.node.json --noEmit"
   },
   "dependencies": {
     "@guolao/vue-monaco-editor": "^1.5.4",
