@@ -3,8 +3,8 @@ import Consola, { LogLevels } from 'consola/browser';
 import { ref } from 'vue';
 import { EventMarker, type EventMessage } from '../shared/events';
 
-export const consola = Consola.withTag('OI Runner++');
-consola.options.level = import.meta.env.DEV ? LogLevels.debug : LogLevels.info;
+export const logger = Consola.withTag('OI Runner++');
+logger.options.level = import.meta.env.DEV ? LogLevels.debug : LogLevels.info;
 
 export const vscode = acquireVsCodeApi();
 

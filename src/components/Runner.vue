@@ -2,7 +2,7 @@
 import type { RunStep, TaskAttributes } from '../../shared/events';
 import { IconError } from '@iconify-prerendered/vue-codicon';
 import { ref, watch } from 'vue';
-import { consola, postEvent } from '../utils';
+import { logger, postEvent } from '../utils';
 import IconCircleSlash from './icon/CircleSlash.vue';
 import IOPanel from './IOPanel.vue';
 import Spin from './Spin.vue';
@@ -45,7 +45,7 @@ watch(() => [state.file, state.status], ([file, status]) => {
 });
 
 async function handleRun(step: RunStep) {
-  consola.debug('Run', step);
+  logger.debug('Run', step);
   if (state.task === undefined || state.file === undefined)
     return;
   if (step === 'execute')

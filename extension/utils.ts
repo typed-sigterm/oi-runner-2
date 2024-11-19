@@ -1,7 +1,7 @@
 import Consola, { LogLevels } from 'consola/basic';
 
-export const consola = Consola.withTag('OI Runner++');
-consola.options.level = process.env.NODE_ENV === 'development' ? LogLevels.debug : LogLevels.info;
+export const logger = Consola.withTag('OI Runner++');
+logger.options.level = process.env.NODE_ENV === 'development' ? LogLevels.debug : LogLevels.info;
 
 /**
  * Cache the result of a function.

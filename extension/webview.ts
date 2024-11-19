@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { EventMarker, type EventMessage } from '../shared/events';
 import { getConfiguredTasks, getDefaultTask } from './config';
 import { Runner } from './runner';
-import { consola } from './utils';
+import { logger } from './utils';
 
 function getHtml(webview: vscode.Webview, context: vscode.ExtensionContext) {
   return process.env.VITE_DEV_SERVER_URL
@@ -77,7 +77,7 @@ class PanelProvider implements vscode.WebviewViewProvider {
   }
 
   private _handleMessage(message: EventMessage) {
-    consola.debug('Extension received message:', message);
+    logger.debug('Extension received message:', message);
 
     switch (message.type) {
       case 'webview:ready': // pass config and initial state to webview

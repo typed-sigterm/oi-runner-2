@@ -4,7 +4,7 @@ import type { RunnerState } from './components/Runner.vue';
 import { onMounted, provide, readonly, ref } from 'vue';
 import { EventMarker } from '../shared/events';
 import Runner from './components/Runner.vue';
-import { consola, postEvent, ThemeInjectKey } from './utils';
+import { logger, postEvent, ThemeInjectKey } from './utils';
 
 provide(ThemeInjectKey, 'dark');
 
@@ -24,7 +24,7 @@ window.addEventListener('message', (ev) => {
   if (ev.data[EventMarker] !== true)
     return;
   const data: EventMessage = ev.data;
-  consola.debug('WebView received message:', data);
+  logger.debug('WebView received message:', data);
 
   switch (data.type) {
     case 'config':

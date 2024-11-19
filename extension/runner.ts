@@ -5,7 +5,7 @@ import type { Task } from './config';
 import * as vscode from 'vscode';
 import { evalCommand, executeCommand } from './command';
 import { getConfiguredTasks } from './config';
-import { consola } from './utils';
+import { logger } from './utils';
 
 class RunError extends Error {}
 
@@ -36,7 +36,7 @@ export class Runner extends vscode.EventEmitter<EventMessage> {
       t = this._evalTask(task);
     } catch (e) {
       vscode.window.showErrorMessage('Cannot parse config, please check [oi-runner-2.tasks] settings.');
-      consola.error(e);
+      logger.error(e);
     }
 
     const workspace = vscode.workspace.getWorkspaceFolder(this.document.uri);
@@ -82,7 +82,7 @@ export class Runner extends vscode.EventEmitter<EventMessage> {
           return;
         if (e instanceof Error && e.name === 'AbortError')
           return this.fire({ type: 'run:killed' });
-        consola.error(e);
+        logger.error(e);
         vscode.window.showErrorMessage(String(e));
       });
   }
