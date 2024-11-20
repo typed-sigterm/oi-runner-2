@@ -16,6 +16,6 @@ jobs:
         with:
           node-version-file: .node-version
           cache: pnpm
-      
+
       - run: pnpm i
       - run: pnpm test:types
