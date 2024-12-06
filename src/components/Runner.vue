@@ -21,7 +21,7 @@ export interface RunnerState {
   hint?: RunnerHint
 }
 
-const { state } = defineProps<{
+const props = defineProps<{
   state: RunnerState
   tasks: TaskAttributes[]
   sourceDirty: boolean
@@ -30,7 +30,7 @@ const { state } = defineProps<{
 // Use `ref` instead of `computed`, because `computed` is always batched, but
 // `postEvent` sometimes takes a long time, UI updates need to be prioritized
 const toolbarStatus = ref<'idle' | 'running' | 'disabled' | 'cancelling'>('disabled');
-watch(() => [state.file, state.status], ([file, status]) => {
+watch(() => [props.state.file, props.state.status], ([file, status]) => {
   if (!file)
     toolbarStatus.value = 'disabled';
   else if (status === 'cancelling')
@@ -44,8 +44,17 @@ watch(() => [state.file, state.status], ([file, status]) => {
   flush: 'sync',
 });
 
+const ranSinceDirty = ref(false);
+watch(() => props.sourceDirty, (dirty) => {
+  if (!dirty) // clear now
+    ranSinceDirty.value = false;
+});
+
 async function handleRun(step: RunStep) {
   logger.debug('Run', step);
+  ranSinceDirty.value = true;
+  const { state } = props;
+
   if (state.task === undefined || state.file === undefined)
     return;
   if (step === 'execute')
@@ -63,11 +72,12 @@ async function handleRun(step: RunStep) {
     stdin: state.stdin,
   });
 }
+
 function handleCancel() {
-  state.status = 'cancelling';
+  props.state.status = 'cancelling';
   postEvent({
     type: 'run:kill',
-    file: state.file!,
+    file: props.state.file!,
   });
 }
 </script>
@@ -79,6 +89,7 @@ function handleCancel() {
     :status="toolbarStatus"
     :source-file="state.file"
     :source-dirty
+    :warn-dirty="ranSinceDirty"
     @run="handleRun"
     @cancel="handleCancel"
   />
