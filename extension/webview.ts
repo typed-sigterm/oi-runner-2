@@ -10,12 +10,23 @@ function getHtml(webview: vscode.Webview, context: vscode.ExtensionContext) {
     : __getWebviewHtml__(webview, context);
 }
 
-class PanelProvider implements vscode.WebviewViewProvider {
+class PanelProvider implements vscode.WebviewViewProvider, vscode.Disposable {
   static readonly VIEW_TYPE = 'oi-runner-2.panel';
 
   constructor(private _context: vscode.ExtensionContext) {
-    vscode.window.onDidChangeActiveTextEditor(this._handleActiveEditorChange, this);
+    this.subscriptions.push(
+      vscode.window.onDidChangeActiveTextEditor(this._handleActiveEditorChange, this),
+      vscode.workspace.onDidChangeTextDocument(this._handleDocumentChange, this),
+      vscode.workspace.onDidRenameFiles(this._handleFilesRename, this),
+    );
   }
+
+  public dispose() {
+    this.subscriptions.forEach(s => s.dispose());
+    this.subscriptions = [];
+  }
+
+  private subscriptions: vscode.Disposable[] = [];
 
   private _view?: vscode.WebviewView;
   private _runners = new Map<string, Runner>();
@@ -32,10 +43,9 @@ class PanelProvider implements vscode.WebviewViewProvider {
       ],
     };
     view.webview.html = getHtml(view.webview, this._context);
-    view.webview.onDidReceiveMessage(this._handleMessage, this);
-
-    vscode.workspace.onDidChangeTextDocument(this._handleDocumentChange, this);
-    vscode.workspace.onDidRenameFiles(this._handleFilesRename, this);
+    this.subscriptions.push(
+      view.webview.onDidReceiveMessage(this._handleMessage, this),
+    );
   }
 
   public postEvent(message: EventMessage) {
@@ -139,9 +149,11 @@ class PanelProvider implements vscode.WebviewViewProvider {
 }
 
 export function createWebviewProvider(context: vscode.ExtensionContext) {
+  const provider = new PanelProvider(context);
+  context.subscriptions.push(provider);
   return vscode.window.registerWebviewViewProvider(
     PanelProvider.VIEW_TYPE,
-    new PanelProvider(context),
+    provider,
     {
       webviewOptions: {
         retainContextWhenHidden: true,
