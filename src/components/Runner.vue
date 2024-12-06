@@ -84,13 +84,17 @@ function handleCancel() {
   />
 
   <div class="io-area">
-    <IOPanel v-model="state.stdin" title="Input" />
+    <IOPanel
+      v-model="state.stdin"
+      title="Input"
+      :disabled="!state.file"
+    />
 
     <IOPanel
       v-model="state.stdout"
       title="Output"
       readonly
-      :disabled="state.status !== 'idle' || !!state.hint"
+      :disabled="state.status !== 'idle' || !!state.hint || !state.file"
     >
       <template v-if="state.duration !== undefined" #info>
         <span class="exit-info">

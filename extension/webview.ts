@@ -20,6 +20,7 @@ class PanelProvider implements vscode.WebviewViewProvider {
   private _view?: vscode.WebviewView;
   private _runners = new Map<string, Runner>();
 
+  private _currentFile: string | undefined;
   private _currentFileDirty = false;
 
   public resolveWebviewView(view: vscode.WebviewView) {
@@ -47,6 +48,9 @@ class PanelProvider implements vscode.WebviewViewProvider {
     if (editor?.document.uri.scheme !== 'file') // skip non-fs editors
       return;
     const file = editor.document.fileName;
+    const task = getDefaultTask(file);
+    if (task === false)
+      return;
 
     // Create runner if not exists
     if (!this._runners.has(file)) {
@@ -55,17 +59,21 @@ class PanelProvider implements vscode.WebviewViewProvider {
       this._runners.set(file, runner);
     }
 
+    this._currentFile = editor.document.uri.toString();
     this._currentFileDirty = editor.document.isDirty;
     // Notify webview
     this.postEvent({
       type: 'context:switch',
       file,
-      defaultTask: getDefaultTask(file),
+      defaultTask: task,
       isDirty: editor.document.isDirty,
     });
   }
 
   private _handleDocumentChange(event: vscode.TextDocumentChangeEvent) {
+    if (this._currentFile !== event.document.uri.toString())
+      return;
+
     const { isDirty } = event.document;
     if (isDirty !== this._currentFileDirty) {
       this._currentFileDirty = isDirty;

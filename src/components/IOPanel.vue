@@ -15,7 +15,7 @@ const fontSize = useFontSize();
 </script>
 
 <template>
-  <div class="io-panel">
+  <div class="io-panel" :aria-disabled="disabled">
     <div>
       <h3>{{ title }}</h3>
       <slot name="info" />
@@ -23,7 +23,6 @@ const fontSize = useFontSize();
     <VueMonacoEditor
       v-model:value="value"
       class="monaco-editor"
-      :disabled
       :theme="theme === 'light' ? 'vs' : 'vs-dark'"
       :options="{
         automaticLayout: true,
@@ -43,6 +42,10 @@ const fontSize = useFontSize();
   display: flex;
   flex-direction: column;
   margin-bottom: 8px;
+
+  &:deep() .margin-view-overlays { /* hack */
+    cursor: initial;
+  }
 }
 
 h3 {
@@ -54,9 +57,13 @@ h3 {
   margin-bottom: 8px;
 }
 
-.monaco-editor[disabled="true"] {
+.io-panel[aria-disabled="true"] .monaco-editor {
   opacity: 0.3;
   overscroll-behavior: none;
-  pointer-events: none;
+  cursor: not-allowed;
+
+  &:deep() * {
+    pointer-events: none;
+  }
 }
 </style>

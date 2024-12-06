@@ -66,6 +66,7 @@
   "oi-runner-2.defaultTask": {
     ".py": "Python" // 拓展名是 .py 的文件默认选择 Python
     // 其他文件默认选择 `oi-runner-2.tasks` 中的第一个语言，在此例中是 C++
+    // 也可以设置为 `false`，则运行面板不会切换到此拓展名的文件
   }
 }
 ```

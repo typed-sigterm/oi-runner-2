@@ -13,7 +13,10 @@ const TaskSchema = z.object({
 export type Task = z.infer<typeof TaskSchema>;
 
 const TasksSchema = z.record(TaskSchema);
-const DefaultTaskSchema = z.record(z.string(), z.string());
+const DefaultTaskSchema = z.record(
+  z.string(),
+  z.string().or(z.literal(false)),
+);
 
 export const getConfiguredTasks = cachedFn(() => {
   return TasksSchema.parse(
@@ -32,7 +35,7 @@ export const getConfiguredDefaultTask = cachedFn(() => {
  * @param file The path to the file
  * @returns The default task or `undefined`.
  */
-export function getDefaultTask(file: string): string | undefined {
+export function getDefaultTask(file: string): string | false | undefined {
   const { ext } = path.parse(file);
   return getConfiguredDefaultTask()[ext];
 }

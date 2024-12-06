@@ -109,7 +109,17 @@
             "type": "object",
             "patternProperties": {
               "^\\.[^.]+$": {
-                "type": "string",
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "boolean",
+                    "enum": [
+                      false
+                    ]
+                  }
+                ],
                 "description": "The default task for a specific file extension."
               }
             },
