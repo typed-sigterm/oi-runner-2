@@ -44,6 +44,15 @@ window.addEventListener('message', (ev) => {
       }
       break;
 
+    case 'context:rename': {
+      const state = states.get(data.from);
+      if (state) {
+        states.delete(data.from);
+        states.set(data.to, state);
+      }
+      break;
+    }
+
     case 'context:state-changed':
       sourceDirty.value = data.isDirty;
       break;

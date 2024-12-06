@@ -17,6 +17,10 @@ export type EventMessage = { // extension -> webview
   defaultTask?: string
   isDirty: boolean
   // @todo context:destroy to remove closed editors
+} | { // extension -> webview
+  type: 'context:rename'
+  from: string
+  to: string
 } | { // webview -> extension
   type: 'context:goto-source'
   file: string

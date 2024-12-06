@@ -35,6 +35,7 @@ class PanelProvider implements vscode.WebviewViewProvider {
     view.webview.onDidReceiveMessage(this._handleMessage, this);
 
     vscode.workspace.onDidChangeTextDocument(this._handleDocumentChange, this);
+    vscode.workspace.onDidRenameFiles(this._handleFilesRename, this);
   }
 
   public postEvent(message: EventMessage) {
@@ -48,8 +49,10 @@ class PanelProvider implements vscode.WebviewViewProvider {
     if (editor?.document.uri.scheme !== 'file') // skip non-fs editors
       return;
     const file = editor.document.fileName;
+    if (file === this._currentFile) // noop
+      return;
     const task = getDefaultTask(file);
-    if (task === false)
+    if (task === false) // skip explicit disabled
       return;
 
     // Create runner if not exists
@@ -81,6 +84,26 @@ class PanelProvider implements vscode.WebviewViewProvider {
         type: 'context:state-changed',
         isDirty,
       });
+    }
+  }
+
+  private _handleFilesRename(event: vscode.FileRenameEvent) {
+    for (const file of event.files) {
+      const from = file.oldUri.fsPath;
+      const to = file.newUri.fsPath;
+      const runner = this._runners.get(from);
+
+      if (this._currentFile === from)
+        this._currentFile = to;
+      if (runner) {
+        this._runners.delete(from);
+        this._runners.set(to, runner);
+        this.postEvent({
+          type: 'context:rename',
+          from,
+          to,
+        });
+      }
     }
   }
 
