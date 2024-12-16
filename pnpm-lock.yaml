@@ -7,40 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      '@guolao/vue-monaco-editor':
-        specifier: ^1.5.4
-        version: 1.5.4(monaco-editor@0.52.0)(vue@3.5.13(typescript@5.6.3))
-      '@iconify-prerendered/vue-codicon':
-        specifier: ^0.28.0
-        version: 0.28.1729663599(vue@3.5.13(typescript@5.6.3))
-      '@vscode-elements/elements':
-        specifier: ^1.6.2
-        version: 1.8.0
-      consola:
-        specifier: ^3.2.3
-        version: 3.2.3
-      convert:
-        specifier: ^5.4.1
-        version: 5.6.1
-      iconv-lite:
-        specifier: ^0.6.3
-        version: 0.6.3
-      monaco-editor:
-        specifier: ^0.52.0
-        version: 0.52.0
-      ps-tree:
-        specifier: ^1.2.0
-        version: 1.2.0
-      tree-kill:
-        specifier: ^1.2.2
-        version: 1.2.2
-      vue:
-        specifier: ^3.5.10
-        version: 3.5.13(typescript@5.6.3)
-      zod:
-        specifier: ^3.23.8
-        version: 3.23.8
     devDependencies:
       '@antfu/eslint-config':
         specifier: ^3.7.3
@@ -51,6 +17,12 @@ importers:
       '@commitlint/config-conventional':
         specifier: ^19.5.0
         version: 19.5.0
+      '@guolao/vue-monaco-editor':
+        specifier: ^1.5.4
+        version: 1.5.4(monaco-editor@0.52.0)(vue@3.5.13(typescript@5.6.3))
+      '@iconify-prerendered/vue-codicon':
+        specifier: ^0.28.0
+        version: 0.28.1729663599(vue@3.5.13(typescript@5.6.3))
       '@tomjs/vite-plugin-vscode':
         specifier: ^3.1.1
         version: 3.1.1(postcss@8.4.49)(typescript@5.6.3)(vite@6.0.2(@types/node@22.7.5)(jiti@2.3.3)(yaml@2.6.0))
@@ -69,15 +41,36 @@ importers:
       '@vitejs/plugin-vue':
         specifier: ^5.2.1
         version: 5.2.1(vite@6.0.2(@types/node@22.7.5)(jiti@2.3.3)(yaml@2.6.0))(vue@3.5.13(typescript@5.6.3))
+      '@vscode-elements/elements':
+        specifier: ^1.6.2
+        version: 1.8.0
       '@vscode/vsce':
         specifier: ^3.2.0
         version: 3.2.1
+      consola:
+        specifier: ^3.2.3
+        version: 3.2.3
+      convert:
+        specifier: ^5.4.1
+        version: 5.6.1
       eslint:
         specifier: ^9.12.0
         version: 9.15.0(jiti@2.3.3)
       husky:
         specifier: ^9.1.6
         version: 9.1.6
+      iconv-lite:
+        specifier: ^0.6.3
+        version: 0.6.3
+      monaco-editor:
+        specifier: ^0.52.0
+        version: 0.52.0
+      ps-tree:
+        specifier: ^1.2.0
+        version: 1.2.0
+      tree-kill:
+        specifier: ^1.2.2
+        version: 1.2.2
       typescript:
         specifier: ^5.5.3
         version: 5.6.3
@@ -90,9 +83,15 @@ importers:
       vitepress-giscus:
         specifier: ^1.0.2
         version: 1.0.2(typescript@5.6.3)(vitepress@1.5.0(@algolia/client-search@5.12.0)(@types/node@22.7.5)(postcss@8.4.49)(search-insights@2.17.2)(typescript@5.6.3))
+      vue:
+        specifier: ^3.5.10
+        version: 3.5.13(typescript@5.6.3)
       vue-tsc:
         specifier: ^2.1.10
         version: 2.1.10(typescript@5.6.3)
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
 
 packages:
 
