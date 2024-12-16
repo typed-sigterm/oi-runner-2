@@ -67,8 +67,7 @@ Format:
   },
   "oi-runner-2.defaultTask": {
     ".py": "Python" // Files with the .py extension default to Python
-    // Others default to the first task defined in oi-runner-2.tasks, which is C++ in this example
-    // You can also set it to `false`, and the run panel won't switch to files with this extension
+    // If a file does not match any extension here, the run panel won't switch to the file
   }
 }
 ```

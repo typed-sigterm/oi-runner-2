@@ -62,7 +62,7 @@ class PanelProvider implements vscode.WebviewViewProvider, vscode.Disposable {
     if (file === this._currentFile) // noop
       return;
     const task = getDefaultTask(file);
-    if (task === false) // skip explicit disabled
+    if (task === undefined)
       return;
 
     // Create runner if not exists

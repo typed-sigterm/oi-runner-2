@@ -38,7 +38,7 @@ window.addEventListener('message', (ev) => {
         currentState.value = {
           ...DefaultState,
           file: data.file,
-          task: data.defaultTask ?? tasks.value[0]?.name,
+          task: data.defaultTask,
         };
         states.set(data.file, currentState.value);
       }

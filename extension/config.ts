@@ -15,7 +15,10 @@ export type Task = z.infer<typeof TaskSchema>;
 const TasksSchema = z.record(TaskSchema);
 const DefaultTaskSchema = z.record(
   z.string(),
-  z.string().or(z.literal(false)),
+  z.string().or(z.literal(false)).transform((value) => {
+    // compat v1.1.0 -> v1.2.0
+    return value === false ? undefined : value;
+  }),
 );
 
 export const getConfiguredTasks = cachedFn(() => {
@@ -33,9 +36,9 @@ export const getConfiguredDefaultTask = cachedFn(() => {
 /**
  * Retrieves the default task for a given file path.
  * @param file The path to the file
- * @returns The default task or `undefined`.
+ * @returns The default task or `false` if disabled.
  */
-export function getDefaultTask(file: string): string | false | undefined {
+export function getDefaultTask(file: string): string | undefined {
   const { ext } = path.parse(file);
   return getConfiguredDefaultTask()[ext];
 }
