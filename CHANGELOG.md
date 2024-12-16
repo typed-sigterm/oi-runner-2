@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.1 (2024-12-16)
+
+### 🩹 Bug Fixes
+
+- Fix default configuration
+
 ## 1.2.0 (2024-12-16)
 
 ### 🚀 Features
@@ -21,7 +27,7 @@
 
 ### 🏡 Other Changes
 
-- OI Runner++ is also published on [Open VSX](https://open-vsx.org/extension/typed-sigterm/oi-runner-2), an open-source registry for VS Code extensions operated by the Eclipse Foundation.
+- OI Runner++ is also published on [Open VSX](https://open-vsx.org/extension/typed-sigterm/oi-runner-2), an open-source registry for VS Code extensions operated by the Eclipse Foundation
 
 ## 1.1.0 (2024-11-17)
 
@@ -55,19 +61,19 @@ Wishing every contestant in tomorrow's <abbr title="Certified Software Professio
 
 ### 🚀 Features
 
-- The compile button is not displayed when the selected language has no compilation command.
+- The compile button is not displayed when the selected language has no compilation command
 - Clear the stderr content from the last run when starting a new run.
-- Add configuration `oi-runner-2.defaultTask` to support setting default running languages for different file extensions.
+- Add configuration `oi-runner-2.defaultTask` to support setting default running languages for different file extensions
 
 ### 🩹 Bug Fixes
 
-- Modified the logo color to avoid being too close to the default background color.
-- Fix the issue with stdin being invalid.
+- Modified the logo color to avoid being too close to the default background color
+- Fix the issue with stdin being invalid
 
 ### 📖 Documentation
 
-- [Documentation site](https://oi-runner-2.by-ts.top/zh-cn/) is now live, come and check it out.
-- Add configuration instructions in the README.
+- [Documentation site](https://oi-runner-2.by-ts.top/zh-cn/) is now live, come and check it out
+- Add configuration instructions in the README
 
 ## 0.1.0 (2024-10-23)
 
