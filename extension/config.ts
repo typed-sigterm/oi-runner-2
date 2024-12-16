@@ -2,7 +2,7 @@ import path from 'node:path';
 import * as vscode from 'vscode';
 import { z } from 'zod';
 import { contributes } from '../package.json';
-import { cachedFn, logger } from './utils';
+import { cachedFn } from './utils';
 
 const ConfigManifest = contributes.configuration[0].properties;
 

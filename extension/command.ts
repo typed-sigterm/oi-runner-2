@@ -7,7 +7,6 @@ import { decode } from 'iconv-lite';
 import ps from 'ps-tree';
 import kill from 'tree-kill';
 import * as vscode from 'vscode';
-import { logger } from './utils';
 
 const execExt = process.platform === 'win32' ? '.exe' : '';
 
