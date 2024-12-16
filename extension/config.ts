@@ -13,13 +13,7 @@ const TaskSchema = z.object({
 export type Task = z.infer<typeof TaskSchema>;
 
 const TasksSchema = z.record(TaskSchema);
-const DefaultTaskSchema = z.record(
-  z.string(),
-  z.string().or(z.literal(false)).transform((value) => {
-    // compat v1.1.0 -> v1.2.0
-    return value === false ? undefined : value;
-  }),
-);
+const DefaultTaskSchema = z.record(z.string(), z.string());
 
 export const getConfiguredTasks = cachedFn(() => {
   return TasksSchema.parse(

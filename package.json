@@ -2,7 +2,7 @@
   "publisher": "typed-sigterm",
   "name": "oi-runner-2",
   "displayName": "OI Runner++",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "packageManager": "pnpm@9.15.0",
   "description": "VS Code extension designed for OIer and ACMer, for running single-file programs.",
@@ -109,17 +109,7 @@
             "type": "object",
             "patternProperties": {
               "^\\.[^.]+$": {
-                "oneOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "boolean",
-                    "enum": [
-                      false
-                    ]
-                  }
-                ],
+                "type": "string",
                 "description": "The default task for a specific file extension."
               }
             },
