@@ -1,7 +1,10 @@
 import path from 'node:path';
 import * as vscode from 'vscode';
 import { z } from 'zod';
-import { cachedFn } from './utils';
+import { contributes } from '../package.json';
+import { cachedFn, logger } from './utils';
+
+const ConfigManifest = contributes.configuration[0].properties;
 
 const CommandSchema = z.tuple([z.string(), z.array(z.string())]);
 const TaskSchema = z.object({
@@ -17,13 +20,19 @@ const DefaultTaskSchema = z.record(z.string(), z.string());
 
 export const getConfiguredTasks = cachedFn(() => {
   return TasksSchema.parse(
-    vscode.workspace.getConfiguration('oi-runner-2').get('tasks', {}),
+    vscode.workspace.getConfiguration('oi-runner-2').get(
+      'tasks',
+      ConfigManifest['oi-runner-2.tasks'].default,
+    ),
   );
 });
 
 export const getConfiguredDefaultTask = cachedFn(() => {
   return DefaultTaskSchema.parse(
-    vscode.workspace.getConfiguration('oi-runner-2').get('defaultTask', {}),
+    vscode.workspace.getConfiguration('oi-runner-2').get(
+      'defaultTask',
+      ConfigManifest['oi-runner-2.defaultTask'].default,
+    ),
   );
 });
 

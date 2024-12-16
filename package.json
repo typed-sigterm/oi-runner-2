@@ -115,6 +115,7 @@
             },
             "additionalProperties": false,
             "default": {
+              ".cpp": "C++",
               ".py": "Python"
             }
           },

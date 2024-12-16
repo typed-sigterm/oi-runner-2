@@ -65,7 +65,6 @@ export function executeCommand(command: string, args: string[], stdin?: string, 
     });
 
     signal?.addEventListener('abort', () => {
-      logger.log(child.pid);
       if (!child.pid)
         return;
       ps(child.pid, (_, children) => {
