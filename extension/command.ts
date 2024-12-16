@@ -4,7 +4,10 @@ import { Buffer } from 'node:buffer';
 import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { decode } from 'iconv-lite';
+import ps from 'ps-tree';
+import kill from 'tree-kill';
 import * as vscode from 'vscode';
+import { logger } from './utils';
 
 const execExt = process.platform === 'win32' ? '.exe' : '';
 
@@ -60,6 +63,17 @@ export function executeCommand(command: string, args: string[], stdin?: string, 
       shell: true,
       signal,
     });
+
+    signal?.addEventListener('abort', () => {
+      logger.log(child.pid);
+      if (!child.pid)
+        return;
+      ps(child.pid, (_, children) => {
+        for (const cpid of children)
+          kill(Number(cpid.PID));
+      });
+    });
+
     child.stdin.end(stdin ?? '');
     child.stderr.on('data', (data) => {
       stderrUsed = true;
