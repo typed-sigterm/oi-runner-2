@@ -107,6 +107,7 @@ function gotoSource() {
 }
 
 .source-link {
+  height: 20px;
   margin-right: auto;
   cursor: pointer;
 }
