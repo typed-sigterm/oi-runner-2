@@ -9,6 +9,7 @@ import {
 } from '@iconify-prerendered/vue-codicon';
 import { computed } from 'vue';
 import { postEvent } from '../utils';
+import '@vscode-elements/elements/dist/vscode-badge';
 import '@vscode-elements/elements/dist/vscode-button';
 import '@vscode-elements/elements/dist/vscode-option';
 import '@vscode-elements/elements/dist/vscode-single-select';
@@ -20,7 +21,6 @@ const props = defineProps<{
   status: ToolbarStatus
   sourceFile?: string
   sourceDirty: boolean
-  warnDirty: boolean
 }>();
 defineEmits<{
   run: [step: RunStep]
@@ -45,15 +45,10 @@ function gotoSource() {
 
 <template>
   <div class="toolbar">
-    <a
-      v-if="sourceFile"
-      class="source-link"
-      :title="`${sourceDirty ? '[unsaved] ' : ''}${sourceFile}`"
-      @click="gotoSource"
-    >
-      <IconFileCode class="icon" />
-      <sup v-if="sourceDirty" :class="[warnDirty && 'warn']" />
+    <a v-if="sourceFile" class="source-link" :title="sourceFile" @click="gotoSource">
+      <IconFileCode />
       Source File
+      <vscode-badge v-if="sourceDirty">unsaved</vscode-badge>
     </a>
 
     <vscode-single-select
@@ -114,32 +109,16 @@ function gotoSource() {
 .source-link {
   margin-right: auto;
   cursor: pointer;
-
-  .icon {
-    width: 16px;
-    height: 16px;
-    vertical-align: text-bottom;
-  }
-
-  sup {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    background: var(--vscode-textLink-foreground);
-    border-radius: 50%;
-    vertical-align: text-top;
-  }
-
-  sup.warn {
-    background: var(--vscode-list-errorForeground);
-    animation: 2s none 0s warn infinite;
-  }
 }
 
-@keyframes warn {
-  0% { opacity: 1; }
-  50% { opacity: 0.5; }
-  100% { opacity: 1; }
+.source-link > svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: text-bottom;
+}
+
+vscode-badge {
+  margin-left: 2px;
 }
 
 vscode-single-select {
