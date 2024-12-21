@@ -1,12 +1,12 @@
 /* eslint-disable no-template-curly-in-string */
 
+import type * as vscode from 'vscode';
 import { Buffer } from 'node:buffer';
 import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { decode } from 'iconv-lite';
 import ps from 'ps-tree';
 import kill from 'tree-kill';
-import * as vscode from 'vscode';
 
 const execExt = process.platform === 'win32' ? '.exe' : '';
 
@@ -24,8 +24,6 @@ export function evalCommand(template: string, document: vscode.TextDocument) {
     .replaceAll('${fileNoExt}', file.dir + path.sep + file.name)
     .replaceAll('${execExt}', execExt);
 }
-
-const commandStderrOutput = vscode.window.createOutputChannel('OI Runner++ Task');
 
 function transformSocketOutput(output: any) {
   return output === null
@@ -46,17 +44,17 @@ export interface ExecuteCommandResult {
  * @param command The command to execute.
  * @param args An array of string arguments for the command.
  * @param stdin The string to write to the stdin of the command.
+ * @param stderr The output channel to write stderr to. Once it is written to, it will be shown.
  * @param cwd The current working directory for the command.
  * @param signal The {@link AbortSignal} that can be for cancel the execution
  * @throws {AbortError} If aborted
  * @returns A promise that resolves
  */
-export function executeCommand(command: string, args: string[], stdin?: string, cwd?: string, signal?: AbortSignal) {
+export function executeCommand(command: string, args: string[], stdin?: string, stderr?: vscode.OutputChannel, cwd?: string, signal?: AbortSignal) {
   return new Promise<ExecuteCommandResult>((resolve, reject) => {
     let startTime: number;
-    let stderrUsed = false;
+    let stderrOpened = false;
 
-    commandStderrOutput.clear();
     const child = spawn(command, args, {
       cwd,
       shell: true,
@@ -73,10 +71,15 @@ export function executeCommand(command: string, args: string[], stdin?: string, 
     });
 
     child.stdin.end(stdin ?? '');
-    child.stderr.on('data', (data) => {
-      stderrUsed = true;
-      commandStderrOutput.append(transformSocketOutput(data));
-    });
+    if (stderr) {
+      child.stderr.on('data', (data) => {
+        if (!stderrOpened) {
+          stderrOpened = true;
+          stderr.show();
+        }
+        stderr.append(transformSocketOutput(data));
+      });
+    }
 
     child.once('spawn', () => startTime = Date.now());
     child.once('error', (e) => {
@@ -92,8 +95,6 @@ export function executeCommand(command: string, args: string[], stdin?: string, 
         exitCode: child.exitCode!,
         duration: Date.now() - startTime,
       });
-      if (stderrUsed)
-        commandStderrOutput.show();
     });
   });
 }

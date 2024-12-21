@@ -14,6 +14,7 @@ export class Runner extends vscode.EventEmitter<EventMessage> {
     super();
   }
 
+  private _stderrChannel = vscode.window.createOutputChannel('OI Runner++ Task');
   private _currentController?: AbortController;
 
   private _evalTask(task: string) {
@@ -46,7 +47,7 @@ export class Runner extends vscode.EventEmitter<EventMessage> {
     Promise.resolve()
       .then(() => { // compile
         if (step !== 'execute' && t.compile)
-          return executeCommand(t.compile[0], t.compile[1], undefined, cwd, signal);
+          return executeCommand(t.compile[0], t.compile[1], undefined, this._stderrChannel, cwd, signal);
       })
       .then((p) => { // compile completed
         if (p && p.exitCode) {
@@ -61,7 +62,7 @@ export class Runner extends vscode.EventEmitter<EventMessage> {
       })
       .then(() => { // execute
         if (step !== 'compile' && t.execute)
-          return executeCommand(t.execute[0], t.execute[1], stdin, cwd, signal);
+          return executeCommand(t.execute[0], t.execute[1], stdin, this._stderrChannel, cwd, signal);
       })
       .then((p) => { // execute completed
         if (!p)
