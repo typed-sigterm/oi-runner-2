@@ -99,8 +99,7 @@ export function executeCommand(command: string, args: string[], stdin?: IOChanne
       });
     }
 
-    // @todo use `performance.now()`
-    child.once('spawn', () => startTime = Date.now());
+    child.once('spawn', () => startTime = performance.now());
     child.once('error', (e) => {
       if (e instanceof Error && e.name === 'AbortError')
         reject(e);
@@ -116,7 +115,7 @@ export function executeCommand(command: string, args: string[], stdin?: IOChanne
       resolve({
         stdout: printed ? transformSocketOutput(printed) : printed,
         exitCode: child.exitCode!,
-        duration: Date.now() - startTime,
+        duration: Math.round(performance.now() - startTime),
       });
     });
   });
