@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { EventMessage, TaskAttributes } from '../shared/events';
-import type { RunnerState } from './components/Runner.vue';
+import type { RunnerState } from './utils';
 import { onMounted, provide, readonly, ref } from 'vue';
 import { EventMarker } from '../shared/events';
 import Runner from './components/Runner.vue';
@@ -112,5 +112,10 @@ onMounted(() => {
 
 a {
   cursor: pointer;
+}
+
+a[aria-disabled="true"] {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 </style>

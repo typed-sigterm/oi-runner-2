@@ -6,7 +6,7 @@ import { IconLoadingLoop } from '@iconify-prerendered/vue-line-md';
 import { computed, inject, ref } from 'vue';
 import { selectFile, ThemeInjectKey, useFontSize } from '../utils';
 
-defineProps<{
+const { disabled } = defineProps<{
   title: string
   readonly?: boolean
   disabled?: boolean
@@ -19,6 +19,8 @@ const fontSize = useFontSize();
 const isLinked = computed(() => typeof value.value === 'object');
 const isLinking = ref(false);
 async function linkFile() {
+  if (disabled)
+    return;
   if (isLinked.value) { // unlink
     value.value = '';
   } else { // link
@@ -40,6 +42,7 @@ async function linkFile() {
         class="link-file"
         :title="isLinked ? 'Unlink the file' : 'Link a file'"
         :aria-selected="isLinked"
+        :aria-disabled="disabled"
         @click="linkFile"
       >
         <IconLoadingLoop v-if="isLinking" />
