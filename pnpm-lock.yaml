@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      '@iconify-prerendered/vue-line-md':
-        specifier: ^0.28.1733726635
-        version: 0.28.1733726635(vue@3.5.13(typescript@5.6.3))
     devDependencies:
       '@antfu/eslint-config':
         specifier: ^3.7.3
@@ -27,6 +23,9 @@ importers:
       '@iconify-prerendered/vue-codicon':
         specifier: ^0.28.0
         version: 0.28.1733990300(vue@3.5.13(typescript@5.6.3))
+      '@iconify-prerendered/vue-line-md':
+        specifier: ^0.28.1733726635
+        version: 0.28.1733726635(vue@3.5.13(typescript@5.6.3))
       '@tomjs/vite-plugin-vscode':
         specifier: ^3.1.1
         version: 3.2.1(postcss@8.4.49)(typescript@5.6.3)(vite@6.0.3(@types/node@22.10.2)(jiti@2.4.1)(yaml@2.6.1))
@@ -54,9 +53,6 @@ importers:
       consola:
         specifier: ^3.2.3
         version: 3.2.3
-      convert:
-        specifier: ^5.4.1
-        version: 5.7.0
       eslint:
         specifier: ^9.12.0
         version: 9.17.0(jiti@2.4.1)
@@ -1702,9 +1698,6 @@ packages:
     resolution: {integrity: sha512-ZPMl0ZJbw74iS9LuX9YIAiW8pfM5p3yh2o/NbXHbkFuZzY5jvdi5jFycEOkmBW5H5I7nA+D6f3UcsCLP2vvSEA==}
     engines: {node: '>=16'}
     hasBin: true
-
-  convert@5.7.0:
-    resolution: {integrity: sha512-3j63MvYat3f42sv8vSBZhPn28YMifKlF6x7ym0PwpdYwY0Ej4iRmYzoHF7oaEclHTljFn5v+abQZlJVb8S+tdw==}
 
   copy-anything@3.0.5:
     resolution: {integrity: sha512-yCEafptTtb4bk7GLEQoM8KVJpxAfdBJYaXyzQEgQQQgYrZiDp8SJmGKlYza6CYjEDNstAdNdKA3UuoULlEbS6w==}
@@ -5444,8 +5437,6 @@ snapshots:
       is-text-path: 2.0.0
       meow: 12.1.1
       split2: 4.2.0
-
-  convert@5.7.0: {}
 
   copy-anything@3.0.5:
     dependencies:

@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.3.0 (2024-12-22)
+
+### 🚀 Features
+
+- You can now redirect stdin and stdout to a file in the run panel. This is useful when the data is too large to be inputted manually, or when you want to save the output for later use
+
+### 🩹 Bug Fixes
+
+- Fix the issue that the warning emitted by the compile command is not displayed when compile-and-run
+- Enable more accurate timing
+
 ## 1.2.1 (2024-12-16)
 
 ### 🩹 Bug Fixes
