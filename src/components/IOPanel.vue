@@ -41,7 +41,7 @@ async function linkFile() {
       <a
         v-if="!disabled"
         class="link-file"
-        :title="isLinked ? 'Unlink the file' : 'Link a file'"
+        :title="isLinked ? 'Unlink File' : 'Link File'"
         :aria-selected="isLinked"
         @click="linkFile"
       >

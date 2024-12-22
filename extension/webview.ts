@@ -153,7 +153,7 @@ class PanelProvider implements vscode.WebviewViewProvider, vscode.Disposable {
 
       case 'file:select':
         vscode.window.showOpenDialog({
-          title: 'Select a file',
+          title: 'Select File',
         }).then((uri) => {
           this.postEvent({
             type: 'file:selected',
