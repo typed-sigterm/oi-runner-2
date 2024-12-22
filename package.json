@@ -186,5 +186,8 @@
     "vue": "^3.5.10",
     "vue-tsc": "^2.1.10",
     "zod": "^3.23.8"
+  },
+  "dependencies": {
+    "@iconify-prerendered/vue-line-md": "^0.28.1733726635"
   }
 }

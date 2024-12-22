@@ -1,7 +1,8 @@
 // @todo rewrite with state machine
 
-import type { EventMessage, RunStep } from '../shared/events';
+import type { EventMessage, IOChannel, IOFileChannel, RunStep } from '../shared/events';
 import type { Task } from './config';
+import { createWriteStream } from 'node:fs';
 import * as vscode from 'vscode';
 import { evalCommand, executeCommand } from './command';
 import { getConfiguredTasks } from './config';
@@ -31,7 +32,7 @@ export class Runner extends vscode.EventEmitter<EventMessage> {
     return result as Task;
   }
 
-  public startRun(task: string, step: RunStep, stdin?: string) {
+  public startRun(task: string, step: RunStep, stdin?: IOChannel, stdout?: IOFileChannel) {
     let t: Task;
     try {
       t = this._evalTask(task);
@@ -47,7 +48,7 @@ export class Runner extends vscode.EventEmitter<EventMessage> {
     Promise.resolve()
       .then(() => { // compile
         if (step !== 'execute' && t.compile)
-          return executeCommand(t.compile[0], t.compile[1], undefined, this._stderrChannel, cwd, signal);
+          return executeCommand(t.compile[0], t.compile[1], undefined, undefined, this._stderrChannel, cwd, signal);
       })
       .then((p) => { // compile completed
         if (p && p.exitCode) {
@@ -61,15 +62,16 @@ export class Runner extends vscode.EventEmitter<EventMessage> {
         }
       })
       .then(() => { // execute
+        const out = stdout ? createWriteStream(stdout.file) : undefined;
         if (step !== 'compile' && t.execute)
-          return executeCommand(t.execute[0], t.execute[1], stdin, this._stderrChannel, cwd, signal);
+          return executeCommand(t.execute[0], t.execute[1], stdin, out, this._stderrChannel, cwd, signal);
       })
       .then((p) => { // execute completed
         if (!p)
           return;
         if (p.exitCode === undefined) {
           this.fire({ type: 'run:execute-failed' });
-          throw new RunError('Excuting failed');
+          throw new RunError('Execution failed');
         } else {
           // @ts-expect-error All attributes either `undefined` or not `undefined` together
           this.fire({

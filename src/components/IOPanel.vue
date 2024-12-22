@@ -1,28 +1,55 @@
 <script lang="ts" setup>
+import type { IOChannel } from '../../shared/events';
 import { VueMonacoEditor } from '@guolao/vue-monaco-editor';
-import { inject } from 'vue';
-import { ThemeInjectKey, useFontSize } from '../utils';
+import { IconFileSymlinkFile } from '@iconify-prerendered/vue-codicon';
+import { IconLoadingLoop } from '@iconify-prerendered/vue-line-md';
+import { computed, inject, ref } from 'vue';
+import { selectFile, ThemeInjectKey, useFontSize } from '../utils';
 
 defineProps<{
   title: string
   readonly?: boolean
   disabled?: boolean
 }>();
-const value = defineModel<string>();
+const value = defineModel<IOChannel>();
 
 const theme = inject(ThemeInjectKey);
 const fontSize = useFontSize();
+
+const isLinked = computed(() => typeof value.value === 'object');
+const isLinking = ref(false);
+async function linkFile() {
+  if (isLinked.value) { // unlink
+    value.value = '';
+  } else { // link
+    isLinking.value = true;
+    const file = await selectFile();
+    if (file)
+      value.value = { file };
+    isLinking.value = false;
+  }
+}
 </script>
 
 <template>
-  <div class="io-panel" :aria-disabled="disabled">
+  <div class="io-panel" :aria-disabled="disabled || typeof value === 'object'">
     <div>
       <h3>{{ title }}</h3>
       <slot name="info" />
+      <a
+        class="link-file"
+        :title="isLinked ? 'Unlink the file' : 'Link a file'"
+        :aria-selected="isLinked"
+        @click="linkFile"
+      >
+        <IconLoadingLoop v-if="isLinking" />
+        <IconFileSymlinkFile v-else />
+      </a>
     </div>
+
     <VueMonacoEditor
-      v-model:value="value"
       class="monaco-editor"
+      :value="typeof value === 'string' ? value : ''"
       :theme="theme === 'light' ? 'vs' : 'vs-dark'"
       :options="{
         automaticLayout: true,
@@ -32,6 +59,7 @@ const fontSize = useFontSize();
         minimap: { enabled: false },
         readOnly: readonly,
       }"
+      @update:value="value = $event"
     />
     <slot name="extra" />
   </div>
@@ -55,6 +83,16 @@ h3 {
   font-weight: normal;
   margin-top: 0;
   margin-bottom: 8px;
+}
+
+.link-file {
+  float: right;
+  font-size: 18px;
+  color: var(--vscode-editor-foreground);
+}
+
+.link-file[aria-selected="true"] {
+  color: var(--vscode-editorLink-activeForeground);
 }
 
 .io-panel[aria-disabled="true"] .monaco-editor {

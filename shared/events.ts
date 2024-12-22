@@ -6,8 +6,15 @@ export interface TaskAttributes {
 }
 export type RunStep = 'compile' | 'execute' | 'compile-execute';
 
+export interface IOFileChannel {
+  file: string
+}
+export type IOChannel =
+  | string // plain content
+  | IOFileChannel; // link to file
+
 export type EventMessage = { // extension -> webview
-  type: 'config'
+  type: 'setup'
   tasks: TaskAttributes[]
 } | { // webview -> extension
   type: 'webview:ready'
@@ -21,9 +28,6 @@ export type EventMessage = { // extension -> webview
   type: 'context:rename'
   from: string
   to: string
-} | { // webview -> extension
-  type: 'context:goto-source'
-  file: string
 } | { // extension -> webview
   type: 'context:state-changed'
   isDirty: boolean
@@ -32,7 +36,8 @@ export type EventMessage = { // extension -> webview
   file: string
   task: string
   step: RunStep
-  stdin?: string
+  stdin?: IOChannel
+  stdout?: IOFileChannel
 } | { // extension -> webview
   type: 'run:compiled'
   skipExcuting: boolean
@@ -51,4 +56,12 @@ export type EventMessage = { // extension -> webview
   file: string
 } | { // extension -> webview
   type: 'run:killed'
+} | { // webview -> extension
+  type: 'file:open-in-editor'
+  path: string
+} | { // webview -> extension
+  type: 'file:select'
+} | { // extension -> webview
+  type: 'file:selected'
+  path?: string
 };

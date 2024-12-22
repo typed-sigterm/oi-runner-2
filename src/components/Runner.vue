@@ -1,25 +1,11 @@
 <script lang="ts" setup>
 import type { RunStep, TaskAttributes } from '../../shared/events';
-import { IconError } from '@iconify-prerendered/vue-codicon';
-import { ref, watch } from 'vue';
-import { logger, postEvent } from '../utils';
-import IconCircleSlash from './icon/CircleSlash.vue';
+import type { RunnerState } from '../utils';
+import { ref, toRaw, watch } from 'vue';
+import { postEvent } from '../utils';
 import IOPanel from './IOPanel.vue';
-import Spin from './Spin.vue';
+import RunnerHint from './RunnerHint.vue';
 import Toolbar from './Toolbar.vue';
-
-export type RunnerStatus = 'idle' | 'compiling' | 'excuting' | 'cancelling';
-export type RunnerHint = 'compile-failed' | 'execute-failed' | 'cancelled';
-export interface RunnerState {
-  file?: string
-  task?: string
-  status: RunnerStatus
-  stdin: string
-  stdout: string
-  exitCode?: number
-  duration?: number
-  hint?: RunnerHint
-}
 
 const { state } = defineProps<{
   state: RunnerState
@@ -44,8 +30,7 @@ watch(() => [state.file, state.status], ([file, status]) => {
   flush: 'sync',
 });
 
-async function handleRun(step: RunStep) {
-  logger.debug('Run', step);
+async function run(step: RunStep) {
   if (state.task === undefined || state.file === undefined)
     return;
   if (step === 'execute')
@@ -55,15 +40,18 @@ async function handleRun(step: RunStep) {
   state.hint = state.duration = state.exitCode = undefined;
   toolbarStatus.value = 'running';
 
+  // Note that some properties are `reactive`, which cannot be `structuredClone` or `postMessage`.
+  // So we need to convert them back to raw
   postEvent({
     type: 'run:launch',
     file: state.file,
     task: state.task,
     step,
-    stdin: state.stdin,
+    stdin: toRaw(state.stdin),
+    stdout: typeof state.stdout === 'object' ? toRaw(state.stdout) : undefined,
   });
 }
-function handleCancel() {
+function cancel() {
   state.status = 'cancelling';
   postEvent({
     type: 'run:kill',
@@ -79,8 +67,8 @@ function handleCancel() {
     :status="toolbarStatus"
     :source-file="state.file"
     :source-dirty
-    @run="handleRun"
-    @cancel="handleCancel"
+    @run="run"
+    @cancel="cancel"
   />
 
   <div class="io-area">
@@ -88,7 +76,11 @@ function handleCancel() {
       v-model="state.stdin"
       title="Input"
       :disabled="!state.file"
-    />
+    >
+      <template #extra>
+        <RunnerHint type="stdin" :state />
+      </template>
+    </IOPanel>
 
     <IOPanel
       v-model="state.stdout"
@@ -103,24 +95,7 @@ function handleCancel() {
       </template>
 
       <template #extra>
-        <div v-if="state.hint === 'compile-failed'" class="stdout-mask run-failed">
-          <IconError />
-          Compilation failed
-        </div>
-        <div v-else-if="state.hint === 'execute-failed'" class="stdout-mask run-failed">
-          <IconError />
-          Execution failed
-        </div>
-        <div v-else-if="state.hint === 'cancelled'" class="stdout-mask run-failed">
-          <IconCircleSlash />
-          Run Cancelled
-        </div>
-        <Spin v-else-if="state.status === 'compiling'" class="stdout-mask">
-          Compiling
-        </Spin>
-        <Spin v-else-if="state.status === 'excuting'" class="stdout-mask">
-          Executing
-        </Spin>
+        <RunnerHint type="stdout" :state />
       </template>
     </IOPanel>
   </div>
@@ -138,25 +113,5 @@ function handleCancel() {
 .exit-info {
   color: var(--vscode-descriptionForeground);
   margin-left: 8px;
-}
-
-.stdout-mask {
-  position: relative;
-  top: calc(-50% - var(--spinner-size) / 2);
-  left: 50%;
-  transform: translate(-50%, 50%);
-  height: 0; /* to prevent `.io-area` height changing when the mask is shown */
-}
-
-.stdout-mask > svg {
-  font-size: 32px;
-  overflow: visible; /* make icon visible */
-  --spinner-size: 32px; /* correct alignment */
-}
-
-.run-failed {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 </style>

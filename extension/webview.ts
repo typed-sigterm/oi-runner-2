@@ -123,7 +123,7 @@ class PanelProvider implements vscode.WebviewViewProvider, vscode.Disposable {
     switch (message.type) {
       case 'webview:ready': // pass config and initial state to webview
         this.postEvent({
-          type: 'config',
+          type: 'setup',
           tasks: Object.entries(getConfiguredTasks()).map(([k, v]) => ({
             name: k,
             compilable: !!v.compile,
@@ -132,17 +132,28 @@ class PanelProvider implements vscode.WebviewViewProvider, vscode.Disposable {
         this._handleActiveEditorChange(vscode.window.activeTextEditor);
         break;
 
-      case 'context:goto-source':
-        vscode.window.showTextDocument(vscode.Uri.file(message.file), {
+      case 'run:launch':
+        this._runners.get(message.file)!.startRun(message.task, message.step, message.stdin, message.stdout);
+        break;
+      case 'run:kill':
+        this._runners.get(message.file)!.stopRun();
+        break;
+
+      case 'file:open-in-editor':
+        vscode.window.showTextDocument(vscode.Uri.file(message.path), {
           selection: new vscode.Selection(0, 0, 0, 0),
         });
         break;
 
-      case 'run:launch':
-        this._runners.get(message.file)!.startRun(message.task, message.step, message.stdin);
-        break;
-      case 'run:kill':
-        this._runners.get(message.file)!.stopRun();
+      case 'file:select':
+        vscode.window.showOpenDialog({
+          title: 'Select a file',
+        }).then((uri) => {
+          this.postEvent({
+            type: 'file:selected',
+            path: uri?.[0].fsPath,
+          });
+        });
         break;
     }
   }

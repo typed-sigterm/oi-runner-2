@@ -1,8 +1,11 @@
 /* eslint-disable no-template-curly-in-string */
 
+import type { WriteStream } from 'node:fs';
 import type * as vscode from 'vscode';
+import type { IOChannel } from '../shared/events';
 import { Buffer } from 'node:buffer';
 import { spawn } from 'node:child_process';
+import { accessSync, constants, createReadStream } from 'node:fs';
 import path from 'node:path';
 import { decode } from 'iconv-lite';
 import ps from 'ps-tree';
@@ -43,14 +46,15 @@ export interface ExecuteCommandResult {
  * Executes a command in a child process.
  * @param command The command to execute.
  * @param args An array of string arguments for the command.
- * @param stdin The string to write to the stdin of the command.
+ * @param stdin The string / file to write to the stdin of the command.
+ * @param stdout The output stream to write stdout to.
  * @param stderr The output channel to write stderr to. Once it is written to, it will be shown.
  * @param cwd The current working directory for the command.
  * @param signal The {@link AbortSignal} that can be for cancel the execution
  * @throws {AbortError} If aborted
  * @returns A promise that resolves
  */
-export function executeCommand(command: string, args: string[], stdin?: string, stderr?: vscode.OutputChannel, cwd?: string, signal?: AbortSignal) {
+export function executeCommand(command: string, args: string[], stdin?: IOChannel, stdout?: WriteStream, stderr?: vscode.OutputChannel, cwd?: string, signal?: AbortSignal) {
   return new Promise<ExecuteCommandResult>((resolve, reject) => {
     let startTime: number;
     let stderrOpened = false;
@@ -70,7 +74,21 @@ export function executeCommand(command: string, args: string[], stdin?: string, 
       });
     });
 
-    child.stdin.end(stdin ?? '');
+    if (typeof stdin === 'string') {
+      child.stdin.end(stdin);
+    } else if (typeof stdin === 'object') {
+      accessSync(stdin.file, constants.F_OK | constants.R_OK);
+      createReadStream(stdin.file)
+        .pipe(child.stdin)
+        .on('end', () => child.stdin.end());
+    } else {
+      child.stdin.end();
+    }
+
+    if (stdout) {
+      child.stdout.pipe(stdout);
+    }
+
     if (stderr) {
       child.stderr.on('data', (data) => {
         if (!stderrOpened) {
@@ -81,6 +99,7 @@ export function executeCommand(command: string, args: string[], stdin?: string, 
       });
     }
 
+    // @todo use `performance.now()`
     child.once('spawn', () => startTime = Date.now());
     child.once('error', (e) => {
       if (e instanceof Error && e.name === 'AbortError')
@@ -88,10 +107,14 @@ export function executeCommand(command: string, args: string[], stdin?: string, 
       else
         resolve({});
     });
+
     child.once('exit', () => {
-      const stdout = child.stdout.read();
+      // If stdout is redirected, resolve `stdout: undefined`
+      let printed: string | undefined;
+      if (!stdout)
+        printed = child.stdout.read();
       resolve({
-        stdout: transformSocketOutput(stdout),
+        stdout: printed ? transformSocketOutput(printed) : printed,
         exitCode: child.exitCode!,
         duration: Date.now() - startTime,
       });

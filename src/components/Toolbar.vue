@@ -37,8 +37,8 @@ const currentTaskCompilable = computed(() => {
 
 function gotoSource() {
   postEvent({
-    type: 'context:goto-source',
-    file: props.sourceFile!,
+    type: 'file:open-in-editor',
+    path: props.sourceFile!,
   });
 }
 </script>
@@ -109,7 +109,6 @@ function gotoSource() {
 .source-link {
   height: 20px;
   margin-right: auto;
-  cursor: pointer;
 }
 
 .source-link > svg {

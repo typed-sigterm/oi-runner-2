@@ -1,10 +1,11 @@
 import type { InjectionKey } from 'vue';
+import type { EventMessage, IOChannel } from '../shared/events';
 import Consola, { LogLevels } from 'consola/browser';
 import { ref } from 'vue';
-import { EventMarker, type EventMessage } from '../shared/events';
+import { EventMarker } from '../shared/events';
 
 export const logger = Consola.withTag('OI Runner++');
-logger.options.level = import.meta.env.DEV ? LogLevels.debug : LogLevels.info;
+logger.options.level = import.meta.env.DEV ? LogLevels.verbose : LogLevels.info;
 
 export const vscode = acquireVsCodeApi();
 
@@ -28,6 +29,9 @@ function refreshFontSize() {
     fontSize.value = size;
 }
 
+/**
+ * @returns Reactive current font size of the editor.
+ */
 export function useFontSize() {
   if (!fontSizeInitialized) {
     fontSizeInitialized = true;
@@ -38,4 +42,34 @@ export function useFontSize() {
     refreshFontSize();
   }
   return fontSize;
+}
+
+export type RunnerStatus = 'idle' | 'compiling' | 'excuting' | 'cancelling';
+export type RunnerHint = 'compile-failed' | 'execute-failed' | 'cancelled';
+export interface RunnerState {
+  file?: string
+  task?: string
+  status: RunnerStatus
+  stdin: IOChannel
+  stdout: IOChannel
+  exitCode?: number
+  duration?: number
+  hint?: RunnerHint
+}
+
+/**
+ * Ask user to select one file.
+ * @returns Resolves the selected file path, or `undefined` if cancelled.
+ */
+export function selectFile() {
+  return new Promise<string | undefined>((resolve) => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data.type !== 'file:selected')
+        return;
+      window.removeEventListener('message', handleMessage);
+      resolve(event.data.path);
+    };
+    postEvent({ type: 'file:select' });
+    window.addEventListener('message', handleMessage);
+  });
 }

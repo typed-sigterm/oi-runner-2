@@ -27,7 +27,7 @@ window.addEventListener('message', (ev) => {
   logger.debug('WebView received message:', data);
 
   switch (data.type) {
-    case 'config':
+    case 'setup':
       tasks.value = data.tasks;
       break;
 
@@ -68,7 +68,8 @@ window.addEventListener('message', (ev) => {
 
     case 'run:executed':
       currentState.value.status = 'idle';
-      currentState.value.stdout = data.stdout;
+      if (data.stdout !== undefined) // Don't update if it's redirected to a file
+        currentState.value.stdout = data.stdout;
       currentState.value.exitCode = data.exitCode;
       currentState.value.duration = data.duration;
       break;
@@ -107,5 +108,9 @@ onMounted(() => {
 
   /* @todo This is not a good practice, but I can't find a better way to do it */
   --spinner-size: 40px;
+}
+
+a {
+  cursor: pointer;
 }
 </style>
