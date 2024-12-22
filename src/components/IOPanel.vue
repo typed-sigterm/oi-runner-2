@@ -39,10 +39,10 @@ async function linkFile() {
       <h3>{{ title }}</h3>
       <slot name="info" />
       <a
+        v-if="!disabled"
         class="link-file"
         :title="isLinked ? 'Unlink the file' : 'Link a file'"
         :aria-selected="isLinked"
-        :aria-disabled="disabled"
         @click="linkFile"
       >
         <IconLoadingLoop v-if="isLinking" />

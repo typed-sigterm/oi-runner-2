@@ -32,7 +32,7 @@ function transformSocketOutput(output: any) {
   return output === null
     ? ''
     : Buffer.isBuffer(output)
-      ? decode(output, /* 'utf8' */ 'gb2312')
+      ? decode(output, /* 'utf8' */ 'gb2312') // @todo allow customizing this
       : output;
 }
 
@@ -111,9 +111,9 @@ export function executeCommand(command: string, args: string[], stdin?: IOChanne
       // If stdout is redirected, resolve `stdout: undefined`
       let printed: string | undefined;
       if (!stdout)
-        printed = child.stdout.read();
+        printed = transformSocketOutput(child.stdout.read());
       resolve({
-        stdout: printed ? transformSocketOutput(printed) : printed,
+        stdout: printed,
         exitCode: child.exitCode!,
         duration: Math.round(performance.now() - startTime),
       });
