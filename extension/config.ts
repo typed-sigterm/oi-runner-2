@@ -45,3 +45,7 @@ export function getDefaultTask(file: string): string | undefined {
   const { ext } = path.parse(file);
   return getConfiguredDefaultTask()[ext];
 }
+
+export function getAutoSave(): boolean {
+  return vscode.workspace.getConfiguration('oi-runner-2').get<boolean>('autoSave', true) !== false;
+}

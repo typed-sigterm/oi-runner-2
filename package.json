@@ -123,6 +123,11 @@
             "type": "boolean",
             "default": true,
             "description": "Whether to add OI Runner++ to the editor title menu."
+          },
+          "oi-runner-2.autoSave": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether to automatically save the file before running."
           }
         }
       }

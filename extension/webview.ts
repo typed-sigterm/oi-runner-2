@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { EventMarker, type EventMessage } from '../shared/events';
-import { getConfiguredTasks, getDefaultTask } from './config';
+import { getAutoSave, getConfiguredTasks, getDefaultTask } from './config';
 import { Runner } from './runner';
 import { logger } from './utils';
 
@@ -117,7 +117,7 @@ class PanelProvider implements vscode.WebviewViewProvider, vscode.Disposable {
     }
   }
 
-  private _handleMessage(message: EventMessage) {
+  private async _handleMessage(message: EventMessage) {
     logger.debug('Extension received message:', message);
 
     switch (message.type) {
@@ -133,8 +133,14 @@ class PanelProvider implements vscode.WebviewViewProvider, vscode.Disposable {
         break;
 
       case 'run:launch':
+        if (getAutoSave() && this._currentFileDirty) {
+          const ret = await vscode.workspace.save(vscode.Uri.file(message.file));
+          if (!ret)
+            vscode.window.showWarningMessage('Failed to auto-save file before running. Please save manually.');
+        }
         this._runners.get(message.file)!.startRun(message.task, message.step, message.stdin, message.stdout);
         break;
+
       case 'run:kill':
         this._runners.get(message.file)!.stopRun();
         break;
