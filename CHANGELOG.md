@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.1 (2024-12-22)
+
+### 🚀 Features
+
+- The extension now automatically save the source file before running by default. You can disable this feature by setting `oi-runner-2.autoSave` to `false`
+
+### 🩹 Bug Fixes
+
+- Fix the appearance of link file button when stdout is empty
+
 ## 1.3.0 (2024-12-22)
 
 ### 🚀 Features
