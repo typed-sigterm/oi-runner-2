@@ -7,7 +7,6 @@ import { Buffer } from 'node:buffer';
 import { spawn } from 'node:child_process';
 import { accessSync, constants, createReadStream } from 'node:fs';
 import path from 'node:path';
-import { decode } from 'iconv-lite';
 import ps from 'ps-tree';
 import kill from 'tree-kill';
 
@@ -32,7 +31,7 @@ function transformSocketOutput(output: any) {
   return output === null
     ? ''
     : Buffer.isBuffer(output)
-      ? decode(output, /* 'utf8' */ 'gb2312') // @todo allow customizing this
+      ? output.toString('utf-8')
       : output;
 }
 
