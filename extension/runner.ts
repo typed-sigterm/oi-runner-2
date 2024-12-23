@@ -39,11 +39,13 @@ export class Runner extends vscode.EventEmitter<EventMessage> {
     } catch (e) {
       vscode.window.showErrorMessage('Cannot parse config, please check [oi-runner-2.tasks] settings.');
       logger.error(e);
+      return;
     }
 
     const workspace = vscode.workspace.getWorkspaceFolder(this.document.uri);
     const cwd = workspace && workspace.uri.fsPath;
     const { signal } = this._currentController = new AbortController();
+    this._stderrChannel.clear();
 
     Promise.resolve()
       .then(() => { // compile
