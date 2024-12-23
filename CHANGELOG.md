@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.2 (2024-12-23)
+
+### 🩹 Bug Fixes
+
+- Fix command IO charset, now default to `utf-8`
+- Clear stderr channel when a new run is started
+
 ## 1.3.1 (2024-12-22)
 
 ### 🚀 Features
