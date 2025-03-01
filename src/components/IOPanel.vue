@@ -11,7 +11,7 @@ const { disabled } = defineProps<{
   readonly?: boolean
   disabled?: boolean
 }>();
-const value = defineModel<IOChannel>();
+const value = defineModel<IOChannel>({ required: true });
 
 const theme = inject(ThemeInjectKey);
 const fontSize = useFontSize();
