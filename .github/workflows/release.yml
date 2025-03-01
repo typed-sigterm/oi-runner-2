@@ -42,7 +42,7 @@ jobs:
           release-url: ${{ github.event.release.url }}
 
       - name: Publish to Open VSX Registry
-        uses: HaaLeo/publish-vscode-extension@f4ece70f329f66686bd71c54b1671353fe320e49 # v1
+        uses: HaaLeo/publish-vscode-extension@ca5561daa085dee804bf9f37fe0165785a9b14db # v2
         id: publishToOpenVSX
         with:
           extensionFile: extension.vsix
@@ -50,7 +50,7 @@ jobs:
           registryUrl: https://open-vsx.org
 
       - name: Publish to Visual Studio Marketplace
-        uses: HaaLeo/publish-vscode-extension@f4ece70f329f66686bd71c54b1671353fe320e49 # v1
+        uses: HaaLeo/publish-vscode-extension@ca5561daa085dee804bf9f37fe0165785a9b14db # v2
         with:
           extensionFile: extension.vsix
           pat: ${{ secrets.VSCE_PAT }}
