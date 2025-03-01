@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import type { IOFileChannel } from '../../shared/events';
+import type { RunnerState } from '../utils';
 import { IconCircleSlash, IconError } from '@iconify-prerendered/vue-codicon';
 import { computed, ref } from 'vue';
-import { postEvent, type RunnerState } from '../utils';
+import { postEvent } from '../utils';
 import Spin from './Spin.vue';
 
 const { type, state } = defineProps<{
