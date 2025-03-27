@@ -169,7 +169,7 @@
     "@guolao/vue-monaco-editor": "^1.5.4",
     "@iconify-prerendered/vue-codicon": "^0.28.1740377626",
     "@iconify-prerendered/vue-line-md": "^0.28.1736493333",
-    "@tomjs/vite-plugin-vscode": "^3.2.1",
+    "@tomjs/vite-plugin-vscode": "^4.0.0",
     "@typed-sigterm/eslint-config": "^1.4.1",
     "@types/node": "^22.13.8",
     "@types/ps-tree": "^1.1.6",
