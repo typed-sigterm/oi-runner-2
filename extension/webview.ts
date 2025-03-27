@@ -5,12 +5,6 @@ import { getAutoSave, getConfiguredTasks, getDefaultTask } from './config';
 import { Runner } from './runner';
 import { logger } from './utils';
 
-function getHtml(webview: vscode.Webview, context: vscode.ExtensionContext) {
-  return process.env.VITE_DEV_SERVER_URL
-    ? __getWebviewHtml__(process.env.VITE_DEV_SERVER_URL)
-    : __getWebviewHtml__(webview, context);
-}
-
 class PanelProvider implements vscode.WebviewViewProvider, vscode.Disposable {
   static readonly VIEW_TYPE = 'oi-runner-2.panel';
 
@@ -43,7 +37,12 @@ class PanelProvider implements vscode.WebviewViewProvider, vscode.Disposable {
         vscode.Uri.joinPath(this._context.extensionUri, 'dist'),
       ],
     };
-    view.webview.html = getHtml(view.webview, this._context);
+    view.webview.html = __getWebviewHtml__({
+      serverUrl: process.env.VITE_DEV_SERVER_URL,
+      webview: view.webview,
+      context: this._context,
+    });
+
     this.subscriptions.push(
       view.webview.onDidReceiveMessage(this._handleMessage, this),
     );
