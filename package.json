@@ -4,7 +4,7 @@
   "displayName": "OI Runner++",
   "version": "1.3.2",
   "private": true,
-  "packageManager": "pnpm@10.7.0",
+  "packageManager": "pnpm@10.8.0",
   "description": "VS Code extension designed for OIer and ACMer, for running single-file programs.",
   "license": "MIT",
   "homepage": "https://oi-runner-2.by-ts.top",
