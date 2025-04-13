@@ -5,8 +5,8 @@ import { computed, ref, toRaw, watch } from 'vue';
 import { postEvent } from '../utils';
 import IOPanel from './IOPanel.vue';
 import RunnerHint from './RunnerHint.vue';
-import Toolbar from './Toolbar.vue';
 import Sidebar from './Sidebar.vue';
+import Toolbar from './Toolbar.vue';
 
 const { state } = defineProps<{
   state: RunnerState

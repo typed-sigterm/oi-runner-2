@@ -72,7 +72,7 @@ async function linkFile() {
       }"
       @update:value="value = $event"
     />
-    
+
     <slot name="extra" />
   </div>
 </template>

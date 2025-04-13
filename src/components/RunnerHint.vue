@@ -46,7 +46,7 @@ function gotoRedirected() {
     <Spin v-else-if="state.status === 'excuting'" class="mask">
       Executing
     </Spin>
-    
+
     <span v-else @vue:mounted="idle = true" @vue:unmounted="idle = false" />
   </template>
 

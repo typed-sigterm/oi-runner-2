@@ -1,16 +1,16 @@
 <script setup lang="ts">
+import type { RunnerState } from '../utils';
 import { IconPlus } from '@iconify-prerendered/vue-line-md';
-import { RunnerState } from '../utils';
 
 defineProps<{
   state: RunnerState
   disabled?: boolean
-}>()
+}>();
 
 defineEmits<{
   switch: [to: number]
   add: []
-}>()
+}>();
 </script>
 
 <template>
@@ -28,8 +28,8 @@ defineEmits<{
     <li
       title="New Test Case"
       role="tab"
-      @click="!disabled && $emit('add')"
       :aria-disabled="disabled"
+      @click="!disabled && $emit('add')"
     >
       <IconPlus />
     </li>
