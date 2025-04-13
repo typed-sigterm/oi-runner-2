@@ -16,6 +16,7 @@ export type IOChannel =
 export type EventMessage = { // extension -> webview
   type: 'setup'
   tasks: TaskAttributes[]
+  extensions: string[]
 } | { // webview -> extension
   type: 'webview:ready'
 } | { // extension -> webview

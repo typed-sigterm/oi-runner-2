@@ -1,24 +1,22 @@
 <script setup lang="ts">
 import type { EventMessage, TaskAttributes } from '../shared/events';
 import type { RunnerState } from './utils';
-import { onMounted, provide, readonly, ref } from 'vue';
+import { onMounted, provide, ref } from 'vue';
 import { EventMarker } from '../shared/events';
+import Empty from './components/Empty.vue';
+import Loading from './components/Loading.vue';
 import Runner from './components/Runner.vue';
 import { logger, postEvent, ThemeInjectKey } from './utils';
 
 provide(ThemeInjectKey, 'dark');
 
-const DefaultState = readonly<RunnerState>({
-  status: 'idle',
-  stdin: '',
-  stdout: '',
-});
-
+const loading = ref(true);
 const states = new Map<string, RunnerState>();
-const currentState = ref<RunnerState>({ ...DefaultState });
+const state = ref<RunnerState | undefined>();
 const sourceDirty = ref(false);
 
 const tasks = ref<TaskAttributes[]>([]);
+const extensions = ref<string[]>([]);
 
 window.addEventListener('message', (ev) => {
   if (ev.data[EventMarker] !== true)
@@ -29,18 +27,22 @@ window.addEventListener('message', (ev) => {
   switch (data.type) {
     case 'setup':
       tasks.value = data.tasks;
+      extensions.value = data.extensions;
+      loading.value = false;
       break;
 
     case 'context:switch':
       if (states.has(data.file)) {
-        currentState.value = states.get(data.file)!;
+        state.value = states.get(data.file)!;
       } else {
-        currentState.value = {
-          ...DefaultState,
+        state.value = {
           file: data.file,
           task: data.defaultTask,
+          status: 'idle',
+          stdin: '',
+          stdout: '',
         };
-        states.set(data.file, currentState.value);
+        states.set(data.file, state.value);
       }
       break;
 
@@ -58,30 +60,30 @@ window.addEventListener('message', (ev) => {
       break;
 
     case 'run:compiled':
-      currentState.value.status = data.skipExcuting ? 'idle' : 'excuting';
+      state.value!.status = data.skipExcuting ? 'idle' : 'excuting';
       break;
 
     case 'run:compile-failed':
-      currentState.value.status = 'idle';
-      currentState.value.hint = 'compile-failed';
+      state.value!.status = 'idle';
+      state.value!.hint = 'compile-failed';
       break;
 
     case 'run:executed':
-      currentState.value.status = 'idle';
+      state.value!.status = 'idle';
       if (data.stdout !== undefined) // Don't update if it's redirected to a file
-        currentState.value.stdout = data.stdout;
-      currentState.value.exitCode = data.exitCode;
-      currentState.value.duration = data.duration;
+        state.value!.stdout = data.stdout;
+      state.value!.exitCode = data.exitCode;
+      state.value!.duration = data.duration;
       break;
 
     case 'run:execute-failed':
-      currentState.value.status = 'idle';
-      currentState.value.hint = 'execute-failed';
+      state.value!.status = 'idle';
+      state.value!.hint = 'execute-failed';
       break;
 
     case 'run:killed':
-      currentState.value.status = 'idle';
-      currentState.value.hint = 'cancelled';
+      state.value!.status = 'idle';
+      state.value!.hint = 'cancelled';
       break;
   }
 });
@@ -96,7 +98,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <Runner :state="currentState" :tasks :source-dirty />
+  <Loading v-if="loading" />
+  <Runner v-else-if="state" :state :tasks :source-dirty />
+  <Empty v-else :extensions />
 </template>
 
 <style>

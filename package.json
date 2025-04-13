@@ -137,7 +137,7 @@
         {
           "id": "oi-runner-2",
           "title": "OI Runner++",
-          "icon": "assets/logo.png"
+          "icon": "./assets/logo.png"
         }
       ]
     },
@@ -146,7 +146,8 @@
         {
           "type": "webview",
           "id": "oi-runner-2.panel",
-          "name": "OI Runner++"
+          "name": "OI Runner++",
+          "icon": "./assets/logo.png"
         }
       ]
     }

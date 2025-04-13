@@ -28,7 +28,7 @@ defineEmits<{
   gotoSource: []
 }>();
 
-const currentTask = defineModel<string>('currentTask');
+const currentTask = defineModel<string>('currentTask', { required: false });
 const currentTaskCompilable = computed(() => {
   const task = props.tasks.find(t => t.name === currentTask.value);
   // If task is not found, the webview is not ready, so treat it as compilable by default

@@ -55,7 +55,7 @@ function cancel() {
   state.status = 'cancelling';
   postEvent({
     type: 'run:kill',
-    file: state.file!,
+    file: state.file,
   });
 }
 </script>

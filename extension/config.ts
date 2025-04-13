@@ -10,8 +10,6 @@ const CommandSchema = z.tuple([z.string(), z.array(z.string())]);
 const TaskSchema = z.object({
   compile: CommandSchema.optional(),
   execute: CommandSchema,
-  // @todo
-  // judge: CommandSchema,
 });
 export type Task = z.infer<typeof TaskSchema>;
 

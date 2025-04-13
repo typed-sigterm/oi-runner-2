@@ -11,6 +11,12 @@ const { disabled } = defineProps<{
   readonly?: boolean
   disabled?: boolean
 }>();
+
+defineSlots<{
+  info: () => any
+  extra: () => any
+}>();
+
 const value = defineModel<IOChannel>({ required: true });
 
 const theme = inject(ThemeInjectKey);
