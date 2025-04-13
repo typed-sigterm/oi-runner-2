@@ -47,8 +47,9 @@ function gotoSource() {
   <header>
     <a v-if="sourceFile" class="source-link" :title="sourceFile" @click="gotoSource">
       <IconFileCode />
-      Source File
+      {{ ' ' }}
       <vscode-badge v-if="sourceDirty">unsaved</vscode-badge>
+      <span v-else>Source File</span>
     </a>
 
     <vscode-single-select

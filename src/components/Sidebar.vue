@@ -17,6 +17,7 @@ defineEmits<{
   <ul>
     <li
       v-for="(_, i) in state.cases"
+      :key="i"
       role="tab"
       :title="`Test Case ${i + 1}`"
       :aria-selected="i === state.case"
