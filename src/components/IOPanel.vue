@@ -10,6 +10,7 @@ const { disabled } = defineProps<{
   title: string
   readonly?: boolean
   disabled?: boolean
+  disableRedirect?: boolean
 }>();
 
 defineSlots<{
@@ -44,11 +45,12 @@ async function linkFile() {
     <div>
       <h3>{{ title }}</h3>
       <slot name="info" />
+
       <a
-        v-if="!disabled"
         class="link-file"
         :title="isLinked ? 'Unlink File' : 'Link File'"
         :aria-selected="isLinked"
+        :aria-disabled="disableRedirect"
         @click="linkFile"
       >
         <IconLoadingLoop v-if="isLinking" />
@@ -70,6 +72,7 @@ async function linkFile() {
       }"
       @update:value="value = $event"
     />
+    
     <slot name="extra" />
   </div>
 </template>
@@ -107,7 +110,6 @@ h3 {
 .io-panel[aria-disabled="true"] .monaco-editor {
   opacity: 0.3;
   overscroll-behavior: none;
-  cursor: not-allowed;
 
   &:deep() * {
     pointer-events: none;

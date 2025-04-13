@@ -46,14 +46,20 @@ export function useFontSize() {
 
 export type RunnerStatus = 'idle' | 'compiling' | 'excuting' | 'cancelling';
 export type RunnerHint = 'compile-failed' | 'execute-failed' | 'cancelled';
-export interface RunnerState {
-  file: string
-  task: string
-  status: RunnerStatus
+
+export interface RunnerCase {
   stdin: IOChannel
   stdout: IOChannel
   exitCode?: number
   duration?: number
+}
+
+export interface RunnerState {
+  file: string
+  task: string
+  status: RunnerStatus
+  case: number
+  cases: RunnerCase[]
   hint?: RunnerHint
 }
 

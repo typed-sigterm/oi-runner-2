@@ -1,17 +1,20 @@
 <script lang="ts" setup>
 import type { RunStep, TaskAttributes } from '../../shared/events';
 import type { RunnerState } from '../utils';
-import { ref, toRaw, watch } from 'vue';
+import { computed, ref, toRaw, watch } from 'vue';
 import { postEvent } from '../utils';
 import IOPanel from './IOPanel.vue';
 import RunnerHint from './RunnerHint.vue';
 import Toolbar from './Toolbar.vue';
+import Sidebar from './Sidebar.vue';
 
 const { state } = defineProps<{
   state: RunnerState
   tasks: TaskAttributes[]
   sourceDirty: boolean
 }>();
+
+const case_ = computed(() => state.cases[state.case]);
 
 // Use `ref` instead of `computed`, because `computed` is always batched, but
 // `postEvent` sometimes takes a long time, UI updates need to be prioritized
@@ -37,7 +40,7 @@ async function run(step: RunStep) {
     state.status = 'excuting';
   else
     state.status = 'compiling';
-  state.hint = state.duration = state.exitCode = undefined;
+  state.hint = case_.value.duration = case_.value.exitCode = undefined;
   toolbarStatus.value = 'running';
 
   // Note that some properties are `reactive`, which cannot be `structuredClone` or `postMessage`.
@@ -47,8 +50,10 @@ async function run(step: RunStep) {
     file: state.file,
     task: state.task,
     step,
-    stdin: toRaw(state.stdin),
-    stdout: typeof state.stdout === 'object' ? toRaw(state.stdout) : undefined,
+    stdin: toRaw(case_.value.stdin),
+    stdout: typeof case_.value.stdout === 'object'
+      ? toRaw(case_.value.stdout)
+      : undefined,
   });
 }
 function cancel() {
@@ -71,43 +76,60 @@ function cancel() {
     @cancel="cancel"
   />
 
-  <div class="io-area">
-    <IOPanel
-      v-model="state.stdin"
-      title="Input"
-      :disabled="!state.file"
-    >
-      <template #extra>
-        <RunnerHint type="stdin" :state />
-      </template>
-    </IOPanel>
+  <main>
+    <div class="io-area">
+      <IOPanel
+        v-model="case_.stdin"
+        title="Input"
+        :disabled="state.status !== 'idle'"
+        :disable-redirect="state.status !== 'idle'"
+      >
+        <template #extra>
+          <RunnerHint type="stdin" :state />
+        </template>
+      </IOPanel>
 
-    <IOPanel
-      v-model="state.stdout"
-      title="Output"
-      readonly
-      :disabled="state.status !== 'idle' || !!state.hint || !state.file"
-    >
-      <template v-if="state.duration !== undefined" #info>
-        <span class="exit-info">
-          Exited with code {{ state.exitCode }} in {{ state.duration / 1000 }}s
-        </span>
-      </template>
+      <IOPanel
+        v-model="case_.stdout"
+        title="Output"
+        readonly
+        :disabled="state.status !== 'idle' || !!state.hint"
+        :disable-redirect="state.status !== 'idle'"
+      >
+        <template v-if="case_.duration !== undefined" #info>
+          <span class="exit-info">
+            Exited with code {{ case_.exitCode }} in {{ case_.duration / 1000 }}s
+          </span>
+        </template>
 
-      <template #extra>
-        <RunnerHint type="stdout" :state />
-      </template>
-    </IOPanel>
-  </div>
+        <template #extra>
+          <RunnerHint type="stdout" :state />
+        </template>
+      </IOPanel>
+    </div>
+
+    <Sidebar
+      :state
+      :disabled="state.status !== 'idle'"
+      @switch="(to) => state.case = to"
+      @add="state.cases.push({ stdin: '', stdout: '' })"
+    />
+  </main>
 </template>
 
 <style scoped>
+main {
+  display: flex;
+  height: 100%;
+  gap: 4px;
+}
+
 .io-area {
   display: grid;
-  flex: 1;
   align-items: stretch;
   grid-template-rows: 1fr 1fr;
-  height: 0;
+  height: 100%;
+  flex: 1;
 }
 
 .exit-info {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { EventMessage, TaskAttributes } from '../shared/events';
 import type { RunnerState } from './utils';
-import { onMounted, provide, ref } from 'vue';
+import { computed, onMounted, provide, ref } from 'vue';
 import { EventMarker } from '../shared/events';
 import Empty from './components/Empty.vue';
 import Loading from './components/Loading.vue';
@@ -15,6 +15,7 @@ const states = new Map<string, RunnerState>();
 const state = ref<RunnerState | undefined>();
 const sourceDirty = ref(false);
 
+const case_ = computed(() => state.value?.cases[state.value.case]);
 const tasks = ref<TaskAttributes[]>([]);
 const extensions = ref<string[]>([]);
 
@@ -24,6 +25,7 @@ window.addEventListener('message', (ev) => {
   const data: EventMessage = ev.data;
   logger.debug('WebView received message:', data);
 
+  const s = state.value!; // shorthand
   switch (data.type) {
     case 'setup':
       tasks.value = data.tasks;
@@ -39,8 +41,11 @@ window.addEventListener('message', (ev) => {
           file: data.file,
           task: data.defaultTask,
           status: 'idle',
-          stdin: '',
-          stdout: '',
+          case: 0,
+          cases: [{
+            stdin: '',
+            stdout: '',
+          }],
         };
         states.set(data.file, state.value);
       }
@@ -60,30 +65,30 @@ window.addEventListener('message', (ev) => {
       break;
 
     case 'run:compiled':
-      state.value!.status = data.skipExcuting ? 'idle' : 'excuting';
+      s.status = data.skipExcuting ? 'idle' : 'excuting';
       break;
 
     case 'run:compile-failed':
-      state.value!.status = 'idle';
-      state.value!.hint = 'compile-failed';
+      s.status = 'idle';
+      s.hint = 'compile-failed';
       break;
 
     case 'run:executed':
-      state.value!.status = 'idle';
+      s.status = 'idle';
       if (data.stdout !== undefined) // Don't update if it's redirected to a file
-        state.value!.stdout = data.stdout;
-      state.value!.exitCode = data.exitCode;
-      state.value!.duration = data.duration;
+        case_.value!.stdout = data.stdout;
+      case_.value!.exitCode = data.exitCode;
+      case_.value!.duration = data.duration;
       break;
 
     case 'run:execute-failed':
-      state.value!.status = 'idle';
-      state.value!.hint = 'execute-failed';
+      s.status = 'idle';
+      s.hint = 'execute-failed';
       break;
 
     case 'run:killed':
-      state.value!.status = 'idle';
-      state.value!.hint = 'cancelled';
+      s.status = 'idle';
+      s.hint = 'cancelled';
       break;
   }
 });
@@ -120,6 +125,6 @@ a {
 
 a[aria-disabled="true"] {
   opacity: 0.4;
-  cursor: not-allowed;
+  cursor: initial;
 }
 </style>

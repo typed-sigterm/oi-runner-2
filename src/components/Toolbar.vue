@@ -44,7 +44,7 @@ function gotoSource() {
 </script>
 
 <template>
-  <div class="toolbar">
+  <header>
     <a v-if="sourceFile" class="source-link" :title="sourceFile" @click="gotoSource">
       <IconFileCode />
       Source File
@@ -95,11 +95,11 @@ function gotoSource() {
     >
       <IconDebugStop />
     </vscode-button>
-  </div>
+  </header>
 </template>
 
 <style scoped>
-.toolbar {
+header {
   display: flex;
   align-items: center;
   justify-content: flex-end;
