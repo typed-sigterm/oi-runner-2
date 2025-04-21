@@ -1,44 +1,72 @@
 <script setup lang="ts">
 import type { RunnerState } from '../utils';
-import { IconPlus } from '@iconify-prerendered/vue-line-md';
+import { IconConfirm, IconMinus, IconPlus, IconTrash } from '@iconify-prerendered/vue-line-md';
 
-defineProps<{
+const { state } = defineProps<{
   state: RunnerState
   disabled?: boolean
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   switch: [to: number]
   add: []
+  remove: [index: number]
 }>();
+
+const removing = defineModel('removing');
+
+function handleClick(index: number) {
+  if (state.case === index)
+    return;
+  if (removing.value)
+    emit('remove', index);
+  else
+    emit('switch', index);
+}
 </script>
 
 <template>
-  <ul>
+  <ol>
     <li
       v-for="(_, i) in state.cases"
       :key="i"
       role="tab"
-      :title="`Test Case ${i + 1}`"
+      :title="`${(i !== state.case && removing) ? 'Remove ' : ''}Test Case ${i + 1}`"
       :aria-selected="i === state.case"
       :aria-disabled="disabled"
-      @click="i !== state.case && $emit('switch', i)"
+      @click="handleClick(i)"
     >
-      #{{ i + 1 }}
+      <IconTrash v-if="removing && i !== state.case" @click="$emit('remove', i)" />
+      <template v-else>
+        #{{ i + 1 }}
+      </template>
     </li>
+
     <li
-      title="New Test Case"
+      v-if="!removing"
+      title="Add Test Case"
       role="tab"
       :aria-disabled="disabled"
       @click="!disabled && $emit('add')"
     >
       <IconPlus />
     </li>
-  </ul>
+
+    <li
+      v-if="state.cases.length > 1"
+      title="Remove Test Case"
+      role="tab"
+      :aria-disabled="disabled"
+      @click="!disabled && (removing = !removing)"
+    >
+      <IconConfirm v-if="removing" />
+      <IconMinus v-else />
+    </li>
+  </ol>
 </template>
 
 <style scoped>
-ul {
+ol {
   height: 100%;
   all: unset;
 }

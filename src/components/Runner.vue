@@ -56,12 +56,22 @@ async function run(step: RunStep) {
       : undefined,
   });
 }
+
 function cancel() {
   state.status = 'cancelling';
   postEvent({
     type: 'run:kill',
     file: state.file,
   });
+}
+
+const removing = ref(false);
+function handleRemove(index: number) {
+  state.cases.splice(index, 1);
+  if (state.case > index)
+    state.case--;
+  if (state.cases.length === 1)
+    removing.value = false;
 }
 </script>
 
@@ -109,10 +119,12 @@ function cancel() {
     </div>
 
     <Sidebar
+      v-model:removing="removing"
       :state
       :disabled="state.status !== 'idle'"
       @switch="(to) => state.case = to"
       @add="state.cases.push({ stdin: '', stdout: '' })"
+      @remove="handleRemove"
     />
   </main>
 </template>
