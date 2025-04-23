@@ -6,11 +6,15 @@ import { IconLoadingLoop } from '@iconify-prerendered/vue-line-md';
 import { computed, inject, ref } from 'vue';
 import { selectFile, ThemeInjectKey, useFontSize } from '../utils';
 
-const { disabled } = defineProps<{
+const { disabled, disableRedirect } = defineProps<{
   title: string
   readonly?: boolean
   disabled?: boolean
   disableRedirect?: boolean
+}>();
+
+const emit = defineEmits<{
+  linkFile: [to?: string]
 }>();
 
 defineSlots<{
@@ -26,16 +30,18 @@ const fontSize = useFontSize();
 const isLinked = computed(() => typeof value.value === 'object');
 const isLinking = ref(false);
 async function linkFile() {
-  if (disabled)
+  if (disableRedirect)
     return;
   if (isLinked.value) { // unlink
     value.value = '';
+    emit('linkFile');
   } else { // link
     isLinking.value = true;
     const file = await selectFile();
     if (file)
       value.value = { file };
     isLinking.value = false;
+    emit('linkFile', file);
   }
 }
 </script>

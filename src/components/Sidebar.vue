@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { RunnerState } from '../utils';
 import { IconConfirm, IconMinus, IconPlus, IconTrash } from '@iconify-prerendered/vue-line-md';
+import { ref } from 'vue';
 
 const { state } = defineProps<{
   state: RunnerState
@@ -13,7 +14,7 @@ const emit = defineEmits<{
   remove: [index: number]
 }>();
 
-const removing = defineModel('removing');
+const removing = ref(false);
 
 function handleClick(index: number) {
   if (state.case === index)
@@ -53,7 +54,7 @@ function handleClick(index: number) {
     </li>
 
     <li
-      v-if="state.cases.length > 1"
+      v-if="removing || state.cases.length > 1"
       title="Remove Test Case"
       role="tab"
       :aria-disabled="disabled"

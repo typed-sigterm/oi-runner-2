@@ -84,9 +84,8 @@ export function executeCommand(command: string, args: string[], stdin?: IOChanne
       child.stdin.end();
     }
 
-    if (stdout) {
+    if (stdout)
       child.stdout.pipe(stdout);
-    }
 
     if (stderr) {
       child.stderr.on('data', (data) => {

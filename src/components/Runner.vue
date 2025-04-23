@@ -65,13 +65,10 @@ function cancel() {
   });
 }
 
-const removing = ref(false);
 function handleRemove(index: number) {
   state.cases.splice(index, 1);
   if (state.case > index)
     state.case--;
-  if (state.cases.length === 1)
-    removing.value = false;
 }
 </script>
 
@@ -105,6 +102,7 @@ function handleRemove(index: number) {
         readonly
         :disabled="state.status !== 'idle' || !!state.hint"
         :disable-redirect="state.status !== 'idle'"
+        @link-file="state.hint = undefined"
       >
         <template v-if="case_.duration !== undefined" #info>
           <span class="exit-info">
@@ -119,7 +117,6 @@ function handleRemove(index: number) {
     </div>
 
     <Sidebar
-      v-model:removing="removing"
       :state
       :disabled="state.status !== 'idle'"
       @switch="(to) => state.case = to"
