@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { EventMessage, TaskAttributes } from '../shared/events';
 import type { RunnerState } from './utils';
-import { computed, onMounted, provide, ref } from 'vue';
+import { computed, onMounted, provide, ref, useTemplateRef } from 'vue';
 import { EventMarker } from '../shared/events';
 import Empty from './components/Empty.vue';
 import Loading from './components/Loading.vue';
@@ -10,6 +10,7 @@ import { logger, postEvent, ThemeInjectKey } from './utils';
 
 provide(ThemeInjectKey, 'dark');
 
+const runner = useTemplateRef('runner');
 const loading = ref(true);
 const states = new Map<string, RunnerState>();
 const state = ref<RunnerState | undefined>();
@@ -64,6 +65,10 @@ window.addEventListener('message', (ev) => {
       sourceDirty.value = data.isDirty;
       break;
 
+    case 'context:redirect':
+      runner.value?.redirect(data.channel);
+      break;
+
     case 'run:compiled':
       s.status = data.skipExcuting ? 'idle' : 'excuting';
       break;
@@ -104,7 +109,7 @@ onMounted(() => {
 
 <template>
   <Loading v-if="loading" />
-  <Runner v-else-if="state" :state :tasks :source-dirty />
+  <Runner v-else-if="state" ref="runner" :state :tasks :source-dirty />
   <Empty v-else :extensions />
 </template>
 

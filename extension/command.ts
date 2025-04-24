@@ -2,13 +2,14 @@
 
 import type { WriteStream } from 'node:fs';
 import type * as vscode from 'vscode';
-import type { IOChannel } from '../shared/events';
+import type { EventMessage, IOChannel } from '../shared/events';
 import { Buffer } from 'node:buffer';
 import { spawn } from 'node:child_process';
 import { accessSync, constants, createReadStream } from 'node:fs';
 import path from 'node:path';
 import ps from 'ps-tree';
 import kill from 'tree-kill';
+import { gettextareaMaxSize } from './config';
 
 const execExt = process.platform === 'win32' ? '.exe' : '';
 
@@ -35,11 +36,7 @@ function transformSocketOutput(output: any) {
       : output;
 }
 
-export interface ExecuteCommandResult {
-  stdout?: string
-  exitCode?: number
-  duration?: number
-}
+export type ExecuteCommandResult = Omit<EventMessage & { type: 'run:executed' }, 'type'> | Record<never, never>;
 
 /**
  * Executes a command in a child process.
@@ -55,8 +52,7 @@ export interface ExecuteCommandResult {
  */
 export function executeCommand(command: string, args: string[], stdin?: IOChannel, stdout?: WriteStream, stderr?: vscode.OutputChannel, cwd?: string, signal?: AbortSignal) {
   return new Promise<ExecuteCommandResult>((resolve, reject) => {
-    let startTime: number;
-    let stderrOpened = false;
+    let startTime: number, stderrOpened = false;
 
     const child = spawn(command, args, {
       cwd,
@@ -105,15 +101,18 @@ export function executeCommand(command: string, args: string[], stdin?: IOChanne
         resolve({});
     });
 
-    child.once('exit', () => {
-      // If stdout is redirected, resolve `stdout: undefined`
-      let printed: string | undefined;
-      if (!stdout)
-        printed = transformSocketOutput(child.stdout.read());
+    child.once('exit', (code) => {
+      if (code === null)
+        return;
+
+      const max = gettextareaMaxSize();
       resolve({
-        stdout: printed,
-        exitCode: child.exitCode!,
+        exitCode: code,
+        stdout: stdout // `undefined` if redirected
+          ? undefined
+          : transformSocketOutput(child.stdout.read(max)),
         duration: Math.round(performance.now() - startTime),
+        overflow: child.stdout.readableLength > max,
       });
     });
   });

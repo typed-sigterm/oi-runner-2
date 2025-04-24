@@ -80,6 +80,14 @@ If disabled, you need to press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>
 
 Format: `true` (default) or `false`.
 
+### `oi-runner-2.textareaMaxSize`
+
+The maximum length of the stdout textarea in bytes in utf-8 encoding.
+
+Long strings may cause a long hanging, process hang, so redirect them to file when they're too long.
+
+Format: `number` (default: `1e4`).
+
 <!-- #endregion config -->
 
 ## Credits

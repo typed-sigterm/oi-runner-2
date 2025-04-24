@@ -77,3 +77,11 @@
 如果禁用，则需要通过 <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> 打开命令面板，搜索 `Launch OI Runner++` 打开运行面板。
 
 格式：`true`（默认）或 `false`
+
+### `oi-runner-2.textareaMaxSize`
+
+stdin/stdout 输入框的最大长度，单位为字节而不是字符，编码方式为 UTF-8。
+
+过长的字符串会导致长时间无响应，若输入或输出过长，请重定向到文件。
+
+格式：数值（默认 `1e4`）。

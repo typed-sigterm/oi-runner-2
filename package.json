@@ -128,6 +128,11 @@
             "type": "boolean",
             "default": true,
             "description": "Whether to automatically save the file before running."
+          },
+          "oi-runner-2.textareaMaxSize": {
+            "type": "integer",
+            "default": 1e4,
+            "description": "The maximum size of the textarea for stdout in bytes in utf-8 encoding."
           }
         }
       }

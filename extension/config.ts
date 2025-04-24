@@ -47,3 +47,7 @@ export function getDefaultTask(file: string): string | undefined {
 export function getAutoSave(): boolean {
   return vscode.workspace.getConfiguration('oi-runner-2').get<boolean>('autoSave', true) !== false;
 }
+
+export function gettextareaMaxSize(): number {
+  return vscode.workspace.getConfiguration('oi-runner-2').get<number>('textareaMaxSize', 1e4);
+}

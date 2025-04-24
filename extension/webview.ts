@@ -139,7 +139,7 @@ class PanelProvider implements vscode.WebviewViewProvider, vscode.Disposable {
           if (!ret)
             vscode.window.showWarningMessage('Failed to auto-save file before running. Please save manually.');
         }
-        this._runners.get(message.file)!.startRun(message.task, message.step, message.stdin, message.stdout);
+        this._runners.get(message.file)!.startRun(message);
         break;
 
       case 'run:kill':

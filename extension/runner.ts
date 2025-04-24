@@ -5,8 +5,15 @@ import type { Task } from './config';
 import { createWriteStream } from 'node:fs';
 import * as vscode from 'vscode';
 import { evalCommand, executeCommand } from './command';
-import { getConfiguredTasks } from './config';
+import { getConfiguredTasks, gettextareaMaxSize as getTextareaMaxSize } from './config';
 import { logger } from './utils';
+
+export interface RunOptions {
+  task: string
+  step: RunStep
+  stdin?: IOChannel
+  stdout?: IOFileChannel
+}
 
 class RunError extends Error {}
 
@@ -32,7 +39,9 @@ export class Runner extends vscode.EventEmitter<EventMessage> {
     return result as Task;
   }
 
-  public startRun(task: string, step: RunStep, stdin?: IOChannel, stdout?: IOFileChannel) {
+  public startRun(options: RunOptions) {
+    const { task, step, stdin, stdout } = options;
+
     let t: Task;
     try {
       t = this._evalTask(task);
@@ -52,36 +61,66 @@ export class Runner extends vscode.EventEmitter<EventMessage> {
         if (step !== 'execute' && t.compile)
           return executeCommand(t.compile[0], t.compile[1], undefined, undefined, this._stderrChannel, cwd, signal);
       })
+
       .then((p) => { // compile completed
-        if (p && p.exitCode) {
-          this.fire({ type: 'run:compile-failed', exitCode: p.exitCode });
-          throw new RunError(`Compilation failed with exit code ${p.exitCode}`);
+        if (!p)
+          return;
+
+        if ('exitCode' in p) {
+          if (p.exitCode) {
+            this.fire({ type: 'run:compile-failed', exitCode: p.exitCode });
+            throw new RunError(`Compilation failed with exit code ${p.exitCode}`);
+          } else {
+            this.fire({
+              type: 'run:compiled',
+              skipExcuting: step === 'compile',
+            });
+          }
         } else {
-          this.fire({
-            type: 'run:compiled',
-            skipExcuting: step === 'compile',
-          });
+          this.fire({ type: 'run:compile-failed' });
+          throw new RunError('Compilation failed');
         }
       })
+
       .then(() => { // execute
         const out = stdout ? createWriteStream(stdout.file) : undefined;
         if (step !== 'compile' && t.execute)
           return executeCommand(t.execute[0], t.execute[1], stdin, out, this._stderrChannel, cwd, signal);
       })
+
       .then((p) => { // execute completed
         if (!p)
           return;
-        if (p.exitCode === undefined) {
-          this.fire({ type: 'run:execute-failed' });
-          throw new RunError('Execution failed');
-        } else {
-          // @ts-expect-error All attributes either `undefined` or not `undefined` together
+
+        if ('exitCode' in p) {
           this.fire({
             type: 'run:executed',
             ...p,
           });
+          if (p.overflow) {
+            return vscode.window.showWarningMessage(
+              `Output is truncated to ${getTextareaMaxSize()} bytes to avoid hanging the editor. It's recommended to redirect stdout to a file, or you can increase the limit in settings.`,
+              'Redirect',
+              'Modify settings',
+            );
+          }
+        } else {
+          this.fire({ type: 'run:execute-failed' });
+          throw new RunError('Execution failed');
         }
       })
+
+      .then((choice) => {
+        if (choice === 'Redirect') {
+          this.fire({
+            type: 'context:redirect',
+            channel: 'stdout',
+          });
+        } else if (choice === 'Modify settings') {
+          vscode.commands.executeCommand('workbench.action.openSettings', 'oi-runner-2.maxOutputSize');
+        }
+      })
+
       .catch((e) => {
         if (e instanceof RunError)
           return;

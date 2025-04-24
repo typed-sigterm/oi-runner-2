@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { RunStep, TaskAttributes } from '../../shared/events';
 import type { RunnerState } from '../utils';
-import { computed, ref, toRaw, watch } from 'vue';
+import { computed, ref, toRaw, useTemplateRef, watch } from 'vue';
 import { postEvent } from '../utils';
 import IOPanel from './IOPanel.vue';
 import RunnerHint from './RunnerHint.vue';
@@ -14,6 +14,7 @@ const { state } = defineProps<{
   sourceDirty: boolean
 }>();
 
+const stdin = useTemplateRef('stdin'), stdout = useTemplateRef('stdout');
 const case_ = computed(() => state.cases[state.case]);
 
 // Use `ref` instead of `computed`, because `computed` is always batched, but
@@ -70,6 +71,14 @@ function handleRemove(index: number) {
   if (state.case > index)
     state.case--;
 }
+
+defineExpose({
+  redirect(channel: 'stdin' | 'stdout') {
+    return channel === 'stdin'
+      ? stdin.value?.redirect()
+      : stdout.value?.redirect();
+  },
+});
 </script>
 
 <template>
@@ -86,6 +95,7 @@ function handleRemove(index: number) {
   <main>
     <div class="io-area">
       <IOPanel
+        ref="stdin"
         v-model="case_.stdin"
         title="Input"
         :disabled="state.status !== 'idle'"
@@ -97,6 +107,7 @@ function handleRemove(index: number) {
       </IOPanel>
 
       <IOPanel
+        ref="stdout"
         v-model="case_.stdout"
         title="Output"
         readonly

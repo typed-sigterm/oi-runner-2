@@ -32,6 +32,7 @@ const isLinking = ref(false);
 async function linkFile() {
   if (disableRedirect)
     return;
+
   if (isLinked.value) { // unlink
     value.value = '';
     emit('linkFile');
@@ -44,6 +45,10 @@ async function linkFile() {
     emit('linkFile', file);
   }
 }
+
+defineExpose({
+  redirect: linkFile,
+});
 </script>
 
 <template>

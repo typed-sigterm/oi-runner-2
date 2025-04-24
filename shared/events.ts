@@ -32,6 +32,9 @@ export type EventMessage = { // extension -> webview
 } | { // extension -> webview
   type: 'context:state-changed'
   isDirty: boolean
+} | { // extension -> webview
+  type: 'context:redirect'
+  channel: 'stdin' | 'stdout'
 } | { // webview -> extension
   type: 'run:launch'
   file: string
@@ -44,12 +47,13 @@ export type EventMessage = { // extension -> webview
   skipExcuting: boolean
 } | { // extension -> webview
   type: 'run:compile-failed'
-  exitCode: number
+  exitCode?: number
 } | { // extension -> webview
   type: 'run:executed'
   stdout: string
   exitCode: number
   duration: number
+  overflow: boolean
 } | { // extension -> webview
   type: 'run:execute-failed'
 } | { // webview -> extension
