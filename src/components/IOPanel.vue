@@ -1,16 +1,18 @@
 <script lang="ts" setup>
 import type { IOChannel } from '../../shared/events';
-import { VueMonacoEditor } from '@guolao/vue-monaco-editor';
+import { VueMonacoDiffEditor, VueMonacoEditor } from '@guolao/vue-monaco-editor';
 import { IconFileSymlinkFile } from '@iconify-prerendered/vue-codicon';
 import { IconLoadingLoop } from '@iconify-prerendered/vue-line-md';
-import { computed, inject, ref } from 'vue';
+import { computed, inject, ref, watch } from 'vue';
 import { selectFile, ThemeInjectKey, useFontSize } from '../utils';
+import { editor } from 'monaco-editor';
 
-const { disabled, disableRedirect } = defineProps<{
+const props = defineProps<{
   title: string
   readonly?: boolean
   disabled?: boolean
   disableRedirect?: boolean
+  diff?: boolean
 }>();
 
 const emit = defineEmits<{
@@ -20,17 +22,41 @@ const emit = defineEmits<{
 defineSlots<{
   info: () => any
   extra: () => any
+  tools: () => any
 }>();
 
 const value = defineModel<IOChannel>({ required: true });
+const diffValue = ref('');
+watch(() => props.diff, (diff) => {
+  if (diff) {
+    if (typeof value.value !== 'string')
+      value.value = '';
+    diffValue.value = value.value;
+  }
+})
 
 const theme = inject(ThemeInjectKey);
 const fontSize = useFontSize();
+const monacoProps = computed(() => ({
+  class: 'monaco-editor',
+  theme: theme === 'light' ? 'vs' : 'vs-dark',
+  options: {
+    automaticLayout: true,
+    // compactMode: true,
+    folding: false,
+    fontSize: fontSize.value,
+    lightbulb: { enabled: editor.ShowLightbulbIconMode.Off },
+    lineNumbersMinChars: 3, 
+    readOnly: props.readonly && !props.diff,
+    renderGutterMenu: false,
+    showFoldingControls: 'never' as const,
+  },
+}));
 
 const isLinked = computed(() => typeof value.value === 'object');
 const isLinking = ref(false);
 async function linkFile() {
-  if (disableRedirect)
+  if (props.disableRedirect || props.diff) // @todo
     return;
 
   if (isLinked.value) { // unlink
@@ -52,35 +78,37 @@ defineExpose({
 </script>
 
 <template>
-  <div class="io-panel" :aria-disabled="disabled || typeof value === 'object'">
+  <div class="io-panel" :aria-disabled="disabled">
     <div>
       <h3>{{ title }}</h3>
       <slot name="info" />
 
-      <a
-        class="link-file"
-        :title="isLinked ? 'Unlink File' : 'Link File'"
-        :aria-selected="isLinked"
-        :aria-disabled="disableRedirect"
-        @click="linkFile"
-      >
-        <IconLoadingLoop v-if="isLinking" />
-        <IconFileSymlinkFile v-else />
-      </a>
+      <div class="tools">
+        <a
+          class="link-file"
+          :title="`${isLinked ? 'Unlink' : 'Link'} File`"
+          :aria-selected="isLinked"
+          :aria-disabled="disableRedirect || diff"
+          @click="linkFile"
+        >
+          <IconLoadingLoop v-if="isLinking" />
+          <IconFileSymlinkFile v-else />
+        </a>
+        <slot name="tools" />
+      </div>
     </div>
 
+    <VueMonacoDiffEditor
+      v-if="diff"
+      v-bind="monacoProps"
+      v-model:modified="diffValue"
+      :original="typeof value === 'string' ? value : ''"
+    />
+
     <VueMonacoEditor
-      class="monaco-editor"
+      v-else
+      v-bind="monacoProps"
       :value="typeof value === 'string' ? value : ''"
-      :theme="theme === 'light' ? 'vs' : 'vs-dark'"
-      :options="{
-        automaticLayout: true,
-        folding: false,
-        fontSize,
-        lineNumbersMinChars: 3,
-        minimap: { enabled: false },
-        readOnly: readonly,
-      }"
       @update:value="value = $event"
     />
 
@@ -108,14 +136,20 @@ h3 {
   margin-bottom: 8px;
 }
 
-.link-file {
+.tools {
   float: right;
   font-size: 18px;
   color: var(--vscode-editor-foreground);
 }
 
-.link-file[aria-selected="true"] {
-  color: var(--vscode-editorLink-activeForeground);
+.tools:deep() {
+  > a {
+    color: unset;
+  }
+
+  > a[aria-selected="true"] {
+    color: var(--vscode-editorLink-activeForeground);
+  }
 }
 
 .io-panel[aria-disabled="true"] .monaco-editor {
@@ -125,5 +159,11 @@ h3 {
   &:deep() * {
     pointer-events: none;
   }
+}
+
+/* Ensure diff editor takes full height */
+.monaco-editor {
+  flex-grow: 1;
+  min-height: 100px; /* Or adjust as needed */
 }
 </style>

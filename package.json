@@ -131,7 +131,7 @@
           },
           "oi-runner-2.textareaMaxSize": {
             "type": "integer",
-            "default": 1e4,
+            "default": 10000,
             "description": "The maximum size of the textarea for stdout in bytes in utf-8 encoding."
           }
         }
@@ -183,6 +183,7 @@
     "@types/vscode-webview": "^1.57.5",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vscode-elements/elements": "^1.13.1",
+    "@vscode/codicons": "^0.0.36",
     "@vscode/vsce": "^3.2.2",
     "consola": "^3.4.0",
     "eslint": "^9.21.0",

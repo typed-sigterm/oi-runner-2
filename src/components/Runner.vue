@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { RunStep, TaskAttributes } from '../../shared/events';
 import type { RunnerState } from '../utils';
+import { IconDiffSingle } from '@iconify-prerendered/vue-codicon';
 import { computed, ref, toRaw, useTemplateRef, watch } from 'vue';
 import { postEvent } from '../utils';
 import IOPanel from './IOPanel.vue';
@@ -33,6 +34,8 @@ watch(() => [state.file, state.status], ([file, status]) => {
   immediate: true,
   flush: 'sync',
 });
+
+const diff = ref(false);
 
 async function run(step: RunStep) {
   if (state.task === undefined || state.file === undefined)
@@ -113,6 +116,7 @@ defineExpose({
         readonly
         :disabled="state.status !== 'idle' || !!state.hint"
         :disable-redirect="state.status !== 'idle'"
+        :diff
         @link-file="state.hint = undefined"
       >
         <template v-if="case_.duration !== undefined" #info>
@@ -123,6 +127,16 @@ defineExpose({
 
         <template #extra>
           <RunnerHint type="stdout" :state />
+        </template>
+
+        <template #tools>
+          <a
+            :title="`${diff ? 'Disable' : 'Enable'} Diff`"
+            :aria-selected="diff"
+            @click="diff = !diff"
+          >
+            <IconDiffSingle />
+          </a>
         </template>
       </IOPanel>
     </div>

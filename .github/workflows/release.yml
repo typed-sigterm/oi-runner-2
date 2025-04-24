@@ -16,7 +16,9 @@ jobs:
       - run: |
           git checkout -f -b latest origin/latest
           git merge --ff-only origin/main
-          git push origin latest
+          # Avoid closing keywords are detected again
+          git push origin -d latest
+          git push -u origin latest
 
   publish:
     runs-on: ubuntu-latest

@@ -112,24 +112,3 @@ onMounted(() => {
   <Runner v-else-if="state" ref="runner" :state :tasks :source-dirty />
   <Empty v-else :extensions />
 </template>
-
-<style>
-#app {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  user-select: none;
-
-  /* @todo This is not a good practice, but I can't find a better way to do it */
-  --spinner-size: 40px;
-}
-
-a {
-  cursor: pointer;
-}
-
-a[aria-disabled="true"] {
-  opacity: 0.4;
-  cursor: initial;
-}
-</style>
