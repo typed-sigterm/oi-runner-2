@@ -103,7 +103,7 @@
                 ]
               }
             },
-            "description": "The tasks available in the run panel and their corresponding compilation and execution commands."
+            "description": "Defines the tasks available in the run panel and their corresponding compilation and execution commands."
           },
           "oi-runner-2.defaultTask": {
             "type": "object",
@@ -132,7 +132,7 @@
           "oi-runner-2.textareaMaxSize": {
             "type": "integer",
             "default": 10000,
-            "description": "The maximum size of the textarea for stdout in bytes in utf-8 encoding."
+            "description": "The maximum size of the stdout textarea in bytes (UTF-8 encoding). Long strings may cause hangs; redirect long output to files."
           }
         }
       }
@@ -159,9 +159,6 @@
   },
   "scripts": {
     "dev": "vite",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs",
     "build": "vue-tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -193,8 +190,6 @@
     "tree-kill": "^1.2.2",
     "typescript": "^5.8.2",
     "vite": "^6.2.0",
-    "vitepress": "^1.6.3",
-    "vitepress-giscus": "^1.0.2",
     "vue": "^3.5.13",
     "vue-tsc": "^2.2.6",
     "zod": "^3.24.2"

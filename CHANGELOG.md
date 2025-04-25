@@ -1,5 +1,7 @@
 # Changelog
 
+> English｜[简体中文](https://gitee.com/typed-sigterm/oi-runner-2/blob/main/CHANGELOG.zh-CN.md)
+
 ## 1.3.2 (2024-12-23)
 
 ### 🩹 Bug Fixes

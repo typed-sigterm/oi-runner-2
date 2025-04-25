@@ -27,5 +27,3 @@ dist-ssr
 
 *.tsbuildinfo
 extension.vsix
-docs/.vitepress/cache
-docs/.vitepress/dist

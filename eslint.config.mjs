@@ -1,7 +1,6 @@
 import ts from '@typed-sigterm/eslint-config';
 
 export default ts({}, {
-  ignores: ['docs/**'],
   rules: {
     // use `consola` instead
     'no-console': [2, { allow: undefined }],
