@@ -34,42 +34,15 @@ On 2024/6/21, I decided to develop OI Runner++, completely rewriting it based on
 
 </details>
 
-Install this extension ([OI Runner++](https://marketplace.visualstudio.com/items?itemName=typed-sigterm.oi-runner-2)), open a folder, write some code, and press <kbd>Ctrl</kbd> + <kbd>S</kbd> to save.
+For a quick start guide:
 
-![](./assets/guide/launch.png)
-
-If the run panel is at the bottom, you can drag it to the side like this:
-
-![](./assets/guide/move.gif)
-
-And it will look like this:
-
-![](./assets/guide/run.gif)
-
-You can also add multiple input/output test cases:
-
-![](./assets/guide/switch-test-case.gif)
-
-When the currently edited file changes, the content in the run panel will also switch accordingly.
-
-You can also enable the diff feature, write the expected output, and after running, it will automatically compare it with the actual output:
-
-![](./assets/guide/diff.gif)
-
-If you want to run programs in other languages, you can also switch tasks:
-
-![](./assets/guide/switch-task.gif)
-
-OI Runner++ supports the following languages by default:
-
-- C++ (Compile arguments: `-std=c++14 -O2`)
-- Python
-
-If you need support for other languages or want to modify compilation options, please read the [Configuration](#configuration) section below.
-
-Remember to save the file before running the code; otherwise, the program executed will still be the last saved version.
+1. Open the Command Palette (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>)
+2. Enter & select `Welcome: Open Walkthrough...`
+3. Enter & select `Get Started with OI Runner++`
 
 ## Configuration
+
+All configuration descriptions can be accessed via the VS Code settings UI (<kbd>Ctrl</kbd> + <kbd>,</kbd>) by searching for `@ext:typed-sigterm.oi-runner-2`.
 
 <details>
 

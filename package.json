@@ -1,11 +1,11 @@
 {
   "publisher": "typed-sigterm",
   "name": "oi-runner-2",
-  "displayName": "OI Runner++",
+  "displayName": "%extension.displayName%",
   "version": "1.3.2",
   "private": true,
   "packageManager": "pnpm@10.9.0",
-  "description": "VS Code extension designed for OIer and ACMer, for running single-file programs.",
+  "description": "%extension.description%",
   "license": "MIT",
   "homepage": "https://oi-runner-2.by-ts.top",
   "repository": {
@@ -25,7 +25,7 @@
     "commands": [
       {
         "command": "oi-runner-2.runCode",
-        "title": "Launch OI Runner++",
+        "title": "%command.launch%",
         "icon": "assets/logo.png"
       }
     ],
@@ -38,9 +38,63 @@
         }
       ]
     },
+    "walkthroughs": [
+      {
+        "id": "oi-runner-2.welcome",
+        "title": "%walkthrough.title%",
+        "description": "%walkthrough.description%",
+        "steps": [
+          {
+            "id": "launch",
+            "title": "%walkthrough.launch.title%",
+            "description": "%walkthrough.launch.description%",
+            "media": {
+              "image": "assets/guide/launch.png",
+              "altText": "%walkthrough.launch.altText%"
+            }
+          },
+          {
+            "id": "panel",
+            "title": "%walkthrough.panel.title%",
+            "description": "%walkthrough.panel.description%",
+            "media": {
+              "image": "assets/guide/run.gif",
+              "altText": "%walkthrough.panel.altText%"
+            }
+          },
+          {
+            "id": "tasks",
+            "title": "%walkthrough.tasks.title%",
+            "description": "%walkthrough.tasks.description%",
+            "media": {
+              "image": "assets/guide/switch-task.gif",
+              "altText": "%walkthrough.tasks.altText%"
+            }
+          },
+          {
+            "id": "test-cases",
+            "title": "%walkthrough.testCases.title%",
+            "description": "%walkthrough.testCases.description%",
+            "media": {
+              "image": "assets/guide/switch-test-case.gif",
+              "altText": "%walkthrough.testCases.altText%"
+            }
+          },
+          {
+            "id": "diff",
+            "title": "%walkthrough.diff.title%",
+            "description": "%walkthrough.diff.description%",
+            "media": {
+              "image": "assets/guide/diff.gif",
+              "altText": "%walkthrough.diff.altText%"
+            }
+          }
+        ]
+      }
+    ],
     "configuration": [
       {
-        "title": "OI Runner++",
+        "title": "%configuration.title%",
         "properties": {
           "oi-runner-2.tasks": {
             "$schema": "http://json-schema.org/draft-07/schema#",
@@ -103,7 +157,7 @@
                 ]
               }
             },
-            "description": "Defines the tasks available in the run panel and their corresponding compilation and execution commands."
+            "description": "%configuration.tasks.description%"
           },
           "oi-runner-2.defaultTask": {
             "type": "object",
@@ -117,22 +171,23 @@
             "default": {
               ".cpp": "C++",
               ".py": "Python"
-            }
+            },
+            "description": "%configuration.defaultTask.description%"
           },
           "oi-runner-2.addToRunMenu": {
             "type": "boolean",
             "default": true,
-            "description": "Whether to add OI Runner++ to the editor title menu."
+            "description": "%configuration.addToRunMenu.description%"
           },
           "oi-runner-2.autoSave": {
             "type": "boolean",
             "default": true,
-            "description": "Whether to automatically save the file before running."
+            "description": "%configuration.autoSave.description%"
           },
           "oi-runner-2.textareaMaxSize": {
             "type": "integer",
             "default": 10000,
-            "description": "The maximum size of the stdout textarea in bytes (UTF-8 encoding). Long strings may cause hangs; redirect long output to files."
+            "description": "%configuration.textareaMaxSize.description%"
           }
         }
       }
@@ -141,7 +196,7 @@
       "panel": [
         {
           "id": "oi-runner-2",
-          "title": "OI Runner++",
+          "title": "%viewsContainer.title%",
           "icon": "./assets/logo.png"
         }
       ]
@@ -151,7 +206,7 @@
         {
           "type": "webview",
           "id": "oi-runner-2.panel",
-          "name": "OI Runner++",
+          "name": "%view.panel.name%",
           "icon": "./assets/logo.png"
         }
       ]
