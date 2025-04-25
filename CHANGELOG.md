@@ -2,6 +2,32 @@
 
 > English｜[简体中文](https://gitee.com/typed-sigterm/oi-runner-2/blob/main/CHANGELOG.zh-CN.md)
 
+## 2.0.0 (2025-04-26)
+
+v2 is mainly based on the feedback from the hackers from [Moonshot48](https://www.msadream.cn/), and the features are basically on par with [Competitive Programming Helper](https://marketplace.visualstudio.com/items/?itemName=DivyanshuAgrawal.competitive-programming-helper).
+
+### 🚀 Features
+
+- Support multiple test cases, you can now keep multiple sets of input and output at the same time
+- Improve the prompt page when no file is opened
+- Support filling in the expected output and comparing it with the actual output in real time for debugging
+- To prevent excessive output from crashing the run panel, the run panel now only displays the first 1e4 bytes of output by default. This limit does not apply when redirecting to a file, and can also be modified through configuration
+- Add loading animation
+
+### 🩹 Bug Fixes
+
+- Fix the prompt above the stdout editor when redirecting output
+
+### 📖 Documentation
+
+- A brand new tutorial for beginners, which can be seen when opening VS Code
+- Migrate all configuration instructions to the standard VS Code settings interface
+- After completing the above two points, there is no longer a need for a documentation website. Visiting [the original documentation site](https://oi-runner-2.by-ts.top/) will redirect to GitHub or Gitee
+
+### 🏡 Other Changes
+
+- The unsaved file prompt now replaces the `Source File` text to fit the layout adjustment
+
 ## 1.3.2 (2024-12-23)
 
 ### 🩹 Bug Fixes

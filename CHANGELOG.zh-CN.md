@@ -2,6 +2,32 @@
 
 > [English](https://github.com/typed-sigterm/oi-runner-2/blob/main/CHANGELOG.md)｜简体中文
 
+## 2.0.0 (2025-04-26)
+
+v2 主要听取了来自 [Moonshot48](https://www.msadream.cn/) 的同学的反馈，功能基本追平了 [Competitive Programming Helper](https://marketplace.visualstudio.com/items/?itemName=DivyanshuAgrawal.competitive-programming-helper)。
+
+### 🚀 新功能
+
+- 支持多组测试样例，你现在可以同时保留多组输入输出
+- 改进未打开文件时的提示页
+- 支持填入预期的输出，与实际输出实时对比，方便调试
+- 为了防止输出过多爆掉运行面板，现在运行面板中默认只显示前 1e4 字节的输出。重定向到文件时不受限制，也可以通过配置修改阈值
+- 添加加载动画
+
+### 🩹 Bug 修复
+
+- 修复重定向输出后 stdout 编辑器上方的提示
+
+### 📖 文档改进
+
+- 全新的新手教程，更新后打开 VS Code 就能看到
+- 迁移所有配置说明到标准的 VS Code 设置界面
+- 完成以上两点后，已经不再需要一个文档网站。访问[原文档站](https://oi-runner-2.by-ts.top/)会重定向到 GitHub 或 Gitee
+
+### 🏡 其他修改
+
+- 文件未保存提示现在替换 `Source File` 文本，以适应布局调整
+
 ## 1.3.2 (2024-12-23)
 
 ### 🩹 Bug 修复
