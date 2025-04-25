@@ -5,21 +5,6 @@ on:
     types: [published]
 
 jobs:
-  sync-latest-branch:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-        with:
-          fetch-depth: 0
-      - run: |
-          git checkout -f -b latest origin/latest
-          git merge --ff-only origin/main
-          # Avoid closing keywords are detected again
-          git push origin -d latest
-          git push -u origin latest
-
   publish:
     runs-on: ubuntu-latest
     permissions:

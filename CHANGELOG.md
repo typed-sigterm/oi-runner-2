@@ -16,7 +16,7 @@ v2 is mainly based on the feedback from the hackers from [Moonshot48](https://ww
 
 ### 🩹 Bug Fixes
 
-- Fix the prompt above the stdout editor when redirecting output
+- Fix the hint above the stdout editor when redirecting output
 
 ### 📖 Documentation
 
@@ -26,7 +26,7 @@ v2 is mainly based on the feedback from the hackers from [Moonshot48](https://ww
 
 ### 🏡 Other Changes
 
-- The unsaved file prompt now replaces the `Source File` text to fit the layout adjustment
+- The `unsaved` badge now replaces the `Source File` text to fit the layout adjustment
 
 ## 1.3.2 (2024-12-23)
 
@@ -73,7 +73,7 @@ v2 is mainly based on the feedback from the hackers from [Moonshot48](https://ww
 ### 🩹 Bug Fixes
 
 - Kill all its child processes when a run is stopped, the stop button will no longer fail now
-- Fix height shaking issue when the "unsaved" badge is toggled
+- Fix height shaking issue when the `unsaved` badge is toggled
 
 ### 📖 Documentation
 
