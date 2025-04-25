@@ -24,7 +24,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "oi-runner-2.runCode",
+        "command": "oi-runner-2.launch",
         "title": "%command.launch%",
         "icon": "assets/logo.png"
       }
@@ -32,7 +32,7 @@
     "menus": {
       "editor/title/run": [
         {
-          "command": "oi-runner-2.runCode",
+          "command": "oi-runner-2.launch",
           "group": "z_commands",
           "when": "config.oi-runner-2.addToRunMenu"
         }
@@ -214,11 +214,11 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc -b && vite build",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "prepare": "husky",
-    "test:types": "vue-tsc -p ./tsconfig.app.json --noEmit && vue-tsc -p ./tsconfig.node.json --noEmit"
+    "type-check": "vue-tsc -p ./tsconfig.app.json --noEmit && vue-tsc -p ./tsconfig.node.json --noEmit"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.3.0",
@@ -231,7 +231,7 @@
     "@typed-sigterm/eslint-config": "^1.4.1",
     "@types/node": "^22.13.8",
     "@types/ps-tree": "^1.1.6",
-    "@types/vscode": "^1.97.0",
+    "@types/vscode": "^1.94.0",
     "@types/vscode-webview": "^1.57.5",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vscode-elements/elements": "^1.13.1",

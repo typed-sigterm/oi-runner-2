@@ -4,7 +4,7 @@
 
 专为 OIer 和 ACMer 设计的 VS Code 插件，用于运行单文件程序。
 
-![](./assets/guide/preview.png)
+![](./assets/preview.png)
 
 ## 快速上手
 
@@ -33,6 +33,11 @@
 2024/6/21，我决定开发 OI Runner++，以 OI Runner 为蓝本进行完全重写并发布。因此，OI Runner++ 保留了 OI Runner 简洁的 UI 设计，但在不少功能上进行了改进。
 
 </details>
+
+从以下任意一个链接安装插件：
+
+- [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=typed-sigterm.oi-runner-2)
+- [Open VSX](https://open-vsx.org/extension/typed-sigterm/oi-runner-2)
 
 打开新手教程：
 

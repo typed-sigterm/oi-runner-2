@@ -4,7 +4,7 @@
 
 VS Code extension designed for OIers and ACMers, for running single-file programs.
 
-![](./assets/guide/preview.png)
+![](./assets/preview.png)
 
 ## Quick Start
 
@@ -34,6 +34,11 @@ On 2024/6/21, I decided to develop OI Runner++, completely rewriting it based on
 
 </details>
 
+Install the extension from one of:
+
+- [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=typed-sigterm.oi-runner-2)
+- [Open VSX](https://open-vsx.org/extension/typed-sigterm/oi-runner-2)
+
 For a quick start guide:
 
 1. Open the Command Palette (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>)
@@ -43,101 +48,6 @@ For a quick start guide:
 ## Configuration
 
 All configuration descriptions can be accessed via the VS Code settings UI (<kbd>Ctrl</kbd> + <kbd>,</kbd>) by searching for `@ext:typed-sigterm.oi-runner-2`.
-
-<details>
-
-<summary>How to Access the Configuration Interface</summary>
-<br>
-
-If you want to modify the configuration for the current workspace (folder), simply create a `.vscode/settings.json` file.
-
-If you want to apply the configuration to all workspaces, press <kbd>Ctrl</kbd> + <kbd>,</kbd> to open VS Code settings, then click the "Open Settings (JSON)" button in the top right corner to open the global configuration file:
-
-![](./assets/guide/settings.png)
-</details>
-
-### `oi-runner-2.tasks`
-
-Defines the tasks available in the run panel and their corresponding compilation and execution commands.
-
-Format:
-
-```jsonc
-{
-  "oi-runner-2.tasks": {
-    "C++": { // Task label
-      "compile": [ // Compilation command and arguments
-        "g++",
-        ["${file}", "-o${fileNoExt}", "-std=c++14", "-O2"] // The use of ${} is explained below
-      ],
-      "execute": [ // Execution command, required
-        "${fileNoExt}${execExt}",
-        []
-      ]
-    },
-    "Python": {
-      // The compilation command can be empty; the compile button will not be displayed when this task is selected
-      "execute": [
-        "python",
-        ["${file}"]
-      ]
-    }
-    // ...
-  }
-}
-```
-
-There are special strings in the commands and arguments that will be replaced with actual information when executed:
-
-| Special String | Replaced With |
-| --- | --- |
-| `${file}` | The absolute path of the source file |
-| `${fileNoExt}` | The absolute path of the source file without the extension |
-| `${execExt}` | The extension of the executable file, `.exe` on Windows, an empty string on other systems |
-
-The working directory for commands is the currently opened folder.
-
-### `oi-runner-2.defaultTask`
-
-Defines the default task selected in the run panel when a file is opened based on its extension.
-
-Format:
-
-```jsonc
-{
-  "oi-runner-2.tasks": {
-    "C++": { /* ... */ },
-    "Python": { /* ... */ }
-  },
-  "oi-runner-2.defaultTask": {
-    ".py": "Python", // Files with the .py extension default to Python
-    ".cpp": "C++"
-    // If a file's extension doesn't match any entry here, the run panel won't automatically switch to that file
-  }
-}
-```
-
-### `oi-runner-2.addToRunMenu`
-
-Whether to add OI Runner++ to the editor title menu's run button options.
-
-If disabled, you need to press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> to open the command palette and search for `Launch OI Runner++` to open the run panel.
-
-Format: `true` (default) or `false`.
-
-### `oi-runner-2.autoSave`
-
-Whether to automatically save the file before running.
-
-Format: `true` (default) or `false`.
-
-### `oi-runner-2.textareaMaxSize`
-
-The maximum size of the stdout textarea in bytes (UTF-8 encoding).
-
-Long strings may cause hangs; redirect long input/output to files if they exceed this limit.
-
-Format: `number` (default: `10000`).
 
 ## Credits
 

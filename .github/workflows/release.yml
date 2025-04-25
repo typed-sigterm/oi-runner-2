@@ -33,7 +33,7 @@ jobs:
           cache: pnpm
 
       - run: pnpm i
-      - run: pnpm build
+      - run: pnpm run build
       - run: pnpm vsce package --no-dependencies -o extension.vsix
 
       - name: Upload to GitHub Release
