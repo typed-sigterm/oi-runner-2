@@ -2,6 +2,17 @@
 
 > English｜[简体中文](https://gitee.com/typed-sigterm/oi-runner-2/blob/main/CHANGELOG.zh-CN.md)
 
+## 2.0.1 (2025-04-26)
+
+### 🔥 Performance
+
+- Use the built-in multi-file state management logic of Monaco Editor to reduce the delay when switching between files and test cases
+- Change the import method of Monaco Editor to reduce the size of the extension
+
+### 📖 Documentation
+
+- Modify wording in walkthrough
+
 ## 2.0.0 (2025-04-26)
 
 v2 is mainly based on the feedback from the hackers from [Moonshot48](https://www.msadream.cn/), and the features are basically on par with [Competitive Programming Helper](https://marketplace.visualstudio.com/items/?itemName=DivyanshuAgrawal.competitive-programming-helper).

@@ -2,6 +2,17 @@
 
 > [English](https://github.com/typed-sigterm/oi-runner-2/blob/main/CHANGELOG.md)｜简体中文
 
+## 2.0.1 (2025-04-26)
+
+### 🔥 性能优化
+
+- 使用 Monaco Editor 内置的多文件状态管理逻辑，减少在文件、样例间切换时的延迟
+- 修改 Monaco Editor 导入方式，减小插件体积
+
+### 📖 文档改进
+
+- 修改新手教程中部分用词
+
 ## 2.0.0 (2025-04-26)
 
 v2 主要听取了来自 [Moonshot48](https://www.msadream.cn/) 的同学的反馈，功能基本追平了 [Competitive Programming Helper](https://marketplace.visualstudio.com/items/?itemName=DivyanshuAgrawal.competitive-programming-helper)。
