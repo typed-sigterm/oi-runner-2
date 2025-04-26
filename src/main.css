@@ -13,6 +13,6 @@ a {
 }
 
 a[aria-disabled="true"] {
-  opacity: 0.4;
+  opacity: .2;
   cursor: initial;
 }

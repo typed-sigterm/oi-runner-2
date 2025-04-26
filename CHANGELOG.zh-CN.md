@@ -16,7 +16,7 @@ v2 主要听取了来自 [Moonshot48](https://www.msadream.cn/) 的同学的反�
 
 ### 🩹 Bug 修复
 
-- 修复重定向输出后 stdout 编辑器上方的提示
+- 修复重定向输出后 output 编辑器上方的提示
 
 ### 📖 文档改进
 

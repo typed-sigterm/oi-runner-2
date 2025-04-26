@@ -2,7 +2,8 @@
 import type { RunStep, TaskAttributes } from '../../shared/events';
 import type { RunnerState } from '../utils';
 import { IconDiffSingle } from '@iconify-prerendered/vue-codicon';
-import { computed, ref, toRaw, useTemplateRef, watch } from 'vue';
+import { nanoid } from 'nanoid';
+import { computed, ref, useTemplateRef, watch } from 'vue';
 import { postEvent } from '../utils';
 import IOPanel from './IOPanel.vue';
 import RunnerHint from './RunnerHint.vue';
@@ -35,8 +36,6 @@ watch(() => [state.file, state.status], ([file, status]) => {
   flush: 'sync',
 });
 
-const diff = ref(false);
-
 async function run(step: RunStep) {
   if (state.task === undefined || state.file === undefined)
     return;
@@ -54,10 +53,8 @@ async function run(step: RunStep) {
     file: state.file,
     task: state.task,
     step,
-    stdin: toRaw(case_.value.stdin),
-    stdout: typeof case_.value.stdout === 'object'
-      ? toRaw(case_.value.stdout)
-      : undefined,
+    stdin: stdin.value?.getFileChannel() ?? stdin.value?.getContent(),
+    stdout: stdout.value?.getFileChannel(),
   });
 }
 
@@ -78,8 +75,12 @@ function handleRemove(index: number) {
 defineExpose({
   redirect(channel: 'stdin' | 'stdout') {
     return channel === 'stdin'
-      ? stdin.value?.redirect()
-      : stdout.value?.redirect();
+      ? stdin.value?.requestLinkFile()
+      : stdout.value?.requestLinkFile();
+  },
+
+  handleExecuteResult(result: string) {
+    stdout.value?.setContent(result);
   },
 });
 </script>
@@ -99,9 +100,10 @@ defineExpose({
     <div class="io-area">
       <IOPanel
         ref="stdin"
-        v-model="case_.stdin"
+        v-model:linked-file="case_.stdinFile"
         title="Input"
-        :disabled="state.status !== 'idle'"
+        :model-path="`inmemory://stdin/${case_.id}`"
+        :disabled="state.status !== 'idle' || !!case_.stdinFile"
         :disable-redirect="state.status !== 'idle'"
       >
         <template #extra>
@@ -111,13 +113,14 @@ defineExpose({
 
       <IOPanel
         ref="stdout"
-        v-model="case_.stdout"
+        v-model:linked-file="case_.stdoutFile"
         title="Output"
+        :model-path="`inmemory://stdout/${case_.id}`"
         readonly
-        :disabled="state.status !== 'idle' || !!state.hint"
+        :disabled="state.status !== 'idle' || !!state.hint || !!case_.stdoutFile"
         :disable-redirect="state.status !== 'idle'"
-        :diff
-        @link-file="state.hint = undefined"
+        :diff="case_.diff"
+        :expected-model-path="`inmemory://expected/${case_.id}`"
       >
         <template v-if="case_.duration !== undefined" #info>
           <span class="exit-info">
@@ -131,9 +134,10 @@ defineExpose({
 
         <template #tools>
           <a
-            :title="`${diff ? 'Disable' : 'Enable'} Diff`"
-            :aria-selected="diff"
-            @click="diff = !diff"
+            :title="`${case_.diff ? 'Disable' : 'Enable'} Diff`"
+            :aria-selected="case_.diff"
+            :aria-disabled="!!case_.stdoutFile"
+            @click="!case_.stdoutFile && (case_.diff = !case_.diff)"
           >
             <IconDiffSingle />
           </a>
@@ -145,7 +149,7 @@ defineExpose({
       :state
       :disabled="state.status !== 'idle'"
       @switch="(to) => state.case = to"
-      @add="state.cases.push({ stdin: '', stdout: '' })"
+      @add="state.cases.push({ id: nanoid() })"
       @remove="handleRemove"
     />
   </main>

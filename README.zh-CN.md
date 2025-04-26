@@ -11,7 +11,6 @@
 <details>
 
 <summary>OI Runner++ 的由来</summary>
-<br>
 
 在 VS Code 中运行 C++ 单文件程序并非易事，我就**深受其害**。网上的教程大多要求配置**冗长、复杂、玄学**的 `.vscode/launch.json` 和 `.vscode/tasks.json`，这完全是一种折磨。
 

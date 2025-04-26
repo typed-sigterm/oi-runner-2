@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import type { IOFileChannel } from '../../shared/events';
 import type { RunnerState } from '../utils';
 import { IconCircleSlash, IconError } from '@iconify-prerendered/vue-codicon';
 import { computed, ref } from 'vue';
@@ -12,12 +11,11 @@ const { type, state } = defineProps<{
 }>();
 
 const idle = ref(true);
-const channel = computed(() => state.cases[state.case][type]);
-
+const linkedFile = computed(() => state.cases[state.case][`${type}File`]);
 function gotoRedirected() {
-  postEvent({
+  linkedFile.value && postEvent({
     type: 'file:open-in-editor',
-    path: (channel.value as IOFileChannel).file,
+    path: linkedFile.value,
   });
 }
 </script>
@@ -50,10 +48,10 @@ function gotoRedirected() {
     <span v-else @vue:mounted="idle = true" @vue:unmounted="idle = false" />
   </template>
 
-  <div v-if="idle && typeof channel === 'object'" class="mask redirected">
+  <div v-if="idle && linkedFile" class="mask redirected">
     redirect
     {{ type === 'stdin' ? 'from' : 'to' }}
-    <a :title="channel.file" @click="gotoRedirected">file</a>
+    <a :title="linkedFile" @click="gotoRedirected">file</a>
   </div>
 </template>
 

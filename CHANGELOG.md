@@ -9,14 +9,14 @@ v2 is mainly based on the feedback from the hackers from [Moonshot48](https://ww
 ### 🚀 Features
 
 - Support multiple test cases, you can now keep multiple sets of input and output at the same time
-- Improve the prompt page when no file is opened
+- Improve guidance when no file is opened
 - Support filling in the expected output and comparing it with the actual output in real time for debugging
 - To prevent excessive output from crashing the run panel, the run panel now only displays the first 1e4 bytes of output by default. This limit does not apply when redirecting to a file, and can also be modified through configuration
 - Add loading animation
 
 ### 🩹 Bug Fixes
 
-- Fix the hint above the stdout editor when redirecting output
+- Fix the hint above the output editor when redirecting output
 
 ### 📖 Documentation
 

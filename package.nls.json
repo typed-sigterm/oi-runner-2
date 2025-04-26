@@ -7,7 +7,7 @@
   "configuration.defaultTask.description": "Defines the default task selected in the run panel when a file is opened based on its extension.",
   "configuration.addToRunMenu.description": "Whether to add OI Runner++ to the editor title menu.",
   "configuration.autoSave.description": "Whether to automatically save the file before running.",
-  "configuration.textareaMaxSize.description": "The maximum size of the stdout textarea in bytes (UTF-8 encoding).\nLong strings may cause hangs; redirect long output to files.",
+  "configuration.textareaMaxSize.description": "The maximum size of the output editor in bytes (UTF-8 encoding).\nLong strings may cause hangs; redirect long output to files.",
   "viewsContainer.title": "OI Runner++",
   "view.panel.name": "OI Runner++",
   "walkthrough.title": "Get Started with OI Runner++",
@@ -28,6 +28,6 @@
   "walkthrough.testCases.description": "You can have multiple test cases per file.",
   "walkthrough.testCases.altText": "Add & switching between test cases.",
   "walkthrough.diff.title": "Comparing with expected output",
-  "walkthrough.diff.description": "To easily check if your program's output is correct, you can use the built-in diff editor.\nAfter enabling diff by clicking **Add Expected Output**, you can paste expected output into stdout editor. You will see the diff result.",
+  "walkthrough.diff.description": "To easily check if your program's output is correct, you can use the built-in diff editor.\nAfter enabling diff by clicking **Add Expected Output**, you can paste expected output into **Output** editor. You will see the diff result.",
   "walkthrough.diff.altText": "Using the diff feature to compare output."
 }

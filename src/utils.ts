@@ -1,5 +1,5 @@
-import type { InjectionKey } from 'vue';
-import type { EventMessage, IOChannel } from '../shared/events';
+import type { InjectionKey, Ref } from 'vue';
+import type { EventMessage } from '../shared/events';
 import Consola, { LogLevels } from 'consola/browser';
 import { ref } from 'vue';
 import { EventMarker } from '../shared/events';
@@ -17,7 +17,7 @@ export function postEvent(message: EventMessage) {
 }
 
 export type Theme = 'dark' | 'light';
-export const ThemeInjectKey: InjectionKey<Theme> = Symbol('theme');
+export const ThemeInjectKey: InjectionKey<Ref<Theme>> = Symbol('theme');
 
 const fontSize = ref(0);
 let fontSizeInitialized = false;
@@ -48,13 +48,16 @@ export type RunnerStatus = 'idle' | 'compiling' | 'excuting' | 'cancelling';
 export type RunnerHint = 'compile-failed' | 'execute-failed' | 'cancelled';
 
 export interface RunnerCase {
-  stdin: IOChannel
-  stdout: IOChannel
+  id: string
+  stdinFile?: string
+  stdoutFile?: string
+  diff?: boolean
   exitCode?: number
   duration?: number
 }
 
 export interface RunnerState {
+  id: string
   file: string
   task: string
   status: RunnerStatus

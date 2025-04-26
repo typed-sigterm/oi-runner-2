@@ -1,22 +1,20 @@
 <script lang="ts" setup>
-import type { IOChannel } from '../../shared/events';
+import type { IOFileChannel } from '../../shared/events';
 import { VueMonacoDiffEditor, VueMonacoEditor } from '@guolao/vue-monaco-editor';
 import { IconFileSymlinkFile } from '@iconify-prerendered/vue-codicon';
 import { IconLoadingLoop } from '@iconify-prerendered/vue-line-md';
 import { editor } from 'monaco-editor/esm/vs/editor/editor.api';
-import { computed, inject, ref, watch } from 'vue';
+import { computed, inject, ref, shallowRef } from 'vue';
 import { selectFile, ThemeInjectKey, useFontSize } from '../utils';
 
 const props = defineProps<{
+  modelPath: string
   title: string
   readonly?: boolean
   disabled?: boolean
   disableRedirect?: boolean
   diff?: boolean
-}>();
-
-const emit = defineEmits<{
-  linkFile: [to?: string]
+  expectedModelPath?: string
 }>();
 
 defineSlots<{
@@ -25,24 +23,19 @@ defineSlots<{
   tools: () => any
 }>();
 
-const value = defineModel<IOChannel>({ required: true });
-const diffValue = ref('');
-watch(() => props.diff, (diff) => {
-  if (diff) {
-    if (typeof value.value !== 'string')
-      value.value = '';
-    diffValue.value = value.value;
-  }
-});
+const linkedFile = defineModel<string | undefined>('linkedFile');
+
+const codeEditor = shallowRef<editor.IStandaloneCodeEditor>();
+const diffEditor = shallowRef<editor.IStandaloneDiffEditor>();
 
 const theme = inject(ThemeInjectKey);
 const fontSize = useFontSize();
 const monacoProps = computed(() => ({
   class: 'monaco-editor',
-  theme: theme === 'light' ? 'vs' : 'vs-dark',
+  theme: theme?.value === 'light' ? 'vs' : 'vs-dark',
   options: {
     automaticLayout: true,
-    // compactMode: true,
+    compactMode: true,
     folding: false,
     fontSize: fontSize.value,
     lightbulb: { enabled: editor.ShowLightbulbIconMode.Off },
@@ -53,27 +46,36 @@ const monacoProps = computed(() => ({
   },
 }));
 
-const isLinked = computed(() => typeof value.value === 'object');
 const isLinking = ref(false);
 async function linkFile() {
   if (props.disableRedirect || props.diff) // @todo
     return;
 
-  if (isLinked.value) { // unlink
-    value.value = '';
-    emit('linkFile');
+  if (linkedFile.value) { // unlink
+    linkedFile.value = undefined;
   } else { // link
     isLinking.value = true;
-    const file = await selectFile();
-    if (file)
-      value.value = { file };
+    linkedFile.value = await selectFile();
     isLinking.value = false;
-    emit('linkFile', file);
   }
 }
 
 defineExpose({
-  redirect: linkFile,
+  getContent() {
+    if (!props.diff)
+      return codeEditor.value?.getModel()?.getValue();
+  },
+
+  setContent(to: string) {
+    diffEditor.value?.getModel()?.original.setValue(to);
+    codeEditor.value?.setValue(to);
+  },
+
+  requestLinkFile: linkFile,
+  getFileChannel(): IOFileChannel | undefined {
+    if (linkedFile.value)
+      return { file: linkedFile.value };
+  },
 });
 </script>
 
@@ -86,8 +88,8 @@ defineExpose({
       <div class="tools">
         <a
           class="link-file"
-          :title="`${isLinked ? 'Unlink' : 'Link'} File`"
-          :aria-selected="isLinked"
+          :title="`${linkedFile ? 'Unlink' : 'Link'} File`"
+          :aria-selected="!!linkedFile"
           :aria-disabled="disableRedirect || diff"
           @click="linkFile"
         >
@@ -98,18 +100,19 @@ defineExpose({
       </div>
     </div>
 
-    <VueMonacoDiffEditor
-      v-if="diff"
+    <VueMonacoEditor
+      v-show="!diff"
       v-bind="monacoProps"
-      v-model:modified="diffValue"
-      :original="typeof value === 'string' ? value : ''"
+      :path="modelPath"
+      @mount="e => codeEditor = e"
     />
 
-    <VueMonacoEditor
-      v-else
+    <VueMonacoDiffEditor
+      v-show="diff"
       v-bind="monacoProps"
-      :value="typeof value === 'string' ? value : ''"
-      @update:value="value = $event"
+      :original-model-path="modelPath"
+      :modified-model-path="expectedModelPath"
+      @mount="e => diffEditor = e"
     />
 
     <slot name="extra" />
@@ -149,6 +152,10 @@ h3 {
 
   > a[aria-selected="true"] {
     color: var(--vscode-editorLink-activeForeground);
+  }
+
+  > a[aria-disabled="true"] {
+    cursor: not-allowed;
   }
 }
 

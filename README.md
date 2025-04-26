@@ -11,7 +11,6 @@ VS Code extension designed for OIers and ACMers, for running single-file program
 <details>
 
 <summary>The Story Behind OI Runner++</summary>
-<br>
 
 Running single C++ files in VS Code isn't straightforward, and I've **suffered** from this. Online tutorials often require configuring **lengthy, complex, and arcane** `.vscode/launch.json` and `.vscode/tasks.json` files, which is pure torture.
 
