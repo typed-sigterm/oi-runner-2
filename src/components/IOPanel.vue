@@ -3,7 +3,7 @@ import type { IOChannel } from '../../shared/events';
 import { VueMonacoDiffEditor, VueMonacoEditor } from '@guolao/vue-monaco-editor';
 import { IconFileSymlinkFile } from '@iconify-prerendered/vue-codicon';
 import { IconLoadingLoop } from '@iconify-prerendered/vue-line-md';
-import { editor } from 'monaco-editor';
+import { editor } from 'monaco-editor/esm/vs/editor/editor.api';
 import { computed, inject, ref, watch } from 'vue';
 import { selectFile, ThemeInjectKey, useFontSize } from '../utils';
 

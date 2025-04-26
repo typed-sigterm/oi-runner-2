@@ -7,7 +7,6 @@
   "packageManager": "pnpm@10.9.0",
   "description": "%extension.description%",
   "license": "MIT",
-  "homepage": "https://oi-runner-2.by-ts.top",
   "repository": {
     "url": "https://github.com/typed-sigterm/oi-runner-2"
   },
