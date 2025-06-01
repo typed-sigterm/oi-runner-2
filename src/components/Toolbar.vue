@@ -131,13 +131,12 @@ vscode-button {
   --vscode-button-background: transparent;
   --vscode-button-hoverBackground: rgba(90, 93, 94, 0.31);
   border: none;
-  padding: 4px;
   font-size: medium;
-  width: 16px;
+  width: 20px;
   margin: 0 2px;
 }
 
-vscode-button::slotted {
-  margin: 0;
+vscode-button svg {
+  margin-left: -6px;
 }
 </style>
