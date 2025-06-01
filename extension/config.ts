@@ -1,6 +1,6 @@
 import path from 'node:path';
 import * as vscode from 'vscode';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { contributes } from '../package.json';
 import { cachedFn } from './utils';
 
@@ -13,7 +13,7 @@ const TaskSchema = z.object({
 });
 export type Task = z.infer<typeof TaskSchema>;
 
-const TasksSchema = z.record(TaskSchema);
+const TasksSchema = z.record(z.string(), TaskSchema);
 const DefaultTaskSchema = z.record(z.string(), z.string());
 
 export const getConfiguredTasks = cachedFn(() => {
