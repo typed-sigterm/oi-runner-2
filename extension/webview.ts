@@ -5,6 +5,7 @@ import { EventMarker } from '../shared/events';
 import { getAutoSave, getConfiguredDefaultTask, getConfiguredTasks, getDefaultTask, isConfigured } from './config';
 import { Runner } from './runner';
 import { logger } from './utils';
+import { OJ_INSTANCE } from './oj';
 
 class PanelProvider implements vscode.WebviewViewProvider, vscode.Disposable {
   static readonly VIEW_TYPE = 'oi-runner-2.panel';
@@ -171,6 +172,25 @@ class PanelProvider implements vscode.WebviewViewProvider, vscode.Disposable {
           });
         });
         break;
+      
+      case 'file:open-url':
+        vscode.env.openExternal(vscode.Uri.parse(message.url));
+        break;
+
+      case 'oj:fetch-samples':
+        try {
+          const res = await OJ_INSTANCE[message.provider].getProblem(message.problem);
+          this.postEvent({
+            type: 'oj:samples-fetched',
+            samples: res.samples,
+          })
+        } catch (e) {
+          logger.error('Failed to fetch samples:', e);
+          this.postEvent({ type: 'oj:samples-fetched' })
+          const res = await vscode.window.showErrorMessage('Failed to fetch samples', 'Copy Details');
+          if (res === 'Copy Details')
+            vscode.env.clipboard.writeText(e instanceof Error && e.stack || String(e));
+        }
     }
   }
 }

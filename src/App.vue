@@ -9,6 +9,7 @@ import { EventMarker } from '../shared/events';
 import Empty from './components/Empty.vue';
 import Loading from './components/Loading.vue';
 import Runner from './components/Runner.vue';
+import TooltipProvider from './components/ui/tooltip/TooltipProvider.vue';
 import { logger, postEvent, ThemeInjectKey } from './utils';
 
 provide(ThemeInjectKey, ref('dark' as const));
@@ -124,7 +125,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <Loading v-if="loading" />
-  <Runner v-else-if="state" ref="runner" :state :tasks :source-dirty />
-  <Empty v-else :extensions />
+  <TooltipProvider>
+    <Loading v-if="loading" />
+    <Runner v-else-if="state" ref="runner" :state :tasks :source-dirty />
+    <Empty v-else :extensions />
+  </TooltipProvider>
 </template>

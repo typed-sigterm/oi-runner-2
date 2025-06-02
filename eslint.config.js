@@ -1,6 +1,6 @@
 import ts from '@typed-sigterm/eslint-config';
 
-export default ts({}, {
+export default ts({
   rules: {
     // use `consola` instead
     'no-console': [2, { allow: undefined }],
@@ -9,4 +9,9 @@ export default ts({}, {
     // for performance
     'vue/no-mutating-props': [0],
   },
+
+  ignores: [
+    './src/components/ui',
+    './src/lib',
+  ],
 });

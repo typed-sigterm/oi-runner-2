@@ -2,6 +2,8 @@
 import type { RunnerState } from '../utils';
 import { IconConfirm, IconMinus, IconPlus, IconTrash } from '@iconify-prerendered/vue-line-md';
 import { ref } from 'vue';
+import ImportCases from './ImportCases.vue';
+import type { ProblemIOSample } from 'un-oj';
 
 const { state } = defineProps<{
   state: RunnerState
@@ -10,7 +12,7 @@ const { state } = defineProps<{
 
 const emit = defineEmits<{
   switch: [to: number]
-  add: []
+  add: [sample?: ProblemIOSample]
   remove: [index: number]
 }>();
 
@@ -23,6 +25,11 @@ function handleClick(index: number) {
     emit('remove', index);
   else
     emit('switch', index);
+}
+
+function handleImport(cases: ProblemIOSample[]) {
+  for (const c of cases)
+    emit('add', c);
 }
 </script>
 
@@ -37,7 +44,7 @@ function handleClick(index: number) {
       :aria-disabled="disabled"
       @click="handleClick(i)"
     >
-      <IconTrash v-if="removing && i !== state.case" @click="$emit('remove', i)" />
+      <IconTrash v-if="removing && i !== state.case" />
       <template v-else>
         #{{ i + 1 }}
       </template>
@@ -46,7 +53,7 @@ function handleClick(index: number) {
     <li
       v-if="!removing"
       title="Add Test Case"
-      role="tab"
+      role="button"
       :aria-disabled="disabled"
       @click="!disabled && $emit('add')"
     >
@@ -56,13 +63,15 @@ function handleClick(index: number) {
     <li
       v-if="removing || state.cases.length > 1"
       title="Remove Test Case"
-      role="tab"
+      role="button"
       :aria-disabled="disabled"
       @click="!disabled && (removing = !removing)"
     >
       <IconConfirm v-if="removing" />
       <IconMinus v-else />
     </li>
+
+    <ImportCases @import="handleImport" />
   </ol>
 </template>
 
@@ -72,7 +81,7 @@ ol {
   all: unset;
 }
 
-li {
+ol:deep() > li {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -82,16 +91,16 @@ li {
   cursor: pointer;
   list-style: none;
   color: var(--vscode-tab-inactiveForeground);
-}
 
-li[aria-selected="true"] {
-  color: var(--vscode-tab-activeForeground);
-  border-right: 2px solid var(--vscode-tab-activeForeground);
-}
+  &[aria-selected="true"] {
+    color: var(--vscode-tab-activeForeground);
+    border-right: 2px solid var(--vscode-tab-activeForeground);
+  }
 
-li[aria-disabled="true"] {
-  pointer-events: none;
-  color: var(--vscode-tab-inactiveForeground);
-  border-right-color: var(--vscode-tab-inactiveForeground);
+  &[aria-disabled="true"] {
+    pointer-events: none;
+    color: var(--vscode-tab-inactiveForeground);
+    border-right-color: var(--vscode-tab-inactiveForeground);
+  }
 }
 </style>

@@ -1,14 +1,16 @@
 <script lang="ts" setup>
 import type { RunStep, TaskAttributes } from '../../shared/events';
-import type { RunnerState } from '../utils';
+import type { RunnerCase, RunnerState } from '../utils';
 import { IconDiffSingle } from '@iconify-prerendered/vue-codicon';
 import { nanoid } from 'nanoid';
-import { computed, ref, useTemplateRef, watch } from 'vue';
-import { postEvent } from '../utils';
+import { computed, ref, toRaw, useTemplateRef, watch } from 'vue';
+import { logger, postEvent } from '../utils';
 import IOPanel from './IOPanel.vue';
 import RunnerHint from './RunnerHint.vue';
 import Sidebar from './Sidebar.vue';
 import Toolbar from './Toolbar.vue';
+import type { ProblemIOSample } from 'un-oj';
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
 const { state } = defineProps<{
   state: RunnerState
@@ -66,10 +68,30 @@ function cancel() {
   });
 }
 
+function updateModel(path: string, content: string) {
+  const p = monaco.Uri.parse(path);
+  const model = monaco.editor.getModel(p);
+  if (!model)
+    monaco.editor.createModel(content, undefined, p);
+  else
+    model.setValue(content);
+}
+
+function handleAdd(sample?: ProblemIOSample) {
+  const case_: RunnerCase = { id: nanoid(), diff: !!sample };
+  state.case = state.cases.push(case_) - 1;
+  if (sample) {
+    updateModel(`inmemory://stdin/${case_.id}`, sample.input);
+    updateModel(`inmemory://expected/${case_.id}`, sample.output);
+  }
+  logger.log(toRaw(state.cases));
+}
+
 function handleRemove(index: number) {
   state.cases.splice(index, 1);
   if (state.case > index)
     state.case--;
+  logger.log(toRaw(state.cases));
 }
 
 defineExpose({
@@ -149,7 +171,7 @@ defineExpose({
       :state
       :disabled="state.status !== 'idle'"
       @switch="(to) => state.case = to"
-      @add="state.cases.push({ id: nanoid() })"
+      @add="handleAdd"
       @remove="handleRemove"
     />
   </main>

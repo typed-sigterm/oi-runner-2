@@ -133,15 +133,16 @@ defineExpose({
 h3 {
   display: inline-block;
   height: 16px;
-  line-height: 16px;
+  font-size: 16px;
   font-weight: normal;
-  margin-top: 0;
+  line-height: 16px;
   margin-bottom: 8px;
 }
 
 .tools {
   float: right;
   font-size: 18px;
+  height: 20px;
   color: var(--vscode-editor-foreground);
 }
 
@@ -156,6 +157,11 @@ h3 {
 
   > a[aria-disabled="true"] {
     cursor: not-allowed;
+  }
+
+  svg {
+    display: inline;
+    vertical-align: text-top;
   }
 }
 

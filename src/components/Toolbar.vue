@@ -113,6 +113,7 @@ header {
 }
 
 .source-link > svg {
+  display: inline;
   width: 16px;
   height: 16px;
   vertical-align: text-bottom;

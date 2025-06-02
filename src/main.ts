@@ -4,6 +4,7 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { createApp } from 'vue';
 import App from './App.vue';
 import './main.css';
+import './tailwind.css';
 import '@vscode/codicons/dist/codicon.css';
 
 const token = import.meta.env.RUNNER_MIXPANEL_TOKEN;

@@ -70,15 +70,19 @@ export interface RunnerState {
  * Ask user to select one file.
  * @returns Resolves the selected file path, or `undefined` if cancelled.
  */
-export function selectFile() {
-  return new Promise<string | undefined>((resolve) => {
+export async function selectFile() {
+  postEvent({ type: 'file:select' });
+  return (await waitEvent('file:selected')).path;
+}
+
+export function waitEvent<T extends EventMessage['type']>(type: T) {
+  return new Promise<EventMessage & { type: T }>((resolve) => {
     const handleMessage = (event: MessageEvent) => {
-      if (event.data.type !== 'file:selected')
+      if (event.data.type !== type)
         return;
       window.removeEventListener('message', handleMessage);
-      resolve(event.data.path);
+      resolve(event.data);
     };
-    postEvent({ type: 'file:select' });
     window.addEventListener('message', handleMessage);
   });
 }

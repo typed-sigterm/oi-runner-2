@@ -1,3 +1,5 @@
+import type { ProblemIOSample } from "un-oj";
+
 export const EventMarker = '__oiRunner2';
 
 export type ConfigLevel = false | 'workspace-folder' | 'workspace' | 'global';
@@ -14,6 +16,17 @@ export interface IOFileChannel {
 export type IOChannel =
   | string // plain content
   | IOFileChannel; // link to file
+
+export const OJNames = [
+  'AtCoder',
+  'Codeforces',
+  'Hydro',
+  'LeetCode',
+  'Luogu',
+  'LibreOJ',
+  'MXOJ',
+] as const;
+export type OJ = (typeof OJNames)[number];
 
 export type EventMessage = { // extension -> webview
   type: 'setup'
@@ -78,7 +91,14 @@ export type EventMessage = { // extension -> webview
 } | { // extension -> webview
   type: 'file:selected'
   path?: string
-} | {
-  type: 'telemetry:policy-changed'
-  enabled: boolean
-};
+} | { // webview -> extension
+  type: 'file:open-url'
+  url: string
+} | { // webview -> extension
+  type: 'oj:fetch-samples'
+  provider: OJ
+  problem: string
+} | { // extension -> webview
+  type: 'oj:samples-fetched'
+  samples?: ProblemIOSample[]
+}

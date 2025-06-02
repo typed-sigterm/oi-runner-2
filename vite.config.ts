@@ -1,3 +1,5 @@
+import path from 'node:path';
+import pluginTailwindcss from '@tailwindcss/vite';
 import pluginVscode from '@tomjs/vite-plugin-vscode';
 import pluginVue from '@vitejs/plugin-vue';
 import { defineConfig } from 'vite';
@@ -6,8 +8,6 @@ export default defineConfig({
   build: {
     chunkSizeWarningLimit: Infinity,
   },
-
-  envPrefix: ['RUNNER_'],
 
   plugins: [
     pluginVscode({ recommended: true }),
@@ -18,5 +18,14 @@ export default defineConfig({
         },
       },
     }),
+    pluginTailwindcss(),
   ],
+
+  envPrefix: ['RUNNER_'],
+
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
 });

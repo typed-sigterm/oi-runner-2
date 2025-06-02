@@ -1,0 +1,86 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --background: var(--vscode-editor-background);
+  --foreground: var(--vscode-editor-foreground);
+  --card: var(--vscode-sideBar-background, var(--vscode-editor-background));
+  --card-foreground: var(--vscode-sideBar-foreground, var(--vscode-editor-foreground));
+  --popover: var(--vscode-dropdown-background, var(--vscode-editor-background));
+  --popover-foreground: var(--vscode-dropdown-foreground, var(--vscode-editor-foreground));
+  --primary: var(--vscode-button-background, var(--vscode-textLink-foreground));
+  --primary-foreground: var(--vscode-button-foreground);
+  --secondary: var(--vscode-button-secondaryBackground, var(--vscode-editorGroupHeader-tabsBackground));
+  --secondary-foreground: var(--vscode-button-secondaryForeground, var(--vscode-editor-foreground));
+  --muted: var(--vscode-input-background, var(--vscode-editorGroupHeader-tabsBackground));
+  --muted-foreground: var(--vscode-descriptionForeground);
+  --accent: var(--vscode-list-hoverBackground, var(--vscode-editorGroupHeader-tabsBackground));
+  --accent-foreground: var(--vscode-list-hoverForeground, var(--vscode-editor-foreground));
+  --destructive: var(--vscode-errorForeground);
+  --destructive-foreground: var(--vscode-errorForeground);
+  --border: var(--vscode-panel-border, var(--vscode-editorGroup-border));
+  --input: var(--vscode-input-background);
+  --ring: var(--vscode-focusBorder);
+  --chart-1: var(--vscode-charts-red);
+  --chart-2: var(--vscode-charts-blue);
+  --chart-3: var(--vscode-charts-yellow);
+  --chart-4: var(--vscode-charts-green);
+  --chart-5: var(--vscode-charts-purple);
+  --radius: 0.625rem;
+  --sidebar: var(--vscode-sideBar-background);
+  --sidebar-foreground: var(--vscode-sideBar-foreground);
+  --sidebar-primary: var(--vscode-sideBarSectionHeader-background, var(--vscode-textLink-foreground));
+  --sidebar-primary-foreground: var(--vscode-sideBarSectionHeader-foreground);
+  --sidebar-accent: var(--vscode-list-activeSelectionBackground);
+  --sidebar-accent-foreground: var(--vscode-list-activeSelectionForeground);
+  --sidebar-border: var(--vscode-sideBar-border);
+  --sidebar-ring: var(--vscode-focusBorder);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
