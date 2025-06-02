@@ -1,7 +1,9 @@
 <script lang="ts" setup>
+import type { ProblemIOSample } from 'un-oj';
 import type { RunStep, TaskAttributes } from '../../shared/events';
 import type { RunnerCase, RunnerState } from '../utils';
 import { IconDiffSingle } from '@iconify-prerendered/vue-codicon';
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { nanoid } from 'nanoid';
 import { computed, ref, toRaw, useTemplateRef, watch } from 'vue';
 import { logger, postEvent } from '../utils';
@@ -9,8 +11,6 @@ import IOPanel from './IOPanel.vue';
 import RunnerHint from './RunnerHint.vue';
 import Sidebar from './Sidebar.vue';
 import Toolbar from './Toolbar.vue';
-import type { ProblemIOSample } from 'un-oj';
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
 const { state } = defineProps<{
   state: RunnerState

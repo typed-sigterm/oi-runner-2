@@ -1,15 +1,15 @@
 <script lang="ts">
 import type { ProblemIOSample } from 'un-oj';
+import type { OJ } from '../../shared/events';
 import { IconCloudAltDownloadFilled, IconLoadingLoop, IconQuestionCircle } from '@iconify-prerendered/vue-line-md';
 import { ref, watch } from 'vue';
+import { postEvent, waitEvent } from '../utils';
 import OJSelector from './OJSelector.vue';
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
-import { postEvent, waitEvent } from '../utils';
-import type { OJ } from '../../shared/events';
 
 export interface ImportedCase {
   input: string
@@ -58,11 +58,11 @@ async function handleImport() {
   }
 }
 
-const reportIssue = () => postEvent({ type: 'file:open-url', url: 'https://github.com/un-oj/core' })
+const reportIssue = () => postEvent({ type: 'file:open-url', url: 'https://github.com/un-oj/core' });
 </script>
 
 <template>
-  <Dialog modal v-model:open="selecting">
+  <Dialog v-model:open="selecting" modal>
     <DialogTrigger as-child>
       <li
         v-bind="$attrs"

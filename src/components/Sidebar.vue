@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import type { ProblemIOSample } from 'un-oj';
 import type { RunnerState } from '../utils';
 import { IconConfirm, IconMinus, IconPlus, IconTrash } from '@iconify-prerendered/vue-line-md';
 import { ref } from 'vue';
 import ImportCases from './ImportCases.vue';
-import type { ProblemIOSample } from 'un-oj';
 
 const { state } = defineProps<{
   state: RunnerState

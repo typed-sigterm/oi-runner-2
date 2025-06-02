@@ -1,5 +1,6 @@
 <script lang="ts">
-import { OJNames, type OJ } from '../../shared/events';
+import type { OJ } from '../../shared/events';
+import { OJNames } from '../../shared/events';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 </script>
 

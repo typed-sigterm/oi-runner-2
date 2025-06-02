@@ -1,4 +1,4 @@
-import type { ProblemIOSample } from "un-oj";
+import type { ProblemIOSample } from 'un-oj';
 
 export const EventMarker = '__oiRunner2';
 
@@ -101,4 +101,4 @@ export type EventMessage = { // extension -> webview
 } | { // extension -> webview
   type: 'oj:samples-fetched'
   samples?: ProblemIOSample[]
-}
+};
