@@ -1,8 +1,22 @@
+import type { ConfigLevel } from '../shared/events';
 import path from 'node:path';
 import * as vscode from 'vscode';
 import { z } from 'zod/v4';
 import { contributes } from '../package.json';
 import { cachedFn } from './utils';
+
+export function isConfigured(): ConfigLevel {
+  const info = vscode.workspace.getConfiguration().inspect('oi-runner-2');
+  if (!info)
+    return false;
+  if (info.workspaceFolderValue)
+    return 'workspace-folder';
+  if (info.workspaceValue)
+    return 'workspace';
+  if (info.globalValue)
+    return 'global';
+  return false;
+}
 
 const ConfigManifest = contributes.configuration[0].properties;
 

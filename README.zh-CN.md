@@ -48,6 +48,12 @@
 
 所有配置说明都可通过 VS Code 设置界面 (<kbd>Ctrl</kbd> + <kbd>,</kbd>) 访问，搜索 `@ext:typed-sigterm.oi-runner-2` 即可找到。
 
+## 遥测
+
+OI Runner++ 会收集一些遥测数据以帮助改进插件（比如了解需要兼容到哪个 VS Code 版本），你可以在源代码仓库中搜索 `mixpanel.track` 收集的信息。
+
+遥测收集的信息不包含个人和敏感信息，仅用于统计目的。你可以在设置 VS Code `telemetry.feedback.enabled` 为 `false` 并重启 VS Code 来禁用遥测。
+
 ## 鸣谢
 
 OI Runner++ 深受 [OI Runner](https://github.com/CmdBlockZQG/oi-runner) 启发，感谢 [@CmdBlockZQG](https://github.com/CmdBlockZQG) 及其他贡献者。

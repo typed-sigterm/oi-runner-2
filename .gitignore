@@ -27,3 +27,4 @@ dist-ssr
 
 *.tsbuildinfo
 extension.vsix
+.env

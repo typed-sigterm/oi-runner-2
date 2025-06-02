@@ -1,5 +1,7 @@
 export const EventMarker = '__oiRunner2';
 
+export type ConfigLevel = false | 'workspace-folder' | 'workspace' | 'global';
+
 export interface TaskAttributes {
   name: string
   compilable: boolean
@@ -17,6 +19,13 @@ export type EventMessage = { // extension -> webview
   type: 'setup'
   tasks: TaskAttributes[]
   extensions: string[]
+  id: string
+  telemetry: false | {
+    'Version': string
+    'VSCode Version': string
+    'Language': string
+    'Configured': ConfigLevel
+  }
 } | { // webview -> extension
   type: 'webview:ready'
 } | { // extension -> webview
@@ -69,4 +78,7 @@ export type EventMessage = { // extension -> webview
 } | { // extension -> webview
   type: 'file:selected'
   path?: string
+} | {
+  type: 'telemetry:policy-changed'
+  enabled: boolean
 };

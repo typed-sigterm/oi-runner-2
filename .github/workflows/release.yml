@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      RUNNER_MIXPANEL_TOKEN: ${{ vars.RUNNER_MIXPANEL_TOKEN }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
@@ -28,6 +30,13 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           release-url: ${{ github.event.release.url }}
 
+      - name: Publish to Visual Studio Marketplace
+        uses: HaaLeo/publish-vscode-extension@ca5561daa085dee804bf9f37fe0165785a9b14db # v2
+        with:
+          extensionFile: extension.vsix
+          pat: ${{ secrets.VSCE_PAT }}
+          registryUrl: https://marketplace.visualstudio.com
+
       - name: Publish to Open VSX Registry
         uses: HaaLeo/publish-vscode-extension@ca5561daa085dee804bf9f37fe0165785a9b14db # v2
         id: publishToOpenVSX
@@ -35,10 +44,3 @@ jobs:
           extensionFile: extension.vsix
           pat: ${{ secrets.OPEN_VSX_TOKEN }}
           registryUrl: https://open-vsx.org
-
-      - name: Publish to Visual Studio Marketplace
-        uses: HaaLeo/publish-vscode-extension@ca5561daa085dee804bf9f37fe0165785a9b14db # v2
-        with:
-          extensionFile: extension.vsix
-          pat: ${{ secrets.VSCE_PAT }}
-          registryUrl: https://marketplace.visualstudio.com

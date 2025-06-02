@@ -1,7 +1,8 @@
 import type { EventMessage } from '../shared/events';
 import * as vscode from 'vscode';
+import { version } from '../package.json';
 import { EventMarker } from '../shared/events';
-import { getAutoSave, getConfiguredDefaultTask, getConfiguredTasks, getDefaultTask } from './config';
+import { getAutoSave, getConfiguredDefaultTask, getConfiguredTasks, getDefaultTask, isConfigured } from './config';
 import { Runner } from './runner';
 import { logger } from './utils';
 
@@ -129,6 +130,14 @@ class PanelProvider implements vscode.WebviewViewProvider, vscode.Disposable {
             compilable: !!v.compile,
           })),
           extensions: Object.keys(getConfiguredDefaultTask()),
+
+          id: vscode.env.machineId,
+          telemetry: vscode.env.isTelemetryEnabled && {
+            'Version': version,
+            'VSCode Version': vscode.version,
+            'Language': vscode.env.language,
+            'Configured': isConfigured(),
+          },
         });
         this._handleActiveEditorChange(vscode.window.activeTextEditor);
         break;

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { EventMessage, TaskAttributes } from '../shared/events';
 import type { RunnerState } from './utils';
+import { md5 } from 'js-md5';
+import mixpanel from 'mixpanel-browser';
 import { nanoid } from 'nanoid';
 import { computed, onMounted, provide, ref, useTemplateRef } from 'vue';
 import { EventMarker } from '../shared/events';
@@ -33,6 +35,11 @@ window.addEventListener('message', (ev) => {
       tasks.value = data.tasks;
       extensions.value = data.extensions;
       loading.value = false;
+      mixpanel.identify(data.id);
+      if (data.telemetry)
+        mixpanel.track('Launched', data.telemetry);
+      else
+        mixpanel.disable();
       break;
 
     case 'context:switch':
@@ -94,6 +101,16 @@ window.addEventListener('message', (ev) => {
       s.status = 'idle';
       s.hint = 'cancelled';
       break;
+  }
+
+  if (ev.data.type.startsWith('run:')) {
+    mixpanel.track('Task Ran', {
+      'Hashed Task Name': md5(s.task),
+      'Case No': s.case + 1,
+      'State': ev.data.type.replace('run:', ''),
+      'Stdin Redirected': !!s.cases[s.case].stdinFile,
+      'Stdout Redirected': !!s.cases[s.case].stdoutFile,
+    });
   }
 });
 

@@ -48,6 +48,12 @@ For a quick start guide:
 
 All configuration descriptions can be accessed via the VS Code settings UI (<kbd>Ctrl</kbd> + <kbd>,</kbd>) by searching for `@ext:typed-sigterm.oi-runner-2`.
 
+## Telemetry
+
+OI Runner++ collects some telemetry data to help improve the extension (e.g., understanding which VS Code versions need to be supported). You can search for `mixpanel.track` in the source code repository to see what information is collected.
+
+Telemetry data does not include personal or sensitive information and is used for statistical purposes only. You can disable telemetry by setting VS Code's `telemetry.feedback.enabled` to `false` and restarting VS Code.
+
 ## Credits
 
 This project is deeply inspired by [OI Runner](https://github.com/CmdBlockZQG/oi-runner). Thanks to [@CmdBlockZQG](https://github.com/CmdBlockZQG) and other contributors of OI Runner.

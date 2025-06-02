@@ -7,10 +7,10 @@ export default defineConfig({
     chunkSizeWarningLimit: Infinity,
   },
 
+  envPrefix: ['RUNNER_'],
+
   plugins: [
-    pluginVscode({
-      recommended: true,
-    }),
+    pluginVscode({ recommended: true }),
     pluginVue({
       template: {
         compilerOptions: {
