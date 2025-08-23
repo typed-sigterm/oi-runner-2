@@ -189,7 +189,7 @@ class PanelProvider implements vscode.WebviewViewProvider, vscode.Disposable {
           this.postEvent({ type: 'oj:samples-fetched' });
           const res = await vscode.window.showErrorMessage('Failed to fetch samples', 'Copy Details');
           if (res === 'Copy Details')
-            vscode.env.clipboard.writeText(e instanceof Error && e.stack || String(e));
+            vscode.env.clipboard.writeText(e instanceof Error && e.stack ? e.stack : String(e));
         }
     }
   }

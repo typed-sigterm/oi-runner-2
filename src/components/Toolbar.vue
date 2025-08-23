@@ -13,6 +13,7 @@ import '@vscode-elements/elements/dist/vscode-badge';
 import '@vscode-elements/elements/dist/vscode-button';
 import '@vscode-elements/elements/dist/vscode-option';
 import '@vscode-elements/elements/dist/vscode-single-select';
+import '@vscode-elements/elements/dist/vscode-button-group';
 
 export type ToolbarStatus = 'idle' | 'disabled' | 'running' | 'cancelling';
 
@@ -62,40 +63,50 @@ function gotoSource() {
       </vscode-option>
     </vscode-single-select>
 
-    <vscode-button
-      v-if="currentTaskCompilable"
-      title="Compile"
-      :disabled="status !== 'idle'"
-      @click="$emit('run', 'compile')"
-    >
-      <IconExtensions />
-    </vscode-button>
+    <vscode-button-group>
+      <vscode-button
+        v-if="currentTaskCompilable"
+        secondary
+        icon-only
+        title="Compile"
+        :disabled="status !== 'idle'"
+        @click="$emit('run', 'compile')"
+      >
+        <IconExtensions />
+      </vscode-button>
 
-    <vscode-button
-      title="Run"
-      :disabled="status !== 'idle'"
-      @click="$emit('run', 'execute')"
-    >
-      <IconDebugStart />
-    </vscode-button>
+      <vscode-button
+        secondary
+        icon-only
+        title="Run"
+        :disabled="status !== 'idle'"
+        @click="$emit('run', 'execute')"
+      >
+        <IconDebugStart />
+      </vscode-button>
 
-    <vscode-button
-      v-if="currentTaskCompilable"
-      title="Compile & Run"
-      :disabled="status !== 'idle'"
-      @click="$emit('run', 'compile-execute')"
-    >
-      <IconRunAll />
-    </vscode-button>
+      <vscode-button
+        v-if="currentTaskCompilable"
+        secondary
+        icon-only
+        title="Compile & Run"
+        :disabled="status !== 'idle'"
+        @click="$emit('run', 'compile-execute')"
+      >
+        <IconRunAll />
+      </vscode-button>
 
-    <vscode-button
-      :style="{ cursor: status === 'cancelling' ? 'progress' : undefined }"
-      title="Stop"
-      :disabled="status !== 'running'"
-      @click="$emit('cancel')"
-    >
-      <IconDebugStop />
-    </vscode-button>
+      <vscode-button
+        :style="{ cursor: status === 'cancelling' ? 'progress' : undefined }"
+        secondary
+        icon-only
+        title="Stop"
+        :disabled="status !== 'running'"
+        @click="$emit('cancel')"
+      >
+        <IconDebugStop />
+      </vscode-button>
+    </vscode-button-group>
   </header>
 </template>
 
@@ -129,15 +140,11 @@ vscode-single-select {
 }
 
 vscode-button {
-  --vscode-button-background: transparent;
-  --vscode-button-hoverBackground: rgba(90, 93, 94, 0.31);
+  /* --vscode-button-background: transparent; */
+  /* --vscode-button-hoverBackground: rgba(90, 93, 94, 0.31); */
   border: none;
   font-size: medium;
   width: 20px;
   margin: 0 2px;
-}
-
-vscode-button svg {
-  margin-left: -6px;
 }
 </style>
