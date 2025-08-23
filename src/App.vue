@@ -88,7 +88,7 @@ window.addEventListener('message', (ev) => {
     case 'run:executed':
       s.status = 'idle';
       if (data.stdout !== undefined) // Don't update if it's redirected to a file
-        runner.value?.handleExecuteResult(data.stdout);
+        runner.value?.handleExecuteResult(s.cases[s.case]!.id, data.stdout);
       case_.value!.exitCode = data.exitCode;
       case_.value!.duration = data.duration;
       break;
@@ -109,8 +109,8 @@ window.addEventListener('message', (ev) => {
       'Hashed Task Name': md5(s.task),
       'Case No': s.case + 1,
       'State': ev.data.type.replace('run:', ''),
-      'Stdin Redirected': !!s.cases[s.case].stdinFile,
-      'Stdout Redirected': !!s.cases[s.case].stdoutFile,
+      'Stdin Redirected': !!s.cases[s.case]!.stdinFile,
+      'Stdout Redirected': !!s.cases[s.case]!.stdoutFile,
     });
   }
 });

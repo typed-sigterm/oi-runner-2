@@ -19,7 +19,7 @@ const { state } = defineProps<{
 }>();
 
 const stdin = useTemplateRef('stdin'), stdout = useTemplateRef('stdout');
-const case_ = computed(() => state.cases[state.case]);
+const case_ = computed(() => state.cases[state.case]!);
 
 // Use `ref` instead of `computed`, because `computed` is always batched, but
 // `postEvent` sometimes takes a long time, UI updates need to be prioritized
@@ -48,6 +48,7 @@ async function run(step: RunStep) {
   state.hint = case_.value.duration = case_.value.exitCode = undefined;
   toolbarStatus.value = 'running';
 
+  const caseId = state.cases[state.case]!.id;
   // Note that some properties are `reactive`, which cannot be `structuredClone` or `postMessage`.
   // So we need to convert them back to raw
   postEvent({
@@ -55,7 +56,10 @@ async function run(step: RunStep) {
     file: state.file,
     task: state.task,
     step,
-    stdin: stdin.value?.getFileChannel() ?? stdin.value?.getContent(),
+    stdin: stdin.value?.getFileChannel()
+      ?? monaco.editor
+        .getModel(monaco.Uri.parse(`inmemory://stdin/${caseId}`))!
+        .getValue(),
     stdout: stdout.value?.getFileChannel(),
   });
 }
@@ -84,14 +88,12 @@ function handleAdd(sample?: ProblemIOSample) {
     updateModel(`inmemory://stdin/${case_.id}`, sample.input);
     updateModel(`inmemory://expected/${case_.id}`, sample.output);
   }
-  logger.log(toRaw(state.cases));
 }
 
 function handleRemove(index: number) {
   state.cases.splice(index, 1);
   if (state.case > index)
     state.case--;
-  logger.log(toRaw(state.cases));
 }
 
 defineExpose({
@@ -101,8 +103,8 @@ defineExpose({
       : stdout.value?.requestLinkFile();
   },
 
-  handleExecuteResult(result: string) {
-    stdout.value?.setContent(result);
+  handleExecuteResult(caseId: string, stdout: string) {
+    updateModel(`inmemory://stdout/${caseId}`, stdout);
   },
 });
 </script>

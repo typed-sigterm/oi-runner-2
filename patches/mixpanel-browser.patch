@@ -1,0 +1,16 @@
+diff --git a/package.json b/package.json
+index 9e66423411a9c66cf6477db412bc0ac51417b044..d0059f4fbf944ab5426a0d99eb13a68c06d364ba 100644
+--- a/package.json
++++ b/package.json
+@@ -24,6 +24,11 @@
+   },
+   "types": "./src/index.d.ts",
+   "exports": {
++    ".": {
++      "import": "./dist/mixpanel.module.js",
++      "require": "./dist/mixpanel.cjs.js",
++      "types": "./src/index.d.ts"
++    },
+     "./src/loaders/loader-module-core": {
+       "types": "./src/index.d.ts",
+       "import": "./src/loaders/loader-module-core.js",

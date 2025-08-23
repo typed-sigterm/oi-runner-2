@@ -11,7 +11,7 @@ const { type, state } = defineProps<{
 }>();
 
 const idle = ref(true);
-const linkedFile = computed(() => state.cases[state.case][`${type}File`]);
+const linkedFile = computed(() => state.cases[state.case]![`${type}File`]);
 function gotoRedirected() {
   linkedFile.value && postEvent({
     type: 'file:open-in-editor',

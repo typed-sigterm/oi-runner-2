@@ -112,7 +112,7 @@ defineExpose({
       v-bind="monacoProps"
       :original-model-path="modelPath"
       :modified-model-path="expectedModelPath"
-      @mount="e => diffEditor = e"
+      @mount="(e: any) => diffEditor = e"
     />
 
     <slot name="extra" />
