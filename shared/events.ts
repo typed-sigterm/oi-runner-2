@@ -13,9 +13,9 @@ export type RunStep = 'compile' | 'execute' | 'compile-execute';
 export interface IOFileChannel {
   file: string
 }
-export type IOChannel =
-  | string // plain content
-  | IOFileChannel; // link to file
+export type IOChannel
+  = | string // plain content
+    | IOFileChannel; // link to file
 
 export const OJNames = [
   'AtCoder',
