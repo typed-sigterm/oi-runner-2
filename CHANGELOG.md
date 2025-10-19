@@ -2,6 +2,19 @@
 
 > English｜[简体中文](https://gitee.com/typed-sigterm/oi-runner-2/blob/main/CHANGELOG.zh-CN.md)
 
+## 2.1.0 (2025-10-19)
+
+### 🚀 Features
+
+- Support one-click import test cases from Online Judges
+- Add telemetry, see README for more details
+
+### 🩹 Bug Fixes
+
+- Fix the behavior of Remove Test Case button
+- Fix diff editor state confusion when switching between test cases
+- UI theme now follows the VS Code theme
+
 ## 2.0.1 (2025-04-26)
 
 ### 🔥 Performance

@@ -2,6 +2,19 @@
 
 > [English](https://github.com/typed-sigterm/oi-runner-2/blob/main/CHANGELOG.md)｜简体中文
 
+## 2.1.0 (2025-10-19)
+
+### 🚀 新功能
+
+- 现在你可以一键从 OJ 拉取输入输出样例，无需复制粘贴
+- 添加遥测，详见 README
+
+### 🩹 Bug 修复
+
+- 修复删除测试样例按钮的行为
+- 修复在测试样例间切换时 diff 编辑器状态错乱的问题
+- UI 主题现在跟随 VS Code 主题
+
 ## 2.0.1 (2025-04-26)
 
 ### 🔥 性能优化

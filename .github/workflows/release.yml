@@ -4,11 +4,14 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     env:
       RUNNER_MIXPANEL_TOKEN: ${{ vars.RUNNER_MIXPANEL_TOKEN }}
     steps:
@@ -22,6 +25,11 @@ jobs:
       - run: pnpm i
       - run: pnpm run build
       - run: pnpm vsce package --no-dependencies -o extension.vsix
+
+      - uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3
+        with:
+          subject-name: ${{ github.event.release.name }}
+          subject-path: ./extension.vsix
 
       - name: Upload to GitHub Release
         uses: csexton/release-asset-action@3567794e918fa3068116688122a76cdeb57b5f09 # v3
