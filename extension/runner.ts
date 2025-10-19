@@ -73,7 +73,7 @@ export class Runner extends vscode.EventEmitter<EventMessage> {
           } else {
             this.fire({
               type: 'run:compiled',
-              skipexecuting: step === 'compile',
+              skipExecuting: step === 'compile',
             });
           }
         } else {

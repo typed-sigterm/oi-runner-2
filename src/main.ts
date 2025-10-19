@@ -7,9 +7,7 @@ import './main.css';
 import './tailwind.css';
 import '@vscode/codicons/dist/codicon.css';
 
-const token = import.meta.env.RUNNER_MIXPANEL_TOKEN;
-if (token)
-  mixpanel.init(token);
+mixpanel.init(import.meta.env.RUNNER_MIXPANEL_TOKEN || 'mock');
 
 createApp(App)
   .use(pluginMonacoEditor, { monaco })

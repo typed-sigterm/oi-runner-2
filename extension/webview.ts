@@ -134,10 +134,10 @@ class PanelProvider implements vscode.WebviewViewProvider, vscode.Disposable {
 
           id: vscode.env.machineId,
           telemetry: vscode.env.isTelemetryEnabled && {
-            'Version': version,
-            'VSCode Version': vscode.version,
-            'Language': vscode.env.language,
-            'Configured': isConfigured(),
+            version,
+            vscode_version: vscode.version,
+            language: vscode.env.language,
+            configured: isConfigured(),
           },
         });
         this._handleActiveEditorChange(vscode.window.activeTextEditor);

@@ -2,6 +2,7 @@
 import type { ProblemIOSample } from 'un-oj';
 import type { OJ } from '../../shared/events';
 import { IconCloudAltDownloadFilled, IconLoadingLoop, IconQuestionCircle } from '@iconify-prerendered/vue-line-md';
+import mixpanel from 'mixpanel-browser';
 import { ref, watch } from 'vue';
 import { postEvent, waitEvent } from '../utils';
 import OJSelector from './OJSelector.vue';
@@ -50,16 +51,26 @@ watch(selecting, (v) => {
 const importing = ref(false);
 async function handleImport() {
   importing.value = true;
+  const startTime = performance.now();
   postEvent({
     type: 'oj:fetch-samples',
     provider: source.value.oj!,
     problem: source.value.problem,
   });
+
   const res = await waitEvent('oj:samples-fetched');
+  mixpanel.track('Import Cases From OJ', {
+    provider: source.value.oj,
+    problem: source.value.problem,
+    duration: Math.floor(performance.now() - startTime),
+    ok: !!res.samples,
+    imported: res.samples?.length,
+  });
   if (res.samples) {
     emit('import', res.samples);
-    selecting.value = importing.value = false;
+    selecting.value = false;
   }
+  importing.value = false;
 }
 
 const reportIssue = () => postEvent({ type: 'file:open-url', url: 'https://github.com/un-oj/core' });

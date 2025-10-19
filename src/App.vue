@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { EventMessage, TaskAttributes } from '../shared/events';
 import type { RunnerState } from './utils';
-import { md5 } from 'js-md5';
 import mixpanel from 'mixpanel-browser';
 import { nanoid } from 'nanoid';
 import { computed, onMounted, provide, ref, useTemplateRef } from 'vue';
@@ -32,16 +31,18 @@ window.addEventListener('message', (ev) => {
 
   const s = state.value!; // shorthand
   switch (data.type) {
-    case 'setup':
+    case 'setup': {
+      const load_duration = Math.floor(performance.now());
       tasks.value = data.tasks;
       extensions.value = data.extensions;
       loading.value = false;
       mixpanel.identify(data.id);
       if (data.telemetry)
-        mixpanel.track('Launched', data.telemetry);
+        mixpanel.track('Launched', { ...data.telemetry, load_duration });
       else
         mixpanel.disable();
       break;
+    }
 
     case 'context:switch':
       if (states.has(data.file)) {
@@ -77,7 +78,7 @@ window.addEventListener('message', (ev) => {
       break;
 
     case 'run:compiled':
-      s.status = data.skipexecuting ? 'idle' : 'executing';
+      s.status = data.skipExecuting ? 'idle' : 'executing';
       break;
 
     case 'run:compile-failed':
@@ -105,12 +106,14 @@ window.addEventListener('message', (ev) => {
   }
 
   if (ev.data.type.startsWith('run:')) {
-    mixpanel.track('Task Ran', {
-      'Hashed Task Name': md5(s.task),
-      'Case No': s.case + 1,
-      'State': ev.data.type.replace('run:', ''),
-      'Stdin Redirected': !!s.cases[s.case]!.stdinFile,
-      'Stdout Redirected': !!s.cases[s.case]!.stdoutFile,
+    mixpanel.track('Task', {
+      event: ev.data.type.replace('run:', ''),
+      task_name: s.task,
+      case_no: s.case + 1,
+      stdin_redirected: !!s.cases[s.case]!.stdinFile,
+      stdout_redirected: !!s.cases[s.case]!.stdoutFile,
+      diff_enabled: !!s.cases[s.case]!.diff,
+      output_overflow: ev.data.overflow,
     });
   }
 });

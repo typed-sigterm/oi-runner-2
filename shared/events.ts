@@ -34,10 +34,10 @@ export type EventMessage = { // extension -> webview
   extensions: string[]
   id: string
   telemetry: false | {
-    'Version': string
-    'VSCode Version': string
-    'Language': string
-    'Configured': ConfigLevel
+    version: string
+    vscode_version: string
+    language: string
+    configured: ConfigLevel
   }
 } | { // webview -> extension
   type: 'webview:ready'
@@ -46,7 +46,6 @@ export type EventMessage = { // extension -> webview
   file: string
   defaultTask: string
   isDirty: boolean
-  // @todo context:destroy to remove closed editors
 } | { // extension -> webview
   type: 'context:rename'
   from: string
@@ -66,7 +65,7 @@ export type EventMessage = { // extension -> webview
   stdout?: IOFileChannel
 } | { // extension -> webview
   type: 'run:compiled'
-  skipexecuting: boolean
+  skipExecuting: boolean
 } | { // extension -> webview
   type: 'run:compile-failed'
   exitCode?: number

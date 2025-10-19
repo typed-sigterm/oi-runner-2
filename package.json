@@ -256,7 +256,6 @@
     "consola": "^3.4.2",
     "eslint": "^9.38.0",
     "husky": "^9.1.7",
-    "js-md5": "^0.8.3",
     "lucide-vue-next": "^0.546.0",
     "mixpanel-browser": "^2.71.0",
     "monaco-editor": "^0.54.0",

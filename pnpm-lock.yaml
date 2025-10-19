@@ -86,9 +86,6 @@ importers:
       husky:
         specifier: ^9.1.7
         version: 9.1.7
-      js-md5:
-        specifier: ^0.8.3
-        version: 0.8.3
       lucide-vue-next:
         specifier: ^0.546.0
         version: 0.546.0(vue@3.5.22(typescript@5.9.3))
@@ -3178,9 +3175,6 @@ packages:
   jiti@2.6.1:
     resolution: {integrity: sha512-ekilCSN1jwRvIbgeg/57YFh8qQDNbwDb9xT/qu2DAHbFFZUicIl4ygVaAvzveMhMVr3LnpSKTNnwt8PoOfmKhQ==}
     hasBin: true
-
-  js-md5@0.8.3:
-    resolution: {integrity: sha512-qR0HB5uP6wCuRMrWPTrkMaev7MJZwJuuw4fnwAzRgP4J4/F8RwtodOKpGp4XpqsLBFzzgqIO42efFAyz2Et6KQ==}
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -8278,8 +8272,6 @@ snapshots:
       '@isaacs/cliui': 8.0.2
 
   jiti@2.6.1: {}
-
-  js-md5@0.8.3: {}
 
   js-tokens@4.0.0: {}
 
