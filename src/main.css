@@ -8,6 +8,11 @@
   --spinner-size: 40px;
 }
 
+body {
+  margin: 0 12px;
+  overflow: hidden;
+}
+
 a {
   cursor: pointer;
 }

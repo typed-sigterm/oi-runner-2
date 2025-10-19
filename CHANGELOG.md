@@ -2,6 +2,12 @@
 
 > English｜[简体中文](https://gitee.com/typed-sigterm/oi-runner-2/blob/main/CHANGELOG.zh-CN.md)
 
+## 2.1.1 (2025-10-19)
+
+### 🩹 Bug Fixes
+
+- Fix several style issues
+
 ## 2.1.0 (2025-10-19)
 
 ### 🚀 Features

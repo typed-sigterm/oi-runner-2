@@ -40,12 +40,11 @@ defineProps<{
 }
 
 h1 {
-  font-size: 26px;
-  margin-top: 0;
+  font-size: 28px;
+  font-weight: bold;
 }
 
 p {
-  margin: 0;
   font-size: 16px;
 }
 
