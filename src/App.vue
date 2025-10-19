@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { EventMessage, TaskAttributes } from '../shared/events';
 import type { RunnerState } from './utils';
+import { useMutationObserver } from '@vueuse/core';
 import mixpanel from 'mixpanel-browser';
 import { nanoid } from 'nanoid';
 import { computed, onMounted, provide, ref, useTemplateRef } from 'vue';
@@ -10,8 +11,6 @@ import Loading from './components/Loading.vue';
 import Runner from './components/Runner.vue';
 import TooltipProvider from './components/ui/tooltip/TooltipProvider.vue';
 import { logger, postEvent, ThemeInjectKey } from './utils';
-
-provide(ThemeInjectKey, ref('dark' as const));
 
 const runner = useTemplateRef('runner');
 const loading = ref(true);
@@ -117,6 +116,19 @@ window.addEventListener('message', (ev) => {
     });
   }
 });
+
+const theme = ref<'dark' | 'light'>('dark');
+useMutationObserver(
+  document.body,
+  () => {
+    const t = document.body.getAttribute('data-vscode-theme-kind');
+    theme.value = t === 'vscode-light' || t === 'vscode-high-contrast-light'
+      ? 'light'
+      : 'dark';
+  },
+  { attributes: true },
+);
+provide(ThemeInjectKey, theme);
 
 let ready = false;
 onMounted(() => {
