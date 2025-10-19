@@ -66,7 +66,7 @@ export type EventMessage = { // extension -> webview
   stdout?: IOFileChannel
 } | { // extension -> webview
   type: 'run:compiled'
-  skipExcuting: boolean
+  skipexecuting: boolean
 } | { // extension -> webview
   type: 'run:compile-failed'
   exitCode?: number

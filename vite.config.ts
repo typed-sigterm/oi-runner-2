@@ -3,6 +3,7 @@ import pluginTailwindcss from '@tailwindcss/vite';
 import pluginVscode from '@tomjs/vite-plugin-vscode';
 import pluginVue from '@vitejs/plugin-vue';
 import { defineConfig } from 'vite';
+import pluginDevtools from 'vite-plugin-vue-devtools';
 
 export default defineConfig({
   build: {
@@ -19,6 +20,7 @@ export default defineConfig({
       },
     }),
     pluginTailwindcss(),
+    pluginDevtools(),
   ],
 
   envPrefix: ['RUNNER_'],

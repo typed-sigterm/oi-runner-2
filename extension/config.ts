@@ -1,9 +1,9 @@
-import type { ConfigLevel } from '../shared/events';
+import type { ConfigLevel } from '../shared/events.js';
 import path from 'node:path';
 import * as vscode from 'vscode';
 import { z } from 'zod/v4';
-import { contributes } from '../package.json';
-import { cachedFn } from './utils';
+import { contributes } from '../package.json' with { type: 'json' };
+import { cachedFn } from './utils.js';
 
 export function isConfigured(): ConfigLevel {
   const info = vscode.workspace.getConfiguration().inspect('oi-runner-2');
@@ -62,6 +62,6 @@ export function getAutoSave(): boolean {
   return vscode.workspace.getConfiguration('oi-runner-2').get<boolean>('autoSave', true) !== false;
 }
 
-export function gettextareaMaxSize(): number {
+export function getTextareaMaxSize(): number {
   return vscode.workspace.getConfiguration('oi-runner-2').get<number>('textareaMaxSize', 1e4);
 }

@@ -1,12 +1,12 @@
 // @todo rewrite with state machine
 
-import type { EventMessage, IOChannel, IOFileChannel, RunStep } from '../shared/events';
-import type { Task } from './config';
+import type { EventMessage, IOChannel, IOFileChannel, RunStep } from '../shared/events.js';
+import type { Task } from './config.js';
 import { createWriteStream } from 'node:fs';
 import * as vscode from 'vscode';
-import { evalCommand, executeCommand } from './command';
-import { getConfiguredTasks, gettextareaMaxSize as getTextareaMaxSize } from './config';
-import { logger } from './utils';
+import { evalCommand, executeCommand } from './command.js';
+import { getConfiguredTasks, getTextareaMaxSize } from './config.js';
+import { logger } from './utils.js';
 
 export interface RunOptions {
   task: string
@@ -73,7 +73,7 @@ export class Runner extends vscode.EventEmitter<EventMessage> {
           } else {
             this.fire({
               type: 'run:compiled',
-              skipExcuting: step === 'compile',
+              skipexecuting: step === 'compile',
             });
           }
         } else {
@@ -132,7 +132,7 @@ export class Runner extends vscode.EventEmitter<EventMessage> {
   }
 
   public stopRun() {
-    this._currentController!.abort();
+    this._currentController?.abort();
     this._currentController = undefined;
   }
 }

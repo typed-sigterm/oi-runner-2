@@ -5,7 +5,7 @@ import type { RunnerCase, RunnerState } from '../utils';
 import { IconDiffSingle } from '@iconify-prerendered/vue-codicon';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { nanoid } from 'nanoid';
-import { computed, ref, useTemplateRef, watch } from 'vue';
+import { computed, ref, useTemplateRef, watch, watchEffect } from 'vue';
 import { postEvent } from '../utils';
 import IOPanel from './IOPanel.vue';
 import RunnerHint from './RunnerHint.vue';
@@ -42,7 +42,7 @@ async function run(step: RunStep) {
   if (state.task === undefined || state.file === undefined)
     return;
   if (step === 'execute')
-    state.status = 'excuting';
+    state.status = 'executing';
   else
     state.status = 'compiling';
   state.hint = case_.value.duration = case_.value.exitCode = undefined;
@@ -76,9 +76,9 @@ function updateModel(path: string, content: string) {
   const p = monaco.Uri.parse(path);
   const model = monaco.editor.getModel(p);
   if (!model)
-    monaco.editor.createModel(content, undefined, p);
+    monaco.editor.createModel(content ?? '', undefined, p);
   else
-    model.setValue(content);
+    model.setValue(content ?? '');
 }
 
 function handleAdd(sample?: ProblemIOSample) {
@@ -94,7 +94,14 @@ function handleRemove(index: number) {
   state.cases.splice(index, 1);
   if (state.case > index)
     state.case--;
+  for (const t of ['stdin', 'stdout', 'expected'])
+    monaco.editor.getModel(monaco.Uri.parse(`inmemory://${t}/${state.cases[index]!.id}`))?.dispose();
 }
+
+watchEffect(() => {
+  if (!state.cases.length)
+    handleAdd();
+});
 
 defineExpose({
   redirect(channel: 'stdin' | 'stdout') {

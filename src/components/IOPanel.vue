@@ -3,8 +3,8 @@ import type { IOFileChannel } from '../../shared/events';
 import { VueMonacoDiffEditor, VueMonacoEditor } from '@guolao/vue-monaco-editor';
 import { IconFileSymlinkFile } from '@iconify-prerendered/vue-codicon';
 import { IconLoadingLoop } from '@iconify-prerendered/vue-line-md';
-import { editor } from 'monaco-editor/esm/vs/editor/editor.api';
-import { computed, inject, ref, shallowRef } from 'vue';
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import { computed, inject, ref, shallowRef, watchEffect } from 'vue';
 import { selectFile, ThemeInjectKey, useFontSize } from '../utils';
 
 const props = defineProps<{
@@ -25,8 +25,8 @@ defineSlots<{
 
 const linkedFile = defineModel<string | undefined>('linkedFile');
 
-const codeEditor = shallowRef<editor.IStandaloneCodeEditor>();
-const diffEditor = shallowRef<editor.IStandaloneDiffEditor>();
+const outputEditor = shallowRef<monaco.editor.IStandaloneCodeEditor>();
+const diffEditor = shallowRef<monaco.editor.IStandaloneDiffEditor>();
 
 const theme = inject(ThemeInjectKey);
 const fontSize = useFontSize();
@@ -38,13 +38,25 @@ const monacoProps = computed(() => ({
     compactMode: true,
     folding: false,
     fontSize: fontSize.value,
-    lightbulb: { enabled: editor.ShowLightbulbIconMode.Off },
+    lightbulb: { enabled: monaco.editor.ShowLightbulbIconMode.Off },
     lineNumbersMinChars: 3,
     readOnly: props.readonly && !props.diff,
     renderGutterMenu: false,
-    showFoldingControls: 'never' as const,
-  },
+    showFoldingControls: 'never',
+  } satisfies monaco.editor.IEditorOptions & monaco.editor.IDiffEditorOptions,
 }));
+
+watchEffect(() => {
+  const mp = monaco.Uri.parse(props.modelPath);
+  outputEditor.value?.setModel(monaco.editor.getModel(mp) ?? monaco.editor.createModel('', undefined, mp));
+  if (props.expectedModelPath) {
+    const emp = monaco.Uri.parse(props.expectedModelPath);
+    diffEditor.value?.setModel({
+      original: monaco.editor.getModel(mp) ?? monaco.editor.createModel('', undefined, mp),
+      modified: monaco.editor.getModel(emp) ?? monaco.editor.createModel('', undefined, emp),
+    });
+  }
+});
 
 const isLinking = ref(false);
 async function linkFile() {
@@ -63,12 +75,12 @@ async function linkFile() {
 defineExpose({
   getContent() {
     if (!props.diff)
-      return codeEditor.value?.getModel()?.getValue();
+      return outputEditor.value?.getModel()?.getValue();
   },
 
   setContent(to: string) {
     diffEditor.value?.getModel()?.original.setValue(to);
-    codeEditor.value?.setValue(to);
+    outputEditor.value?.setValue(to);
   },
 
   requestLinkFile: linkFile,
@@ -103,15 +115,12 @@ defineExpose({
     <VueMonacoEditor
       v-show="!diff"
       v-bind="monacoProps"
-      :path="modelPath"
-      @mount="e => codeEditor = e"
+      @mount="e => outputEditor = e"
     />
 
     <VueMonacoDiffEditor
       v-show="diff"
       v-bind="monacoProps"
-      :original-model-path="modelPath"
-      :modified-model-path="expectedModelPath"
       @mount="(e: any) => diffEditor = e"
     />
 

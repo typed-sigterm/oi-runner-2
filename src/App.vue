@@ -53,7 +53,7 @@ window.addEventListener('message', (ev) => {
           task: data.defaultTask,
           status: 'idle',
           case: 0,
-          cases: [{ id: nanoid() }],
+          cases: [],
         };
         states.set(data.file, state.value);
       }
@@ -77,7 +77,7 @@ window.addEventListener('message', (ev) => {
       break;
 
     case 'run:compiled':
-      s.status = data.skipExcuting ? 'idle' : 'excuting';
+      s.status = data.skipexecuting ? 'idle' : 'executing';
       break;
 
     case 'run:compile-failed':

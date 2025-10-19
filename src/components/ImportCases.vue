@@ -28,6 +28,10 @@ const PROBLEM_EXAMPLE: Record<OJ, string> = {
 </script>
 
 <script setup lang="ts">
+defineProps<{
+  disabled?: boolean
+}>();
+
 const emit = defineEmits<{
   import: [cases: ProblemIOSample[]]
   reportIssue: []
@@ -66,9 +70,10 @@ const reportIssue = () => postEvent({ type: 'file:open-url', url: 'https://githu
     <DialogTrigger as-child>
       <li
         v-bind="$attrs"
+        :aria-disabled="disabled"
         title="Import from OJ"
         role="tab"
-        @click="selecting = true"
+        @click="!disabled && (selecting = true)"
       >
         <IconCloudAltDownloadFilled />
       </li>

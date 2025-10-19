@@ -41,7 +41,7 @@ function gotoRedirected() {
       Compiling
     </Spin>
 
-    <Spin v-else-if="state.status === 'excuting'" class="mask">
+    <Spin v-else-if="state.status === 'executing'" class="mask">
       Executing
     </Spin>
 

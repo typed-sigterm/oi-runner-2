@@ -44,7 +44,7 @@ export function useFontSize() {
   return fontSize;
 }
 
-export type RunnerStatus = 'idle' | 'compiling' | 'excuting' | 'cancelling';
+export type RunnerStatus = 'idle' | 'compiling' | 'executing' | 'cancelling';
 export type RunnerHint = 'compile-failed' | 'execute-failed' | 'cancelled';
 
 export interface RunnerCase {

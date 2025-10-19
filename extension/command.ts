@@ -9,7 +9,7 @@ import { accessSync, constants, createReadStream } from 'node:fs';
 import path from 'node:path';
 import ps from 'ps-tree';
 import kill from 'tree-kill';
-import { gettextareaMaxSize } from './config';
+import { getTextareaMaxSize } from './config';
 
 const execExt = process.platform === 'win32' ? '.exe' : '';
 
@@ -105,7 +105,7 @@ export function executeCommand(command: string, args: string[], stdin?: IOChanne
       if (code === null)
         return;
 
-      const max = gettextareaMaxSize();
+      const max = getTextareaMaxSize();
       resolve({
         exitCode: code,
         stdout: stdout // `undefined` if redirected

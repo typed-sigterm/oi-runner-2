@@ -71,7 +71,7 @@ function handleImport(cases: ProblemIOSample[]) {
       <IconMinus v-else />
     </li>
 
-    <ImportCases @import="handleImport" />
+    <ImportCases :disabled @import="handleImport" />
   </ol>
 </template>
 
