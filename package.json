@@ -3,9 +3,9 @@
   "name": "oi-runner-2",
   "displayName": "%extension.displayName%",
   "type": "module",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "private": true,
-  "packageManager": "pnpm@10.9.0",
+  "packageManager": "pnpm@10.18.3",
   "description": "%extension.description%",
   "license": "MIT",
   "repository": {
@@ -225,6 +225,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
+    "pack": "vsce package --no-dependencies -o extension.vsix",
     "preview": "vite preview",
     "prepare": "husky",
     "type-check": "vue-tsc -p ./tsconfig.app.json --noEmit && vue-tsc -p ./tsconfig.node.json --noEmit"
@@ -258,7 +259,7 @@
     "husky": "^9.1.7",
     "lucide-vue-next": "^0.546.0",
     "mixpanel-browser": "^2.71.0",
-    "monaco-editor": "^0.54.0",
+    "monaco-editor": "^0.52.0",
     "nanoid": "^5.1.6",
     "ps-tree": "^1.2.0",
     "reka-ui": "^2.5.1",

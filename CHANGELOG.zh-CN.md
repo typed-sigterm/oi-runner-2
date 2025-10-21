@@ -2,6 +2,12 @@
 
 > [English](https://github.com/typed-sigterm/oi-runner-2/blob/main/CHANGELOG.md)｜简体中文
 
+## 2.1.2 (2025-10-21)
+
+### 🩹 Bug 修复
+
+- 修复无法粘贴的问题
+
 ## 2.1.1 (2025-10-19)
 
 ### 🩹 Bug 修复
