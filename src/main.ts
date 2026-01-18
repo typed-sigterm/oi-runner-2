@@ -1,6 +1,6 @@
 import { install as pluginMonacoEditor } from '@guolao/vue-monaco-editor';
 import mixpanel from 'mixpanel-browser';
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import * as monaco from 'monaco-editor';
 import { createApp } from 'vue';
 import App from './App.vue';
 import './main.css';

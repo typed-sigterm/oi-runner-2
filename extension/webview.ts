@@ -1,4 +1,5 @@
 import type { EventMessage } from '../shared/events';
+import { getWebviewHtml } from 'virtual:vscode';
 import * as vscode from 'vscode';
 import { version } from '../package.json';
 import { EventMarker } from '../shared/events';
@@ -39,7 +40,7 @@ class PanelProvider implements vscode.WebviewViewProvider, vscode.Disposable {
         vscode.Uri.joinPath(this._context.extensionUri, 'dist'),
       ],
     };
-    view.webview.html = __getWebviewHtml__({
+    view.webview.html = getWebviewHtml({
       serverUrl: process.env.VITE_DEV_SERVER_URL,
       webview: view.webview,
       context: this._context,
