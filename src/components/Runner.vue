@@ -3,7 +3,7 @@ import type { ProblemIOSample } from 'un-oj';
 import type { RunStep, TaskAttributes } from '../../shared/events';
 import type { RunnerCase, RunnerState } from '../utils';
 import { IconDiffSingle } from '@iconify-prerendered/vue-codicon';
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import * as monaco from 'monaco-editor';
 import { nanoid } from 'nanoid';
 import { computed, ref, useTemplateRef, watch, watchEffect } from 'vue';
 import { postEvent } from '../utils';
