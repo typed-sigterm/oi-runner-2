@@ -1,4 +1,4 @@
-# OI Runner++
+# OI Runner++ ![最新版本](https://img.shields.io/github/v/release/typed-sigterm/oi-runner-2?label=%E6%9C%80%E6%96%B0%E7%89%88%E6%9C%AC) ![许可证](https://img.shields.io/github/license/typed-sigterm/oi-runner-2?label=%E8%AE%B8%E5%8F%AF%E8%AF%81) ![OSS Lifecycle](https://img.shields.io/osslifecycle?file_url=https%3A%2F%2Fraw.githubusercontent.com%2Ftyped-sigterm%2Foi-runner-2%2Fmain%2FOSSMETADATA) [![GitHub Stars](https://img.shields.io/github/stars/typed-sigterm/oi-runner-2)](https://github.com/typed-sigterm/oi-runner-2)
 
 > [English](https://github.com/typed-sigterm/oi-runner-2/blob/main/README.md)｜简体中文
 
