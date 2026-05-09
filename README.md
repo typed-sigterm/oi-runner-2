@@ -4,7 +4,7 @@
 
 VS Code extension designed for OIers and ACMers, for running single-file programs.
 
-![](./assets/preview.png)
+![Preview](./assets/preview.png)
 
 ## Quick Start
 

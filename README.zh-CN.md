@@ -4,7 +4,7 @@
 
 专为 OIer 和 ACMer 设计的 VS Code 插件，用于运行单文件程序。
 
-![](./assets/preview.png)
+![Preview](./assets/preview.png)
 
 ## 快速上手
 
