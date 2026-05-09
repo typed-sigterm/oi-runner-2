@@ -1,3 +1,7 @@
+shellEmulator: true
+
+trustPolicy: no-downgrade
+
 allowBuilds:
   '@vscode/vsce-sign': true
   keytar: true
