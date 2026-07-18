@@ -192,6 +192,14 @@ class PanelProvider implements vscode.WebviewViewProvider, vscode.Disposable {
           if (res === 'Copy Details')
             vscode.env.clipboard.writeText(e instanceof Error && e.stack ? e.stack : String(e));
         }
+        break;
+
+      case 'clipboard:read':
+        this.postEvent({
+          type: 'clipboard:text',
+          text: await vscode.env.clipboard.readText(),
+        });
+        break;
     }
   }
 }

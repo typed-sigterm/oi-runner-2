@@ -5,7 +5,7 @@ import { IconFileSymlinkFile } from '@iconify-prerendered/vue-codicon';
 import { IconLoadingLoop } from '@iconify-prerendered/vue-line-md';
 import * as monaco from 'monaco-editor';
 import { computed, inject, ref, shallowRef, watchEffect } from 'vue';
-import { selectFile, ThemeInjectKey, useFontSize } from '../utils';
+import { readClipboard, selectFile, ThemeInjectKey, useFontSize } from '../utils';
 
 const props = defineProps<{
   modelPath: string
@@ -72,6 +72,27 @@ async function linkFile() {
   }
 }
 
+function handleMount(editor: monaco.editor.IStandaloneCodeEditor) {
+  outputEditor.value = editor;
+  // Bridge clipboard paste through the extension host: in production VS Code
+  // webviews Monaco's built-in paste fails because `navigator.clipboard.readText()`
+  // requires `clipboard-read` permission that the prod webview lacks (see issue #26).
+  // Only register on editable editors (Input panel); skip readonly / diff editors.
+  if (props.readonly || props.diff)
+    return;
+  editor.addAction({
+    id: 'oi-runner-2.clipboard.paste',
+    label: 'Paste',
+    keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyV],
+    run: async (ed) => {
+      const text = await readClipboard();
+      const sels = ed.getSelections();
+      if (sels)
+        ed.executeEdits('oi-runner-2.clipboard-paste', sels.map(range => ({ range, text, forceMoveMarkers: true })));
+    },
+  });
+}
+
 defineExpose({
   getContent() {
     if (!props.diff)
@@ -115,7 +136,7 @@ defineExpose({
     <VueMonacoEditor
       v-show="!diff"
       v-bind="monacoProps"
-      @mount="e => outputEditor = e"
+      @mount="handleMount"
     />
 
     <VueMonacoDiffEditor

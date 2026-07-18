@@ -100,4 +100,9 @@ export type EventMessage = { // extension -> webview
 } | { // extension -> webview
   type: 'oj:samples-fetched'
   samples?: ProblemIOSample[]
+} | { // webview -> extension
+  type: 'clipboard:read'
+} | { // extension -> webview
+  type: 'clipboard:text'
+  text: string
 };
