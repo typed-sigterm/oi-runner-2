@@ -75,6 +75,17 @@ export async function selectFile() {
   return (await waitEvent('file:selected')).path;
 }
 
+/**
+ * Read the system clipboard via the extension host.
+ * Works in both dev and prod webviews (prod lacks `clipboard-read` permission
+ * for `navigator.clipboard`, so we bridge through the extension).
+ * @returns Resolves the clipboard text.
+ */
+export async function readClipboard() {
+  postEvent({ type: 'clipboard:read' });
+  return (await waitEvent('clipboard:text')).text;
+}
+
 export function waitEvent<T extends EventMessage['type']>(type: T) {
   return new Promise<EventMessage & { type: T }>((resolve) => {
     const handleMessage = (event: MessageEvent) => {
